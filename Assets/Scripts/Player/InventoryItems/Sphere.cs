@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryItemBase : InventoryItem
+public class Sphere : InventoryItem
 {
-    public InventoryItemBase()
+    public Sphere()
     {
-        Name = Constants.INVENTORY_ITEM_BASE;
+        Name = Constants.SPHERE;
         Count = 1;
         IsStackable = true;
     }

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryItemBase : InventoryItem
+public class Cube : InventoryItem
 {
-    public InventoryItemBase()
+    public Cube()
     {
-        Name = Constants.INVENTORY_ITEM_BASE;
+        Name = Constants.CUBE;
         Count = 1;
         IsStackable = true;
     }

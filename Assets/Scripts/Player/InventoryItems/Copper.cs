@@ -6,7 +6,7 @@ public class Copper : InventoryItem
 {
     public Copper()
     {
-        Name = "Copper";
+        Name = Constants.COPPER;
         Count = 1;
         IsStackable = true;
     }
