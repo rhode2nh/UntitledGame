@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class Constants
 {
+    // Item Indices
+    public const int CUBE_ID = 0;
+    public const int SPHERE_ID = 1;
+
+    // Prefixes
+    public const string INVENTORY_ITEM_PREFIX = "II";
+    public const string WEARABLE_ITEM_PREFIX = "WI";
+    public const string CONSUMABLE_ITEM_PREFIX = "CI";
+
     // Tags
     public const string WORLD_ITEM = "WORLD_ITEM";
 

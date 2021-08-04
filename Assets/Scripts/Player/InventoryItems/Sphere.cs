@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sphere : InventoryItem
+[CreateAssetMenu(fileName = "Sphere", menuName = "Items/Sphere", order = 1)]
+public class Sphere : Item
 {
-    public Sphere()
+    private void Awake()
     {
-        Name = Constants.SPHERE;
-        Count = 1;
-        IsStackable = true;
+        this.Name = Constants.SPHERE;
+        this.Id = Constants.SPHERE_ID;
+        this.Count = 1;
+        this.IsStackable = true;
     }
 }

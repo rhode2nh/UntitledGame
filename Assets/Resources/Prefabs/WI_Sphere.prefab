@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: itemName
       value: Sphere
       objectReference: {fileID: 0}
+    - target: {fileID: 301281462498406125, guid: eb63039a6e0d7fb479b4916f55c5ff3f, type: 3}
+      propertyPath: itemReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b748f892b9ccb48b0e4f7ba47fb4e1, type: 2}
     - target: {fileID: 301281462498406126, guid: eb63039a6e0d7fb479b4916f55c5ff3f, type: 3}
       propertyPath: m_Name
       value: WI_Sphere

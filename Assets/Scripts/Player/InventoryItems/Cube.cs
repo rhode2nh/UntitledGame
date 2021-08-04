@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cube : InventoryItem
+[CreateAssetMenu(fileName = "Cube", menuName = "Items/Cube", order = 1)]
+public class Cube : Item
 {
-    public Cube()
+    private void Awake()
     {
-        Name = Constants.CUBE;
-        Count = 1;
-        IsStackable = true;
+        this.Name = Constants.CUBE;
+        this.Id = Constants.CUBE_ID;
+        this.Count = 1;
+        this.IsStackable = true;
     }
 }

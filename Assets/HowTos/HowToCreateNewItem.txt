@@ -1,0 +1,3 @@
+1. Create constants
+2. Create Item scriptable object
+3. Create world item prefab variant

@@ -6,50 +6,60 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private List<InventoryItem> items;
+    private List<Item> items;
     public int MaxItems { get; set; }
 
     private void Start()
     {
-        items = new List<InventoryItem>();       
+        items = new List<Item>();       
     }
 
-    public List<InventoryItem> GetItems()
+    public List<Item> GetItems()
     {
         return items;
     }
 
-    public void RemoveItem(int index)
+    public int Count()
     {
-        items.RemoveAt(index);
+        return items.Count;
     }
 
-    public InventoryItem RemoveItem(string itemName)
+    public Item RemoveItem(int index)
     {
-        var item = items.FirstOrDefault(x => x.Name == itemName);
-
-        if (item.Count == 1)
+        if (items[index].Count == 1)
         {
-            items.Remove(item);
+            Item item = Instantiate(items[index]);
+            items.RemoveAt(index);
+            return item;
         }
-        else if (item.Count > 1)
+        else
         {
-            item.Count--;
+            items[index].Count--;
+            Item item = Instantiate(items[index]);
+            item.Count = 1;
+            return item;
         }
-        return CreateItem(itemName);
     }
 
-    public void RemoveItem(InventoryItem item)
+    public Item RemoveLastItem()
+    {
+        return RemoveItem(items.Count - 1);
+    }
+
+    public void RemoveItem(Item item)
     {
         items.Remove(item);
     }
 
-    public void AddItem(InventoryItem item)
+    public void AddItem(Item item)
     {
-        var itemToUpdate = items.FirstOrDefault(x => x.Name == item.Name);
+        var itemToUpdate = items.FirstOrDefault(x => x.Id == item.Id);
         if (item.IsStackable && itemToUpdate != null)
         {
-            itemToUpdate.Count += 1;
+            for (int i = 0; i < item.Count; i++)
+            {
+                itemToUpdate.Count += 1;
+            }
         } 
         else
         {
@@ -57,32 +67,9 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItem(string itemName)
-    {
-        var itemToUpdate = items.FirstOrDefault(x => x.Name == itemName);
-        if (itemToUpdate != null)
-        {
-            if (itemToUpdate.IsStackable)
-            {
-                itemToUpdate.Count += 1;
-            } 
-        }
-        else
-        {
-            items.Add(CreateItem(itemName));
-        }
-    }
-
     public bool isItemInInventory(string itemName)
     {   
         return items.FirstOrDefault(x => x.Name == itemName) != null ? true : false;
-    }
-
-    public InventoryItem CreateItem(string itemName)
-    {
-        Type t = Type.GetType(itemName);
-        InventoryItem item = (InventoryItem)Activator.CreateInstance(t);
-        return item;
     }
 
     public void PrintItems()
