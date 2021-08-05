@@ -3,8 +3,9 @@ using UnityEngine;
 public class WorldItem : MonoBehaviour
 {
     public string itemName;
-    public Item itemReference;
+    public ItemObject item;
     private Transform childObject;
+    public int count;
     //ItemStats itemStats;
 
     // Start is called before the first frame update
@@ -12,23 +13,12 @@ public class WorldItem : MonoBehaviour
     {
         childObject = transform.GetChild(0);
         childObject.tag = Constants.WORLD_ITEM;
+        count = 1;
         //itemStats = new ItemStats();
     }
 
-    //public void UpdateStatsOnInstantiation(ItemStats newItemStats)
-    //{
-    //    this.itemStats = newItemStats;
-    //}
-
-    //public ItemStats getItemStats()
-    //{
-    //    return itemStats;
-    //}
-    public void UpdateItemReference(Item itemReference)
+    void UpdateCount(int _count)
     {
-        this.itemReference.Name = itemReference.Name;
-        this.itemReference.Id = itemReference.Id;
-        this.itemReference.Count = itemReference.Count;
-        this.itemReference.IsStackable = itemReference.IsStackable;
+        this.count = _count;
     }
 }

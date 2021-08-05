@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Inventory inventory;
+    public InventoryObject inventoryObject;
     private InputRaycast inputRaycast;
     private DropItem dropItemSpawner;
     public bool isDebug;
@@ -10,19 +10,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        inventory = GetComponent<Inventory>();
         inputRaycast = GetComponentInChildren<InputRaycast>();
         dropItemSpawner = GetComponentInChildren<DropItem>();
-    }
-    // Test methods
-    public void AddItemToInventory(InventoryItem item)
-    {
-        //inventory.AddItem(new Copper());
-    }
-    
-    public void PrintInventoryItems()
-    {
-        inventory.PrintItems();
     }
 
     public void PickUpInventoryItem()
@@ -30,7 +19,7 @@ public class PlayerController : MonoBehaviour
         if (inputRaycast.isHitting && inputRaycast.hit.transform.tag == Constants.WORLD_ITEM)
         {
             var item = inputRaycast.hit.transform.parent.gameObject.GetComponent<WorldItem>();
-            inventory.AddItem(Instantiate(item.itemReference));
+            inventoryObject.AddItem(item.item, item.count);
             if (isDebug)
             {
                 PrintPickUpItem(item);
@@ -41,34 +30,36 @@ public class PlayerController : MonoBehaviour
 
     public void DropLastInventoryItem()
     {
-        if (inventory.Count() > 0)
+        if (inventoryObject.Size() > 0)
         {
-            Item item = inventory.RemoveLastItem();
-            GameObject itemToDrop = Resources.Load<GameObject>("Prefabs/WI_" + item.Name);
-            itemToDrop.GetComponent<WorldItem>().UpdateItemReference(item);
+            ItemObject item = inventoryObject.RemoveLastItem();
+            GameObject itemToDrop = item.prefab;
             dropItemSpawner.DropInventoryItem(itemToDrop);
             if (isDebug)
             {
-                PrintDropItem(itemToDrop.GetComponent<WorldItem>());
+                PrintDropItem(item.prefab.GetComponent<WorldItem>());
             }
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        inventoryObject.inventory.Clear();
+    }
+
+    #region Debug Functions
     private void PrintDropItem(WorldItem item)
     {
         string debugString = "---DROPPED ITEM---\n";
-        debugString += "\tName: " + item.itemReference.Name + "\n";
-        debugString += "\tCount: " + item.itemReference.Count + "\n";
-        debugString += "\tisStackable: " + item.itemReference.IsStackable + "\n";
+        debugString += "\tName: " + item.item.Name + "\n";
         Debug.Log(debugString);
     }
     
     private void PrintPickUpItem(WorldItem item)
     {
         string debugString = "---PICKED UP ITEM---\n";
-        debugString += "\tName: " + item.itemReference.Name + "\n";
-        debugString += "\tCount: " + item.itemReference.Count + "\n";
-        debugString += "\tisStackable: " + item.itemReference.IsStackable + "\n";
+        debugString += "\tName: " + item.item.Name + "\n";
         Debug.Log(debugString);
     }
+    #endregion
 }

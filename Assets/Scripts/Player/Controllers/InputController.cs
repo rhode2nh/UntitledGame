@@ -14,12 +14,6 @@ public class InputController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-            playerController.PrintInventoryItems();
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            //playerController.AddItemToInventory(new Copper());
-        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             playerController.PickUpInventoryItem();

@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Cube
-  itemReference: {fileID: 11400000, guid: ad47534b261327e4b9d92fcf93ba35dc, type: 2}
+  item: {fileID: 11400000, guid: ad47534b261327e4b9d92fcf93ba35dc, type: 2}
+  count: 1
 --- !u!1 &301281462973478542
 GameObject:
   m_ObjectHideFlags: 0
