@@ -18,13 +18,13 @@ public class PlayerController : MonoBehaviour
     {
         if (inputRaycast.isHitting && inputRaycast.hit.transform.tag == Constants.WORLD_ITEM)
         {
-            var item = inputRaycast.hit.transform.parent.gameObject.GetComponent<WorldItem>();
+            var item = inputRaycast.hit.transform.gameObject.GetComponent<WorldItem>();
             inventoryObject.AddItem(item.item, item.count);
             if (isDebug)
             {
                 PrintPickUpItem(item);
             }
-            Destroy(inputRaycast.hit.transform.parent.gameObject);
+            Destroy(inputRaycast.hit.transform.gameObject);
         }
     }
 
