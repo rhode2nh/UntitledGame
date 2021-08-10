@@ -6,6 +6,8 @@ using UnityEngine;
 public class InventoryObject : ScriptableObject
 {
     public List<InventorySlot> inventory = new List<InventorySlot>();
+    public delegate void OnItemChanged();
+    public OnItemChanged onItemChangedCallback;
     private bool hasItem = false;
     public void AddItem(ItemObject item, int amount)
     {
@@ -24,6 +26,10 @@ public class InventoryObject : ScriptableObject
             inventory.Add(new InventorySlot(item, amount));
         }
         hasItem = false;
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
     }
 
     public int Size()
@@ -49,7 +55,12 @@ public class InventoryObject : ScriptableObject
 
     public ItemObject RemoveLastItem()
     {
-        return RemoveItem(inventory.Count - 1);
+        ItemObject item = RemoveItem(inventory.Count - 1);
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
+        return item;
     }
 }
 

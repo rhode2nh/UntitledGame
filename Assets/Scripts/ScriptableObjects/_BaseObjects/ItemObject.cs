@@ -14,4 +14,5 @@ public abstract class ItemObject : ScriptableObject
     public string Name;
     public ItemType type;
     public GameObject prefab;
+    public Sprite sprite;
 }

@@ -4,29 +4,42 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
-    public float mouseSensitivity = 300.0f;
-    public Transform playerBody;
+    public float mouseSensitivity = 150.0f;
 
     private float mouseX;
     private float mouseY;
-    private float xRotation = 0.0f;
+    private float xRotation;
+    private float yRotation;
+    private float multiplier = 0.01f;
+    private Camera playerCamera; 
+    private Rigidbody _rb;
     
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        playerCamera = GetComponentInChildren<Camera>();
+        _rb = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        MyInput();
 
-        xRotation -= mouseY;
+        playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        _rb.MoveRotation(Quaternion.Euler(_rb.transform.localRotation.eulerAngles));
+        transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+    }
+
+    private void MyInput()
+    {
+        mouseX = Input.GetAxisRaw("Mouse X");
+        mouseY = Input.GetAxisRaw("Mouse Y");
+
+        yRotation += mouseX * mouseSensitivity * multiplier;
+        xRotation -= mouseY * mouseSensitivity * multiplier;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerBody.Rotate(Vector3.up * mouseX);
     }
 }
