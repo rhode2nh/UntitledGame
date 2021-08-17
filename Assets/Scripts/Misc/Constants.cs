@@ -15,6 +15,7 @@ public class Constants
 
     // Tags
     public const string WORLD_ITEM = "WORLD_ITEM";
+    public const string PLAYER = "Player";
 
     // Inventory/World Item Names
     public const string INVENTORY_ITEM_BASE = "InventoryItemBase";

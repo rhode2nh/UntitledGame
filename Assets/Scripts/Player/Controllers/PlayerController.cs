@@ -73,6 +73,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void DropItemInInventory(ItemObject item)
+    {
+        if (inventoryObject.Size() > 0)
+        {
+            ItemObject removedItem = inventoryObject.RemoveItem(item);
+            GameObject itemToDrop = removedItem.prefab;
+            dropItemSpawner.DropInventoryItem(itemToDrop);
+            if (isDebug)
+            {
+                PrintDropItem(removedItem.prefab.GetComponent<WorldItem>());
+            }
+        }
+    }
+
     public void Jump()
     {
         

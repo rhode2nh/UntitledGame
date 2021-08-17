@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
@@ -51,6 +52,24 @@ public class InventoryObject : ScriptableObject
             ItemObject item = inventory[index].item;
             return item;
         }
+    }
+
+    public ItemObject RemoveItem(ItemObject item)
+    {
+        InventorySlot removedItem = inventory.FirstOrDefault(x => x.item == item);
+        if (removedItem.count == 1)
+        {
+            inventory.Remove(removedItem);
+        }
+        else
+        {
+            removedItem.count--;
+        }
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
+        return removedItem.item;
     }
 
     public ItemObject RemoveLastItem()

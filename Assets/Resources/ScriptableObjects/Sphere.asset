@@ -16,3 +16,4 @@ MonoBehaviour:
   Name: Sphere
   type: 2
   prefab: {fileID: 610702017394763089, guid: e4c92d2dd5360d14ba9fd43e59cc5d59, type: 3}
+  sprite: {fileID: 21300000, guid: a29afaf14a9350248b567dc0d2e64b0b, type: 3}

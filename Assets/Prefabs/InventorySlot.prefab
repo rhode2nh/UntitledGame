@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
-  playerController: {fileID: 0}
+  playerController: {fileID: 14748333578188011, guid: bca7b229c4f53864c9d5b7117ad3ef9f, type: 3}
 --- !u!1 &6059875072752514924
 GameObject:
   m_ObjectHideFlags: 0

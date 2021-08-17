@@ -279,11 +279,12 @@ GameObject:
   - component: {fileID: 14748333578188013}
   - component: {fileID: 14748333578188008}
   - component: {fileID: 14748333578188011}
-  - component: {fileID: 1687461887}
   - component: {fileID: 1687461890}
+  - component: {fileID: 1687461892}
+  - component: {fileID: 1687461887}
   m_Layer: 0
   m_Name: FirstPersonPlayer 1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -330,9 +331,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryObject: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
   isDebug: 0
-  speed: 6
+  speed: 5
   movementMultiplier: 10
   drag: 6
+--- !u!114 &1687461890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14748333578188015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4be9c5e050c0c469b8d5cf0802857a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensitivity: 200
+--- !u!114 &1687461892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14748333578188015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745c8f415b8f5294ca82cb924d0decd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
 --- !u!54 &1687461887
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -349,16 +376,3 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1687461890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14748333578188015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc4be9c5e050c0c469b8d5cf0802857a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivity: 200
