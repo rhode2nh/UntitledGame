@@ -5,6 +5,7 @@ using UnityEngine;
 public enum ItemType
 {
     CONSUMABLE,
+    PRIMITIVE,
     WEARABLE,
     TEST
 }

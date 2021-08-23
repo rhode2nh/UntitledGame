@@ -18,7 +18,7 @@ public class InputController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            playerController.PickUpItem();
+            playerController.HandleInteractable();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {

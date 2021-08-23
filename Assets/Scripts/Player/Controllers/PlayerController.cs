@@ -47,16 +47,13 @@ public class PlayerController : MonoBehaviour
 
     public void PickUpItem()
     {
-        if (inputRaycast.isHitting && inputRaycast.hit.transform.tag == Constants.WORLD_ITEM)
+        var item = inputRaycast.hit.transform.gameObject.GetComponent<WorldItem>();
+        inventoryObject.AddItem(item.item, item.count);
+        if (isDebug)
         {
-            var item = inputRaycast.hit.transform.gameObject.GetComponent<WorldItem>();
-            inventoryObject.AddItem(item.item, item.count);
-            if (isDebug)
-            {
-                PrintPickUpItem(item);
-            }
-            Destroy(inputRaycast.hit.transform.gameObject);
+            PrintPickUpItem(item);
         }
+        Destroy(inputRaycast.hit.transform.gameObject);
     }
 
     public void DropLastItemInInventory()
@@ -84,6 +81,19 @@ public class PlayerController : MonoBehaviour
             {
                 PrintDropItem(removedItem.prefab.GetComponent<WorldItem>());
             }
+        }
+    }
+
+    public void HandleInteractable()
+    {
+        switch (inputRaycast.hit.transform.gameObject.tag)
+        {
+            case Constants.WORLD_ITEM:
+                PickUpItem();
+                break;
+            default:
+                Debug.Log("I don't know what to do with this: " + inputRaycast.hit.transform.gameObject.tag);
+                break;
         }
     }
 

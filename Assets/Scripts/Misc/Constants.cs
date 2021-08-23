@@ -7,6 +7,8 @@ public class Constants
     // Item Indices
     public const int CUBE_ID = 0;
     public const int SPHERE_ID = 1;
+    public const int PRIMITIVE_ITEM_BASE_ID = 2;
+    public const int SCREW_ID = 3;
 
     // Prefixes
     public const string INVENTORY_ITEM_PREFIX = "II";
@@ -18,8 +20,10 @@ public class Constants
     public const string PLAYER = "Player";
 
     // Inventory/World Item Names
-    public const string INVENTORY_ITEM_BASE = "InventoryItemBase";
-    public const string CUBE = "Cube";
-    public const string COPPER = "Copper";
-    public const string SPHERE = "Sphere";
+    public const string INVENTORY_ITEM_BASE = "INVENTORY_ITEM_BASE";
+    public const string CUBE = "CUBE";
+    public const string COPPER = "COPPER";
+    public const string SPHERE = "SPHERE";
+    public const string PRIMITIVE_ITEM_BASE = "PRIMITIVE_ITEM_BASE";
+    public const string SCREW = "SCREW";
 }
