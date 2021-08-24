@@ -6,6 +6,8 @@ public class InputController : MonoBehaviour
 {
     private PlayerController playerController;
     private InventoryUIController inventoryUIController;
+    public GameObject developerConsole;
+    private bool isInUI = false;
 
     void Start()
     {
@@ -16,17 +18,29 @@ public class InputController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isInUI)
         {
-            playerController.HandleInteractable();
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                playerController.HandleInteractable();
+            }
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                playerController.TransferItem();
+            }
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                playerController.DropLastItemInInventory();
+            }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                inventoryUIController.OpenInventory();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.BackQuote))
         {
-            playerController.DropLastItemInInventory();
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            inventoryUIController.OpenInventory();
+            isInUI = !isInUI;
+            developerConsole.GetComponent<DeveloperConsoleBehavior>().Toggle();
         }
     }
 }

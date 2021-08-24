@@ -29,8 +29,8 @@ public class PlayerController : MonoBehaviour
     // Movement
     private void Update()
     {
-        _horizontalMovement = Input.GetAxisRaw("Horizontal");
-        _verticalMovement = Input.GetAxisRaw("Vertical");
+        _horizontalMovement = Input.GetAxisRaw("Horizontal") * Time.deltaTime;
+        _verticalMovement = Input.GetAxisRaw("Vertical") * Time.deltaTime;
         ControlDrag();
         _moveDirection = transform.forward * _verticalMovement + transform.right * _horizontalMovement;
     }
@@ -45,9 +45,8 @@ public class PlayerController : MonoBehaviour
         _body.drag = drag;
     }
 
-    public void PickUpItem()
+    public void PickUpItem(WorldItem item)
     {
-        var item = inputRaycast.hit.transform.gameObject.GetComponent<WorldItem>();
         inventoryObject.AddItem(item.item, item.count);
         if (isDebug)
         {
@@ -84,16 +83,50 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TransferItem()
+    {
+        if (inputRaycast.isHitting)
+        {
+            var interactable = inputRaycast.hit.transform.gameObject;
+            switch (interactable.tag)
+            {
+                case Constants.CHEST:
+                    var otherInventory = interactable.GetComponent<ChestInventory>();
+                    if (inventoryObject.Size() > 0)
+                    {
+                        var item = inventoryObject.RemoveLastItem();
+                        otherInventory.AddItem(item, 1);
+                    }
+                    break;
+                default:
+                    Debug.Log("I don't know what to do with this: " + interactable.tag);
+                    break;
+            }
+        }
+    }
+
     public void HandleInteractable()
     {
-        switch (inputRaycast.hit.transform.gameObject.tag)
+        if (inputRaycast.isHitting)
         {
-            case Constants.WORLD_ITEM:
-                PickUpItem();
-                break;
-            default:
-                Debug.Log("I don't know what to do with this: " + inputRaycast.hit.transform.gameObject.tag);
-                break;
+            var interactable = inputRaycast.hit.transform.gameObject;
+            switch (interactable.tag)
+            {
+                case Constants.WORLD_ITEM:
+                    PickUpItem(interactable.GetComponent<WorldItem>());
+                    break;
+                case Constants.CHEST:
+                    var otherInventory = interactable.GetComponent<ChestInventory>();
+                    if (otherInventory.Size() > 0)
+                    {
+                        var item = otherInventory.RemoveLastItem();
+                        inventoryObject.AddItem(item, 1);
+                    }
+                    break;
+                default:
+                    Debug.Log("I don't know what to do with this: " + inputRaycast.hit.transform.gameObject.tag);
+                    break;
+            }
         }
     }
 

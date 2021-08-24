@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - WIBase
   - WORLD_ITEM
+  - CHEST
   layers:
   - Default
   - TransparentFX

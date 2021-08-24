@@ -6,7 +6,7 @@ public class InventoryUIController : MonoBehaviour
 {
     private MouseLook mouseLook;
     private bool isInUI = false;
-    public GameObject canvas;
+    public GameObject inventoryUI;
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +24,14 @@ public class InventoryUIController : MonoBehaviour
         isInUI = !isInUI;
         if (isInUI)
         {
-            canvas.SetActive(true);
+            inventoryUI.SetActive(true);
             Time.timeScale = 0;
             mouseLook.enabled = false;
             Cursor.lockState = CursorLockMode.None;
         }
         else
         {
-            canvas.SetActive(false);
+            inventoryUI.SetActive(false);
             Time.timeScale = 1;
             mouseLook.enabled = true;
             Cursor.lockState = CursorLockMode.Locked;

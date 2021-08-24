@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c86a896b236ec64aabf27ae1fd02ea6, type: 3}
+  m_Name: SpawnCommand
+  m_EditorClassIdentifier: 
+  commandWord: spawn
+  position: {x: 2.7786453, y: -5.503276, z: -80.85942}
+  rotation: {x: -0.64327085, y: 0.29360288, z: 0.29360288, w: 0.64327085}

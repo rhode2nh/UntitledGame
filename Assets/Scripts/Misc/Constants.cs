@@ -12,11 +12,12 @@ public class Constants
 
     // Prefixes
     public const string INVENTORY_ITEM_PREFIX = "II";
-    public const string WEARABLE_ITEM_PREFIX = "WI";
+    public const string WORLD_ITEM_PREFIX = "WI";
     public const string CONSUMABLE_ITEM_PREFIX = "CI";
 
     // Tags
     public const string WORLD_ITEM = "WORLD_ITEM";
+    public const string CHEST = "CHEST";
     public const string PLAYER = "Player";
 
     // Inventory/World Item Names
