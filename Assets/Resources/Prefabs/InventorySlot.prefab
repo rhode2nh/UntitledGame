@@ -224,6 +224,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
+  inventorySlotText: {fileID: 87009564874687505}
+  inventorySlotSprite: {fileID: 2610967905371146495}
+  button: {fileID: 2408364458965521856}
 --- !u!114 &-972266430527486383
 MonoBehaviour:
   m_ObjectHideFlags: 0

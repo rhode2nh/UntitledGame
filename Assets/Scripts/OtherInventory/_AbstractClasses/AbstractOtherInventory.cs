@@ -6,6 +6,8 @@ using UnityEngine;
 public abstract class AbstractOtherInventory: MonoBehaviour
 {
     public List<InventorySlot> inventory = new List<InventorySlot>();
+    public delegate void OnItemChanged();
+    public OnItemChanged onItemChangedCallback;
     private bool hasItem = false;
     public void AddItem(ItemObject item, int amount)
     {
@@ -24,6 +26,10 @@ public abstract class AbstractOtherInventory: MonoBehaviour
             inventory.Add(new InventorySlot(item, amount));
         }
         hasItem = false;
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
     }
 
     public int Size()
@@ -58,12 +64,20 @@ public abstract class AbstractOtherInventory: MonoBehaviour
         {
             removedItem.count--;
         }
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
         return removedItem.item;
     }
 
     public ItemObject RemoveLastItem()
     {
         ItemObject item = RemoveItem(inventory.Count - 1);
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
         return item;
     }
 }

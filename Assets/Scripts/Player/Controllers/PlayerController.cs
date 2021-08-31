@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public InventoryObject inventoryObject;
+    private InventoryUIController inventoryUIController;
     private InputRaycast inputRaycast;
     private DropItem dropItemSpawner;
     public bool isDebug;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
         dropItemSpawner = GetComponentInChildren<DropItem>();
         _body = GetComponent<Rigidbody>();
         _body.freezeRotation = true;
+        inventoryUIController = GetComponent<InventoryUIController>();
     }
 
     // Movement
@@ -116,12 +118,14 @@ public class PlayerController : MonoBehaviour
                     PickUpItem(interactable.GetComponent<WorldItem>());
                     break;
                 case Constants.CHEST:
-                    var otherInventory = interactable.GetComponent<ChestInventory>();
-                    if (otherInventory.Size() > 0)
-                    {
-                        var item = otherInventory.RemoveLastItem();
-                        inventoryObject.AddItem(item, 1);
-                    }
+                    inventoryUIController.OpenTrade(interactable.GetComponent<ChestInventory>());
+                    //var otherInventory = interactable.GetComponent<ChestInventory>();
+                    //if (otherInventory.Size() > 0)
+                    //{
+                    //    var item = otherInventory.RemoveLastItem();
+                    //    inventoryObject.AddItem(item, 1);
+                    //}
+                    
                     break;
                 default:
                     Debug.Log("I don't know what to do with this: " + inputRaycast.hit.transform.gameObject.tag);

@@ -6,16 +6,13 @@ public class InventoryUISlot : MonoBehaviour
     public InventoryObject inventory;
     private PlayerController playerController;
     private InventorySlot item;
-    private Text inventorySlotText;
-    private Image inventorySlotSprite;
-    private Button button;
+    public Text inventorySlotText;
+    public Image inventorySlotSprite;
+    public Button button;
 
     private void Start()
     {
         playerController = GameObject.FindGameObjectWithTag(Constants.PLAYER).GetComponent<PlayerController>();
-        inventorySlotText = GetComponentInChildren<Text>();
-        inventorySlotSprite = gameObject.transform.GetChild(0).GetComponent<Image>();
-        button = GetComponent<Button>();
     }
 
     public void AddItem(InventorySlot newItem)

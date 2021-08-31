@@ -11,6 +11,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject uiCanvas = null;
     [SerializeField] private TMP_InputField inputField = null;
+    [SerializeField] private TMP_Text historyText = null;
 
     public MouseLook mouseLook;
 
@@ -57,5 +58,6 @@ public class DeveloperConsoleBehavior : MonoBehaviour
         DeveloperConsole.ProcessCommand(inputValue);
 
         inputField.text = string.Empty;
+        historyText.text += inputValue + "\n";
     }
 }
