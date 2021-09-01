@@ -42,5 +42,13 @@ public class InputController : MonoBehaviour
             isInUI = !isInUI;
             developerConsole.GetComponent<DeveloperConsoleBehavior>().Toggle();
         }
+        if (Input.GetKeyDown(KeyCode.UpArrow) && isInUI)
+        {
+            developerConsole.GetComponent<DeveloperConsoleBehavior>().PreviousCommand();
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow) && isInUI)
+        {
+            developerConsole.GetComponent<DeveloperConsoleBehavior>().NextCommand();
+        }
     }
 }

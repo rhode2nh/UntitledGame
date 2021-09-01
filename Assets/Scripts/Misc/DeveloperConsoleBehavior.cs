@@ -21,6 +21,9 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
     private DeveloperConsole developerConsole;
 
+    private List<string> commandHistory = new List<string>();
+    private int historyIndex = 0;
+
     private DeveloperConsole DeveloperConsole
     {
         get
@@ -55,9 +58,38 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
     public void ProcessCommand(string inputValue)
     {
+        if (inputValue.Contains("`"))
+        {
+            inputField.text = string.Empty;
+            return;
+        }
         DeveloperConsole.ProcessCommand(inputValue);
 
         inputField.text = string.Empty;
         historyText.text += inputValue + "\n";
+        commandHistory.Add(inputValue);
+        historyIndex = commandHistory.Count;
+    }
+
+    public void PreviousCommand()
+    {
+        if (historyIndex <= 0 || commandHistory.Count == 0)
+        {
+            //historyIndex = 0;
+            return;
+        }
+
+        inputField.text = commandHistory[--historyIndex];
+    }
+
+    public void NextCommand()
+    {
+        if (historyIndex >= commandHistory.Count || commandHistory.Count == 0)
+        {
+            inputField.text = string.Empty;
+            return;
+        }
+
+        inputField.text = commandHistory[historyIndex++];
     }
 }
