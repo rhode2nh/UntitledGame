@@ -73,6 +73,12 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+		//--------------------CUSTOM VARIABLES--------------------
+		[Tooltip("Show debug info for first person controller function")]
+		public bool isDebug = false;
+		public InventoryObject inventoryObject;
+        public InputRaycast _inputRaycast;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -96,6 +102,7 @@ namespace StarterAssets
 		{
 			JumpAndGravity();
 			GroundedCheck();
+			//HandleInteractable();
 			Move();
 		}
 
@@ -103,6 +110,32 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+
+		public void HandleInteractable()
+        {
+            if (_inputRaycast.isHitting)
+            {
+                var interactable = _inputRaycast.hit.transform.gameObject;
+                switch (interactable.tag)
+                {
+                    case Constants.WORLD_ITEM:
+                        PickUpItem(interactable.GetComponent<WorldItem>());
+                        break;
+                    case Constants.CHEST:
+                        //inventoryUIController.OpenTrade(interactable.GetComponent<ChestInventory>());
+                        //var otherInventory = interactable.GetComponent<ChestInventory>();
+                        //if (otherInventory.Size() > 0)
+                        //{
+                        //    var item = otherInventory.RemoveLastItem();
+                        //    inventoryObject.AddItem(item, 1);
+                        //}
+                        break;
+                    default:
+                        Debug.Log("I don't know what to do with this: " + _inputRaycast.hit.transform.gameObject.tag);
+                        break;
+                }
+            }
+        }
 
 		private void GroundedCheck()
 		{
@@ -243,5 +276,18 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
+        public void PickUpItem(WorldItem item)
+        {
+            inventoryObject.AddItem(item.item, item.count);
+            if (isDebug)
+            {
+                //PrintPickUpItem(item);
+            }
+            Destroy(_inputRaycast.hit.transform.gameObject);
+        }
+        private void OnApplicationQuit()
+        {
+            inventoryObject.inventory.Clear();
+        }
 	}
 }

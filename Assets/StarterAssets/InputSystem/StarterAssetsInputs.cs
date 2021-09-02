@@ -12,18 +12,31 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool checkInteractable;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
+
+		private PlayerInput playerInput;
+		private InventoryUIController inventoryUIController;
+		private FirstPersonController firstPersonController;
+		public DeveloperConsoleBehavior developerConsole;
 
 #if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 #endif
+		
+        private void Start()
+        {
+            playerInput = GetComponent<PlayerInput>();
+            inventoryUIController = GetComponent<InventoryUIController>();
+			firstPersonController = GetComponent<FirstPersonController>();
+        }
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -45,12 +58,51 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
+		public void OnInteract(InputValue value)
+        {
+			InteractInput(value.isPressed);
+        }
+
+		public void OnOpenInventory(InputValue value)
+        {
+			OpenInventoryInput(value.isPressed);
+        }
+
+		public void OnOpenConsole(InputValue value)
+        {
+			OpenConsoleInput();
+        }
+
+        #region Inventory Action Map Functions
+        public void OnCloseInventory(InputValue value)
+        {
+			CloseInventoryInput(value.isPressed);
+        }
+        #endregion
+
+        #region Console Action Map Functions
+		public void OnCloseConsole(InputValue value)
+        {
+			CloseConsoleInput();
+        }
+
+		public void OnPreviousCommand(InputValue value)
+        {
+			PreviousCommandInput();
+        }
+
+		public void OnNextCommand(InputValue value)
+        {
+			NextCommandInput();	
+        }
+        #endregion
 #else
-	// old input sys if we do decide to have it (most likely wont)...
+		// old input sys if we do decide to have it (most likely wont)...
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
+        public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
@@ -70,9 +122,56 @@ namespace StarterAssets
 			sprint = newSprintState;
 		}
 
+		public void InteractInput(bool newInteractableState)
+        {
+			firstPersonController.HandleInteractable();
+        }
+
+		public void OpenInventoryInput(bool openInventoryState)
+        {
+			if (openInventoryState)
+            {
+				playerInput.currentActionMap = playerInput.actions.FindActionMap("Inventory");
+				inventoryUIController.OpenInventory();
+            }
+        }
+
+		public void CloseInventoryInput(bool closeInventoryState)
+        {
+			if (closeInventoryState)
+            {
+				playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+				inventoryUIController.CloseInventory();
+            }
+        }
+
+		public void OpenConsoleInput()
+        {
+			Time.timeScale = 0.0f;
+			playerInput.currentActionMap = playerInput.actions.FindActionMap("Console");
+			developerConsole.Toggle();
+        }
+
+		public void CloseConsoleInput()
+        {
+			Time.timeScale = 1.0f;
+			playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+			developerConsole.Toggle();
+        }
+
+		public void NextCommandInput()
+        {
+			developerConsole.NextCommand();
+        }
+
+		public void PreviousCommandInput()
+        {
+			developerConsole.PreviousCommand();
+        }
+
 #if !UNITY_IOS || !UNITY_ANDROID
 
-		private void OnApplicationFocus(bool hasFocus)
+        private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
 		}

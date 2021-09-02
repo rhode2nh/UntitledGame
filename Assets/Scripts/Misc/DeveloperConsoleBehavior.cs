@@ -42,23 +42,23 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     {
         if (uiCanvas.activeSelf)
         {
-            Time.timeScale = pausedTimeScale;
+            //Time.timeScale = pausedTimeScale;
             uiCanvas.SetActive(false);
-            mouseLook.enabled = true;
+            //mouseLook.enabled = true;
         }
         else
         {
-            pausedTimeScale = Time.timeScale;
-            Time.timeScale = 0;
+            //pausedTimeScale = Time.timeScale;
+            //Time.timeScale = 0;
             uiCanvas.SetActive(true);
-            mouseLook.enabled = false;
+            //mouseLook.enabled = false;
             inputField.ActivateInputField();
         }
     }
 
     public void ProcessCommand(string inputValue)
     {
-        if (inputValue.Contains("`"))
+        if (inputValue.Contains("`") || inputValue.Equals(string.Empty))
         {
             inputField.text = string.Empty;
             return;
@@ -69,6 +69,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
         historyText.text += inputValue + "\n";
         commandHistory.Add(inputValue);
         historyIndex = commandHistory.Count;
+        inputField.ActivateInputField();
     }
 
     public void PreviousCommand()
@@ -80,6 +81,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
         }
 
         inputField.text = commandHistory[--historyIndex];
+        inputField.ActivateInputField();
     }
 
     public void NextCommand()
@@ -91,5 +93,6 @@ public class DeveloperConsoleBehavior : MonoBehaviour
         }
 
         inputField.text = commandHistory[historyIndex++];
+        inputField.ActivateInputField();
     }
 }

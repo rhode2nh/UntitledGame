@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryUIController : MonoBehaviour
 {
-    private MouseLook mouseLook;
+    //private MouseLook mouseLook;
     private bool isInUI = false;
     public GameObject inventoryUI;
     public GameObject TradeUI;
@@ -12,7 +12,7 @@ public class InventoryUIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mouseLook = GetComponent<MouseLook>();
+        //mouseLook = GetComponent<MouseLook>();
     }
 
     // Update is called once per frame
@@ -27,35 +27,32 @@ public class InventoryUIController : MonoBehaviour
         if (isInUI)
         {
             TradeUI.SetActive(true);
-            Time.timeScale = 0;
-            mouseLook.enabled = false;
+            //Time.timeScale = 0;
+            //mouseLook.enabled = false;
             Cursor.lockState = CursorLockMode.None;
         }
         else
         {
             TradeUI.SetActive(false);
             Time.timeScale = 1;
-            mouseLook.enabled = true;
+            //mouseLook.enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
     
     public void OpenInventory()
     {
-        isInUI = !isInUI;
-        if (isInUI)
-        {
-            inventoryUI.SetActive(true);
-            Time.timeScale = 0;
-            mouseLook.enabled = false;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            inventoryUI.SetActive(false);
-            Time.timeScale = 1;
-            mouseLook.enabled = true;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        inventoryUI.SetActive(true);
+        //Time.timeScale = 0;
+        //mouseLook.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void CloseInventory()
+    {
+        inventoryUI.SetActive(false);
+        //Time.timeScale = 1;
+        //mouseLook.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
