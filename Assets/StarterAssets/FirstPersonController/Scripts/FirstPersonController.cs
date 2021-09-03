@@ -78,6 +78,10 @@ namespace StarterAssets
 		public bool isDebug = false;
 		public InventoryObject inventoryObject;
         public InputRaycast _inputRaycast;
+		public PlayerStats playerStats;
+
+		private Vector3 _oldPos;
+		private float _totalDisance = 0.0f;
 
 		private void Awake()
 		{
@@ -96,14 +100,17 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+			// Get start position to calculate distance travelled
+			_oldPos = transform.position;
 		}
 
 		private void Update()
 		{
 			JumpAndGravity();
 			GroundedCheck();
-			//HandleInteractable();
 			Move();
+			CalculateDistanceTravelled();
 		}
 
 		private void LateUpdate()
@@ -285,6 +292,16 @@ namespace StarterAssets
             }
             Destroy(_inputRaycast.hit.transform.gameObject);
         }
+
+		private void CalculateDistanceTravelled()
+        {
+			Vector3 distanceVector = transform.position - _oldPos;
+			float distanceThisFrame = distanceVector.magnitude;
+			_totalDisance += distanceThisFrame;
+			_oldPos = transform.position;
+			playerStats.DistanceTraveled = _totalDisance;
+        }
+
         private void OnApplicationQuit()
         {
             inventoryObject.inventory.Clear();

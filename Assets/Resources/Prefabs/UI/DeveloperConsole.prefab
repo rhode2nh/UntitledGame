@@ -344,7 +344,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9033728450243243136}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -644.5, y: -298, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -368,6 +368,7 @@ MonoBehaviour:
   commands:
   - {fileID: 11400000, guid: e3ab924af31139c40a751c7e8dbc3580, type: 2}
   - {fileID: 11400000, guid: 60b30a0828a7dd947a6f95ff34d5e4f3, type: 2}
+  - {fileID: 11400000, guid: d3fe04c5c8b354e4f94c6209b957c262, type: 2}
   uiCanvas: {fileID: 9033728450243243136}
   inputField: {fileID: 9033728451181444103}
   historyText: {fileID: 9033728449664483261}

@@ -13,10 +13,6 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     [SerializeField] private TMP_InputField inputField = null;
     [SerializeField] private TMP_Text historyText = null;
 
-    public MouseLook mouseLook;
-
-    private float pausedTimeScale;
-
     private static DeveloperConsoleBehavior instance;
 
     private DeveloperConsole developerConsole;
@@ -42,16 +38,11 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     {
         if (uiCanvas.activeSelf)
         {
-            //Time.timeScale = pausedTimeScale;
             uiCanvas.SetActive(false);
-            //mouseLook.enabled = true;
         }
         else
         {
-            //pausedTimeScale = Time.timeScale;
-            //Time.timeScale = 0;
             uiCanvas.SetActive(true);
-            //mouseLook.enabled = false;
             inputField.ActivateInputField();
         }
     }
