@@ -76,7 +76,7 @@ namespace StarterAssets
 		//--------------------CUSTOM VARIABLES--------------------
 		[Tooltip("Show debug info for first person controller function")]
 		public bool isDebug = false;
-		public InventoryObject inventoryObject;
+		public Inventory inventoryObject;
         public InputRaycast _inputRaycast;
 		public PlayerStats playerStats;
 

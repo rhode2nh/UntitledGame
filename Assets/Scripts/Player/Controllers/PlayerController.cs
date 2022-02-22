@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public InventoryObject inventoryObject;
+    public Inventory inventoryObject;
     private InventoryUIController inventoryUIController;
     private InputRaycast inputRaycast;
     private DropItem dropItemSpawner;
@@ -59,9 +59,9 @@ public class PlayerController : MonoBehaviour
 
     public void DropLastItemInInventory()
     {
-        if (inventoryObject.Size() > 0)
+        if (inventoryObject.NumUniqueItems() > 0)
         {
-            ItemObject item = inventoryObject.RemoveLastItem();
+            Item item = inventoryObject.RemoveLastItem();
             GameObject itemToDrop = item.prefab;
             dropItemSpawner.DropInventoryItem(itemToDrop);
             if (isDebug)
@@ -71,11 +71,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void DropItemInInventory(ItemObject item)
+    public void DropItemInInventory(Item item)
     {
-        if (inventoryObject.Size() > 0)
+        if (inventoryObject.NumUniqueItems() > 0)
         {
-            ItemObject removedItem = inventoryObject.RemoveItem(item);
+            Item removedItem = inventoryObject.RemoveItem(item);
             GameObject itemToDrop = removedItem.prefab;
             dropItemSpawner.DropInventoryItem(itemToDrop);
             if (isDebug)
@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
             {
                 case Constants.CHEST:
                     var otherInventory = interactable.GetComponent<ChestInventory>();
-                    if (inventoryObject.Size() > 0)
+                    if (inventoryObject.NumUniqueItems() > 0)
                     {
                         var item = inventoryObject.RemoveLastItem();
                         otherInventory.AddItem(item, 1);

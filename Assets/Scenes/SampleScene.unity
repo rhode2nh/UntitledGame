@@ -498,6 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   m_PointAction: {fileID: 0}
   m_MoveAction: {fileID: -3552364970006637457, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
@@ -1295,6 +1296,14 @@ PrefabInstance:
       propertyPath: playerStats
       value: 
       objectReference: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}
+    - target: {fileID: 3435951012020343847, guid: 5d70dd0a6172cda4f864e061968d3935, type: 3}
+      propertyPath: RotationSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3435951012020343847, guid: 5d70dd0a6172cda4f864e061968d3935, type: 3}
+      propertyPath: inventoryObject
+      value: 
+      objectReference: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
     - target: {fileID: 5445187745215308248, guid: 5d70dd0a6172cda4f864e061968d3935, type: 3}
       propertyPath: m_Name
       value: FirstPersonController
@@ -1440,6 +1449,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8573872353430096661, guid: 71235058a9769024cb56a0cb46c71a81, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71235058a9769024cb56a0cb46c71a81, type: 3}
 --- !u!1001 &9033728450969315706

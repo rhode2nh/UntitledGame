@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Cube", menuName = "Inventory/Items/Cube", order = 1)]
-public class Cube : ItemObject
+public class Cube : Item
 {
     private void Awake()
     {

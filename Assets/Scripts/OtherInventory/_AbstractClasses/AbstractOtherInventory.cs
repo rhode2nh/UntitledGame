@@ -9,7 +9,7 @@ public abstract class AbstractOtherInventory: MonoBehaviour
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
     private bool hasItem = false;
-    public void AddItem(ItemObject item, int amount)
+    public void AddItem(Item item, int amount)
     {
         for (int i = 0; i < inventory.Count; i++)
         {
@@ -37,23 +37,23 @@ public abstract class AbstractOtherInventory: MonoBehaviour
         return inventory.Count;
     }
 
-    public ItemObject RemoveItem(int index)
+    public Item RemoveItem(int index)
     {
         if (inventory[index].count == 1)
         {
-            ItemObject item = inventory[index].item;
+            Item item = inventory[index].item;
             inventory.RemoveAt(index);
             return item;
         }
         else
         {
             inventory[index].count--;
-            ItemObject item = inventory[index].item;
+            Item item = inventory[index].item;
             return item;
         }
     }
 
-    public ItemObject RemoveItem(ItemObject item)
+    public Item RemoveItem(Item item)
     {
         InventorySlot removedItem = inventory.FirstOrDefault(x => x.item == item);
         if (removedItem.count == 1)
@@ -71,9 +71,9 @@ public abstract class AbstractOtherInventory: MonoBehaviour
         return removedItem.item;
     }
 
-    public ItemObject RemoveLastItem()
+    public Item RemoveLastItem()
     {
-        ItemObject item = RemoveItem(inventory.Count - 1);
+        Item item = RemoveItem(inventory.Count - 1);
         if (onItemChangedCallback != null)
         {
             onItemChangedCallback.Invoke();

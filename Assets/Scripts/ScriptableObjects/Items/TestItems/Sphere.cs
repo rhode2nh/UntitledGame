@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Sphere", menuName = "Inventory/Items/Sphere", order = 1)]
-public class Sphere : ItemObject
+public class Sphere : Item
 {
     private void Awake()
     {

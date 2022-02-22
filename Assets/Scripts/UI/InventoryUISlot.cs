@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class InventoryUISlot : MonoBehaviour
 {
-    public InventoryObject inventory;
+    public Inventory inventory;
     private PlayerController playerController;
     private InventorySlot item;
     public Text inventorySlotText;

@@ -3,7 +3,7 @@ using UnityEngine;
 public class WorldItem : MonoBehaviour
 {
     public string itemName;
-    public ItemObject item;
+    public Item item;
     public int count;
     //ItemStats itemStats;
 

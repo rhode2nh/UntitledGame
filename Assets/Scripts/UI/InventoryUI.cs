@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    public InventoryObject inventory;
+    public Inventory inventory;
     public Transform itemsParent;
     public GameObject slotPrefab;
     public int numSlots;
@@ -31,7 +31,7 @@ public class InventoryUI : MonoBehaviour
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            if (i < inventory.Size())
+            if (i < inventory.NumUniqueItems())
             {
                 slots[i].AddItem(inventory.inventory[i]);
             }
