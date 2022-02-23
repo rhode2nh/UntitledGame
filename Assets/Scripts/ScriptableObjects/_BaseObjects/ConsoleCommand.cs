@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class ConsoleCommand : ScriptableObject
 {
-    [SerializeField] private string commandWord = string.Empty;
+    [SerializeField] private List<string> commandWord = new List<string>();
 
-    public string CommandWord => commandWord;
+    public List<string> CommandWord => commandWord;
 
     public abstract bool Process(string[] args);
 }

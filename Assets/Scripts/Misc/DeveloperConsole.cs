@@ -29,16 +29,28 @@ public class DeveloperConsole
 
     public void ProcessCommand(string commandInput, string[] args)
     {
+        var processCommand = false;
         foreach (var command in commands)
         {
-            if (!commandInput.Equals(command.CommandWord, System.StringComparison.OrdinalIgnoreCase))
+            foreach (var commandWord in command.CommandWord)
             {
-                continue;
+                if (commandInput.Equals(commandWord, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    processCommand = true;
+                    break;
+                }
+                if (processCommand)
+                {
+                    break;
+                }
             }
 
-            if (command.Process(args))
+            if (processCommand)
             {
-                return;
+                if (command.Process(args))
+                {
+                    return;
+                }
             }
         }
     }

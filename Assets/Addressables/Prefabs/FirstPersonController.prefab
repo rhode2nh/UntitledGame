@@ -405,7 +405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 6
   SprintSpeed: 8
-  RotationSpeed: 0.5
+  RotationSpeed: 1.5
   SpeedChangeRate: 10
   JumpHeight: 1.2
   Gravity: -15
@@ -423,6 +423,7 @@ MonoBehaviour:
   isDebug: 0
   inventoryObject: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
   _inputRaycast: {fileID: 3019484515291503010}
+  playerStats: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}
 --- !u!114 &4849985807314206416
 MonoBehaviour:
   m_ObjectHideFlags: 0

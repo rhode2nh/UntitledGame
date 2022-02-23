@@ -22,6 +22,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
         handle.Completed += Handle_Completed;
         return true;
     }
+
     private void Handle_Completed(AsyncOperationHandle<Item> operation)
     {
         if (operation.Status == AsyncOperationStatus.Failed)
@@ -35,7 +36,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
             Debug.Log("Item added");
         }
 
-        else if (args.Length == 2)
+        else if (args.Length >= 2)
         {
             if (int.TryParse(args[1], out int result))
             {
