@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79727069d2a9794ba16fa328d2cae17, type: 3}
+  m_Name: TestConsumable
+  m_EditorClassIdentifier: 
+  Id: 5
+  Name: TEST_CONSUMABLE
+  type: 0
+  prefab: {fileID: 6701025338146490559, guid: 183ad3d9e1fbf554c84e9493c9c7df5b, type: 3}
+  sprite: {fileID: 0}
+  stats: {fileID: 11400000, guid: 83f4d530bd1638645b19505de042adc8, type: 2}

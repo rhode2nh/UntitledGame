@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfdeb495a5d4a5941b8b88461ec98e59, type: 3}
   m_Name: LogCommand
   m_EditorClassIdentifier: 
-  commandWord: log
+  commandWord:
+  - Echo
+  - Log

@@ -44,6 +44,11 @@ public class Inventory : ScriptableObject
         return inventory.Any(x => x.item == item && x.count >= count);
     }
 
+    public bool HasItem(string name, int count = 1)
+    {
+        return inventory.Any(x => x.item.Name.Equals(name.ToUpper()) && x.count >= count);
+    }
+
     /// <summary>
     /// Get the number of unique items in the inventory.
     /// </summary>
@@ -72,6 +77,24 @@ public class Inventory : ScriptableObject
             Item item = inventory[index].item;
             return item;
         }
+    }
+
+    public Item RemoveItem(string name, int count = 1)
+    {
+        InventorySlot removedItem = inventory.FirstOrDefault(x => x.item.Name == name.ToUpper());
+        if (removedItem.count - count <= 0)
+        {
+            inventory.Remove(removedItem);
+        }
+        else
+        {
+            removedItem.count -= count;
+        }
+        if (onItemChangedCallback != null)
+        {
+            onItemChangedCallback.Invoke();
+        }
+        return removedItem.item;
     }
 
     /// <summary>

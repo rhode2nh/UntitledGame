@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3b2a4b1731dbaf45bd6e8d507f1a792, type: 3}
-  m_Name: CanCraftCommand
+  m_Script: {fileID: 11500000, guid: e073052eceaee3a47b4b5e3067cb4d6f, type: 3}
+  m_Name: ConsumeCommand
   m_EditorClassIdentifier: 
   commandWord:
-  - CanCraft
-  - cc
-  InventoryObject: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
-  args:
-  - cylinder
+  - Consume
+  Inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
+  playerStats: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}

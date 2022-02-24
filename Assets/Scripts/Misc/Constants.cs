@@ -10,6 +10,7 @@ public class Constants
     public const int PRIMITIVE_ITEM_BASE_ID = 2;
     public const int SCREW_ID = 3;
     public const int CYLINDER_ID = 4;
+    public const int TEST_CONSUMABLE_ID = 5;
 
     // Prefixes
     public const string INVENTORY_ITEM_PREFIX = "II";
@@ -29,4 +30,11 @@ public class Constants
     public const string PRIMITIVE_ITEM_BASE = "PRIMITIVE_ITEM_BASE";
     public const string SCREW = "SCREW";
     public const string CYLINDER = "CYLINDER";
+    public const string TEST_CONSUMABLE = "TEST_CONSUMABLE";
+
+    // Stat Names
+    public const string AGILITY = "AGILITY";
+    public const string STRENGTH = "STRENGTH";
+    public const string STAMINA = "STAMINA";
+    public const string SPEED = "SPEED";
 }

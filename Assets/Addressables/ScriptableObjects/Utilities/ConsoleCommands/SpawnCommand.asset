@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c86a896b236ec64aabf27ae1fd02ea6, type: 3}
   m_Name: SpawnCommand
   m_EditorClassIdentifier: 
-  commandWord: spawn
-  position: {x: 2.7786453, y: -5.503276, z: -80.85942}
-  rotation: {x: -0.64327085, y: 0.29360288, z: 0.29360288, w: 0.64327085}
+  commandWord:
+  - Spawn
+  position: {x: 3.9408245, y: 1.762433, z: 0.2429409}
+  rotation: {x: 0.13210554, y: 0.5555739, z: -0.091214076, w: 0.8158222}
+  args:
+  - cube
+  - 1

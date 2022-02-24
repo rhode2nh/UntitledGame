@@ -16,5 +16,5 @@ MonoBehaviour:
   Name: CYLINDER
   type: 3
   prefab: {fileID: 8861989744117030282, guid: 921265ea42e68674096fa9671dc51119, type: 3}
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 91f923e8a844c484598e921eb1e58b99, type: 3}
   recipe: {fileID: 11400000, guid: 8d618ac41b5907146819a23c61498f1b, type: 2}

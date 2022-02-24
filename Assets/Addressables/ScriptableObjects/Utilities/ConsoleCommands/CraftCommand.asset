@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb7d77e4a8abe4444945c7205da6e481, type: 3}
   m_Name: CraftCommand
   m_EditorClassIdentifier: 
-  commandWord: Craft
+  commandWord:
+  - Craft
+  - c
   InventoryObject: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
   args:
   - cylinder
