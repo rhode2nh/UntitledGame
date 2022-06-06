@@ -17,4 +17,5 @@ MonoBehaviour:
   type: 0
   prefab: {fileID: 6701025338146490559, guid: 183ad3d9e1fbf554c84e9493c9c7df5b, type: 3}
   sprite: {fileID: 0}
-  stats: {fileID: 11400000, guid: 83f4d530bd1638645b19505de042adc8, type: 2}
+  itemStats: {fileID: 11400000, guid: 83f4d530bd1638645b19505de042adc8, type: 2}
+  recipe: {fileID: 11400000, guid: 8d618ac41b5907146819a23c61498f1b, type: 2}

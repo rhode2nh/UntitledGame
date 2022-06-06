@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Craftable : Item
+public interface ICraftable
 {
-    public Recipe recipe;
+    public Recipe Recipe { get; }
 }

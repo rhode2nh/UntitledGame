@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commandWord:
   - Consume
-  Inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
+  inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
   playerStats: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}

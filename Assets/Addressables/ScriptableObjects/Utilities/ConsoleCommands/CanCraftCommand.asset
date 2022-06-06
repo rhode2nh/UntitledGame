@@ -15,6 +15,6 @@ MonoBehaviour:
   commandWord:
   - CanCraft
   - cc
-  InventoryObject: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
+  inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
   args:
-  - cylinder
+  - testconsumable

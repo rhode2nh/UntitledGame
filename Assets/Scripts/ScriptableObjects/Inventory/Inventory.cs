@@ -97,6 +97,12 @@ public class Inventory : ScriptableObject
         return removedItem.item;
     }
 
+    public Item GetItem(string name)
+    {
+        InventorySlot removedItem = inventory.FirstOrDefault(x => x.item.Name == name.ToUpper());
+        return removedItem.item;
+    }
+
     /// <summary>
     /// Remove the specified item from the inventory.
     /// </summary>
@@ -128,6 +134,23 @@ public class Inventory : ScriptableObject
             onItemChangedCallback.Invoke();
         }
         return item;
+    }
+
+    public bool CanCraft(Recipe recipe)
+    {
+        return recipe.RequiredItems.All(x => this.HasItem(x.item, x.count));
+    }
+
+    public bool Craft(Recipe recipe)
+    {
+        if (CanCraft(recipe))
+        {
+            recipe.RequiredItems.ForEach(x => this.RemoveItem(x.item, x.count));
+            recipe.Results.ForEach(x => this.AddItem(x.item, x.count));
+            return true;
+        }
+
+        return false;
     }
 }
 

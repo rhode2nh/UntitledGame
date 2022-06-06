@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6440f2c02c3e749b51b97ebb5ffcd3, type: 3}
   m_Name: TestConsumableStats
   m_EditorClassIdentifier: 
-  agility: 0
-  strength: 0
-  stamina: 0
-  machineLearning: 0
-  speed: 0
+  _attributes:
+  - key: 0
+    val:
+      rawValue: 2
+      buffPercentage: 0.2

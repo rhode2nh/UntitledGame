@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerStats : Stats
 {
     [Header("Player Specific Stats")]
+    [SerializeField] public float health;
     [SerializeField] private float distanceTraveled = 0.0f;
 
     public float DistanceTraveled

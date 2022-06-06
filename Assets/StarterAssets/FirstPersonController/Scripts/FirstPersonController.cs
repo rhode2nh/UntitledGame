@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -76,7 +77,7 @@ namespace StarterAssets
 		//--------------------CUSTOM VARIABLES--------------------
 		[Tooltip("Show debug info for first person controller function")]
 		public bool isDebug = false;
-		public Inventory inventoryObject;
+		public Inventory inventory;
         public InputRaycast _inputRaycast;
 		public PlayerStats playerStats;
 
@@ -117,6 +118,11 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+
+		public void Consume(ItemStats itemStats)
+        {
+			playerStats.ApplyConsumable(itemStats);
+        }
 
 		public void HandleInteractable()
         {
@@ -285,7 +291,7 @@ namespace StarterAssets
 		}
         public void PickUpItem(WorldItem item)
         {
-            inventoryObject.AddItem(item.item, item.count);
+            inventory.AddItem(item.item, item.count);
             if (isDebug)
             {
                 //PrintPickUpItem(item);
@@ -304,7 +310,7 @@ namespace StarterAssets
 
         private void OnApplicationQuit()
         {
-            inventoryObject.inventory.Clear();
+            inventory.inventory.Clear();
         }
 	}
 }

@@ -1349,6 +1349,10 @@ PrefabInstance:
       propertyPath: inventoryUI
       value: 
       objectReference: {fileID: 787353362}
+    - target: {fileID: 3435951012020343847, guid: 5d70dd0a6172cda4f864e061968d3935, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
     - target: {fileID: 5445187745215308248, guid: 5d70dd0a6172cda4f864e061968d3935, type: 3}
       propertyPath: m_Name
       value: FirstPersonController

@@ -5,10 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Consume Command", menuName = "Utilities/DeveloperConsole/Commands/Consume Command")]
 public class ConsumeCommand : ConsoleCommand
 {
-    public Inventory Inventory;
+    public Inventory inventory;
     public PlayerStats playerStats;
-    //public string[] args;
-    //private AsyncOperationHandle<Recipe> handle;
     
     public override bool Process(string[] args)
     {
@@ -17,37 +15,19 @@ public class ConsumeCommand : ConsoleCommand
 
         if (args.Length == 1)
         {
-            if (!Inventory.HasItem(args[0]))
+            if (!inventory.HasItem(args[0]))
             {
                 return false;
             }
-            Consumable item = (Consumable)Inventory.RemoveItem(args[0]);
-            item.Consume(playerStats);
+
+            Item item = inventory.GetItem(args[0]);
+            if (item is IConsumable)
+            {
+                var consumable = item as IConsumable;
+                inventory.RemoveItem(args[0]);
+                playerStats.ApplyConsumable(consumable.ItemStats);
+            }
         }
         return true;
     }
-    //private void Handle_Completed(AsyncOperationHandle<Recipe> operation)
-    //{
-    //    if (args.Length == 1)
-    //    {
-    //        if (operation.Status == AsyncOperationStatus.Failed)
-    //        {
-    //            Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
-    //        }
-
-    //        if (operation.Result.Craft(InventoryObject) == true)
-    //        {
-    //            Debug.Log("Item was crafted");
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("Item could not be crafted.");
-    //        }
-    //    }
-    //}
-
-    //private void OnDestroy()
-    //{
-    //    Addressables.Release(handle);
-    //}
 }

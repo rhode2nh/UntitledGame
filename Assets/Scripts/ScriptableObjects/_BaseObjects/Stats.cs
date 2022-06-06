@@ -15,7 +15,8 @@ public enum StatTypes
     Strength,
     Stamina,
     Intelligence,
-    Speed
+    Speed,
+    Health
 }
 
 [Serializable]
