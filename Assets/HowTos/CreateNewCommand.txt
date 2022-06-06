@@ -1,0 +1,4 @@
+1. Create a new ScriptableObject in Scripts/ScriptableObjects/Commands
+2. Goto Addressables/ScriptableObjects/Utilities/ConsoleCommands
+3. Right click => Create => Utilities => DeveloperConsole => Commands => Your Command
+4. (REVAMP) Goto Prefabs/UI/DeveloperConsole and add your new command in the Commands array

@@ -1,0 +1,4 @@
+1. Create constants in Scripts/Misc/Constants.cs
+2. Create Item scriptable object
+3. Create world item prefab variant in Addressables/Entities/
+4. Add any additional components/scriptable objects the item needs such as recipes, models, etc.
