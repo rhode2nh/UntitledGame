@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    public Inventory inventory;
     public Transform itemsParent;
     public GameObject slotPrefab;
     public int numSlots;
@@ -13,7 +12,7 @@ public class InventoryUI : MonoBehaviour
 
     void Awake()
     {
-        inventory.onItemChangedCallback += UpdateUI;
+        GameEvents.current.onUpdateInventoryGUI += UpdateUI;
         for (int i = 0; i < numSlots; i++)
         {
             GameObject instancedSlot = Instantiate(slotPrefab);
@@ -24,16 +23,18 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        UpdateUI();
+        // TODO
+        // This needs to be implemented when a save state system is created.
+        //UpdateUI();
     }
 
-    private void UpdateUI()
+    private void UpdateUI(List<InventorySlot> items)
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            if (i < inventory.NumUniqueItems())
+            if (i < items.Count)
             {
-                slots[i].AddItem(inventory.inventory[i]);
+                slots[i].AddItem(items[i]);
             }
             else
             {

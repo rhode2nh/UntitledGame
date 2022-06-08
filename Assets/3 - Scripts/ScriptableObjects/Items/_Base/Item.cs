@@ -1,19 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
-{
-    CONSUMABLE,
-    PRIMITIVE,
-    WEARABLE,
-    TEST
-}
+/// <summary>
+/// The base entity that exists for things in the world.
+/// </summary>
 public abstract class Item : ScriptableObject
 {
     public int Id;
     public string Name;
-    public ItemType type;
     public GameObject prefab;
     public Sprite sprite;
 }

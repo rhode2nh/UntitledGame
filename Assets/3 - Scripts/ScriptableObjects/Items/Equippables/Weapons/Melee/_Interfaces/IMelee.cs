@@ -1,0 +1,4 @@
+public interface IMelee : IWeapon
+{
+
+}

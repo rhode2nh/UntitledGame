@@ -11,6 +11,7 @@ public class Constants
     public const int SCREW_ID = 3;
     public const int CYLINDER_ID = 4;
     public const int TEST_CONSUMABLE_ID = 5;
+    public const int TEST_MODIFIER_ID = 6;
 
     // Prefixes
     public const string INVENTORY_ITEM_PREFIX = "II";
@@ -31,6 +32,7 @@ public class Constants
     public const string SCREW = "SCREW";
     public const string CYLINDER = "CYLINDER";
     public const string TEST_CONSUMABLE = "TEST_CONSUMABLE";
+    public const string TEST_MODIFIER = "TEST_MODIFIER";
 
     // Stat Names
     public const string AGILITY = "AGILITY";

@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     public void PickUpItem(WorldItem item)
     {
-        inventoryObject.AddItem(item.item, item.count);
+//        inventoryObject.AddItem(item.item, item.count);
         if (isDebug)
         {
             PrintPickUpItem(item);
@@ -59,30 +59,30 @@ public class PlayerController : MonoBehaviour
 
     public void DropLastItemInInventory()
     {
-        if (inventoryObject.NumUniqueItems() > 0)
-        {
-            Item item = inventoryObject.RemoveLastItem();
-            GameObject itemToDrop = item.prefab;
-            dropItemSpawner.DropInventoryItem(itemToDrop);
-            if (isDebug)
-            {
-                PrintDropItem(item.prefab.GetComponent<WorldItem>());
-            }
-        }
+//        if (inventoryObject.NumUniqueItems() > 0)
+//        {
+//            Item item = inventoryObject.RemoveLastItem();
+//            GameObject itemToDrop = item.prefab;
+//            dropItemSpawner.DropInventoryItem(itemToDrop);
+//            if (isDebug)
+//            {
+//                PrintDropItem(item.prefab.GetComponent<WorldItem>());
+//            }
+//        }
     }
 
     public void DropItemInInventory(Item item)
     {
-        if (inventoryObject.NumUniqueItems() > 0)
-        {
-            Item removedItem = inventoryObject.RemoveItem(item);
-            GameObject itemToDrop = removedItem.prefab;
-            dropItemSpawner.DropInventoryItem(itemToDrop);
-            if (isDebug)
-            {
-                PrintDropItem(removedItem.prefab.GetComponent<WorldItem>());
-            }
-        }
+ //       if (inventoryObject.NumUniqueItems() > 0)
+ //       {
+ //           Item removedItem = inventoryObject.RemoveItem(item);
+ //           GameObject itemToDrop = removedItem.prefab;
+ //           dropItemSpawner.DropInventoryItem(itemToDrop);
+ //           if (isDebug)
+ //           {
+ //               PrintDropItem(removedItem.prefab.GetComponent<WorldItem>());
+ //           }
+ //       }
     }
 
     public void HandleInteractable()
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        inventoryObject.inventory.Clear();
+        inventoryObject.items.Clear();
     }
 
     #region Debug Functions

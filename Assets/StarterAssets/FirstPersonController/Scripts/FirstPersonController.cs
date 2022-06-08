@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -74,7 +74,7 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
-		//--------------------CUSTOM VARIABLES--------------------
+		//--------------------user variables--------------------
 		[Tooltip("Show debug info for first person controller function")]
 		public bool isDebug = false;
 		public Inventory inventory;
@@ -91,6 +91,7 @@ namespace StarterAssets
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
+
 		}
 
 		private void Start()
@@ -119,9 +120,9 @@ namespace StarterAssets
 			CameraRotation();
 		}
 
-		public void Consume(ItemStats itemStats)
+		public void Consume(Item item)
         {
-			playerStats.ApplyConsumable(itemStats);
+            GameEvents.current.Consume(item);
         }
 
 		public void HandleInteractable()
@@ -289,9 +290,10 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
+
         public void PickUpItem(WorldItem item)
         {
-            inventory.AddItem(item.item, item.count);
+            GameEvents.current.ItemPickup(item.item, item.count);
             if (isDebug)
             {
                 //PrintPickUpItem(item);
@@ -310,7 +312,7 @@ namespace StarterAssets
 
         private void OnApplicationQuit()
         {
-            inventory.inventory.Clear();
+            inventory.items.Clear();
         }
 	}
 }

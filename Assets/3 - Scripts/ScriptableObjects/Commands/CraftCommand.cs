@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -34,7 +32,7 @@ public class CraftCommand : ConsoleCommand
             if (operation.Result is ICraftable)
             {
                 var craftable = operation.Result as ICraftable;
-                if (inventory.Craft(craftable.Recipe) == true)
+                if (GameEvents.current.Craft(craftable.Recipe) == true)
                 {
                     Debug.Log("Item was crafted");
                 }

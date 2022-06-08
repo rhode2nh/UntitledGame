@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -7,7 +5,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 [CreateAssetMenu(fileName = "New Add Item To Inventory Command", menuName = "Utilities/DeveloperConsole/Commands/Add Item To Inventory Command")]
 public class AddItemToInventoryCommand : ConsoleCommand
 {
-    public Inventory InventoryObject;
     public string[] args;
     private AsyncOperationHandle<Item> handle;
 
@@ -32,7 +29,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
 
         else if (args.Length == 1)
         {
-            InventoryObject.AddItem(operation.Result);
+            GameEvents.current.ItemPickup(operation.Result, 1);
             Debug.Log("Item added");
         }
 
@@ -40,7 +37,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
         {
             if (int.TryParse(args[1], out int result))
             {
-                InventoryObject.AddItem(operation.Result, result);
+                GameEvents.current.ItemPickup(operation.Result, result);
                 Debug.Log("Items added");
             }
         }
