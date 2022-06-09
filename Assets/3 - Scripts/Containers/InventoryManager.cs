@@ -9,12 +9,13 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.current.onItemPickup += AddItem;
+        GameEvents.current.onAddItemToPlayerInventory += AddItem;
         GameEvents.current.onCanCraft += CanCraft;
         GameEvents.current.onCraft += Craft;
         GameEvents.current.onConsume += Consume;
         GameEvents.current.onGetItem += GetItem;
         GameEvents.current.onHasItem += HasItem;
+        GameEvents.current.onRemoveItem += RemoveItem;
         hasItem = false;
     }
 

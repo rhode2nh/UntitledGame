@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-[CreateAssetMenu(fileName = "New Add Item To Inventory Command", menuName = "Utilities/DeveloperConsole/Commands/Add Item To Inventory Command")]
-public class AddItemToInventoryCommand : ConsoleCommand
+[CreateAssetMenu(fileName = "New Equip Command", menuName = "Utilities/DeveloperConsole/Commands/Equip Command")]
+public class EquipCommand : ConsoleCommand
 {
     public string[] args;
     private AsyncOperationHandle<Item> handle;
-
+    
     public override bool Process(string[] args)
     {
         if (args.Length == 0)
@@ -19,26 +19,26 @@ public class AddItemToInventoryCommand : ConsoleCommand
         handle.Completed += Handle_Completed;
         return true;
     }
-
     private void Handle_Completed(AsyncOperationHandle<Item> operation)
     {
-        if (operation.Status == AsyncOperationStatus.Failed)
+        if (args.Length == 1)
         {
-            Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
-        }
-
-        else if (args.Length == 1)
-        {
-            GameEvents.current.AddItemToPlayerInventory(operation.Result, 1);
-            Debug.Log("Item added");
-        }
-
-        else if (args.Length >= 2)
-        {
-            if (int.TryParse(args[1], out int result))
+            if (operation.Status == AsyncOperationStatus.Failed)
             {
-                GameEvents.current.AddItemToPlayerInventory(operation.Result, result);
-                Debug.Log("Items added");
+                Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
+            }
+
+            if (operation.Result is IEquippable)
+            {
+                if (GameEvents.current.HasItem(operation.Result.Name))
+                {
+                    GameEvents.current.Equip(operation.Result, 1);
+                    Debug.Log("Item was equipped!");
+                }
+                else
+                {
+                    Debug.Log("Item cannot be equppied");
+                }
             }
         }
     }

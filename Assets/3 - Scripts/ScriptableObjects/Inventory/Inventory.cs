@@ -5,6 +5,7 @@ using UnityEngine;
 public class Inventory : ScriptableObject
 {
     public List<InventorySlot> items = new List<InventorySlot>();
+    public int maxSize = 0;
 }
 
 [System.Serializable]
