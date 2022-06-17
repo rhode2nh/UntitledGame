@@ -41,5 +41,4 @@ public class Constants
     // Mutable Item Properties
     // These constants will follow a convention as such: P_[item type acroynm]_[property]_[value data type]
     public const string P_W_MODIFIERS_LIST = "P_W_MODIFIERS_LIST";
-    public const string P_I_ID_STRING = "P_I_ID_STRING";
 }

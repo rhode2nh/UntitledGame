@@ -29,7 +29,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
 
         else if (args.Length == 1)
         {
-            GameEvents.current.AddItemToPlayerInventory(operation.Result, 1);
+            GameEvents.current.AddItemToPlayerInventory(operation.Result.GetInstanceID(), operation.Result, 1);
             Debug.Log("Item added");
         }
 
@@ -37,7 +37,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
         {
             if (int.TryParse(args[1], out int result))
             {
-                GameEvents.current.AddItemToPlayerInventory(operation.Result, result);
+                GameEvents.current.AddItemToPlayerInventory(operation.Result.GetInstanceID(), operation.Result, result);
                 Debug.Log("Items added");
             }
         }

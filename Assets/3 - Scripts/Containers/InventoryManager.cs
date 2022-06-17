@@ -16,7 +16,9 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.onConsume += Consume;
         GameEvents.current.onGetItem += GetItem;
         GameEvents.current.onHasItem += HasItem;
-        GameEvents.current.onRemoveItem += RemoveItem;
+        GameEvents.current.onRemoveItemFromPlayerInventory += RemoveItem;
+        GameEvents.current.onClearInventory += ClearInventory;
+        GameEvents.current.onIsItemEquippable += isEquippable;
         hasItem = false;
     }
 
@@ -25,7 +27,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     /// <param name="item">The item to add.</param>
     /// <param name="amount">The number of the item to add.</param>
-    public void AddItem(Item item, int amount = 1, Dictionary<string, object> properties = null)
+    public void AddItem(int id, Item item, int amount = 1, Dictionary<string, object> properties = null)
     {
         if (properties == null)
         {
@@ -44,7 +46,7 @@ public class InventoryManager : MonoBehaviour
 
         if (!hasItem)
         {
-            inventory.items.Add(new InventorySlot(item, amount, properties));
+            inventory.items.Add(new InventorySlot(id, item, amount, properties));
         }
         hasItem = false;
         GameEvents.current.UpdateInventoryGUI(inventory.items);
@@ -69,25 +71,20 @@ public class InventoryManager : MonoBehaviour
         return inventory.items.Count;
     }
 
-    /// <summary>
-    /// Remove an item at the specified index in the inventory.
-    /// </summary>
-    /// <param name="index">The location to remove the item.</param>
-    /// <returns>The item removed.</returns>
-    public Item RemoveItem(int index)
+    public InventorySlot RemoveItem(int id)
     {
-        if (inventory.items[index].count == 1)
+        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
+        if (removedItem.count == 1)
         {
-            Item item = inventory.items[index].item;
-            inventory.items.RemoveAt(index);
-            return item;
+            inventory.items.Remove(removedItem);
         }
         else
         {
-            inventory.items[index].count--;
-            Item item = inventory.items[index].item;
-            return item;
+            removedItem.count -= 1;
         }
+
+        GameEvents.current.UpdateInventoryGUI(inventory.items);
+        return removedItem;
     }
 
     public Item RemoveItem(string name, int count = 1)
@@ -133,11 +130,11 @@ public class InventoryManager : MonoBehaviour
         return removedItem.item;
     }
 
-    public Item RemoveLastItem()
-    {
-        Item item = RemoveItem(inventory.items.Count - 1);
-        return item;
-    }
+    //public Item RemoveLastItem()
+    //{
+    //    Item item = RemoveItem(inventory.items.Count - 1);
+    //    return item;
+    //}
 
     public bool CanCraft(Recipe recipe)
     {
@@ -149,7 +146,7 @@ public class InventoryManager : MonoBehaviour
         if (CanCraft(recipe))
         {
             recipe.RequiredItems.ForEach(x => this.RemoveItem(x.item, x.count));
-            recipe.Results.ForEach(x => this.AddItem(x.item, x.count));
+            //recipe.Results.ForEach(x => this.AddItem(x.item, x.count));
             return true;
         }
 
@@ -173,5 +170,15 @@ public class InventoryManager : MonoBehaviour
             playerStats.attributes[attribute.Key].RawValue += attribute.Value.RawValue;
             playerStats.attributes[attribute.Key].BuffPercentage += attribute.Value.BuffPercentage;
         }
+    }
+
+    public void ClearInventory()
+    {
+        inventory.items.Clear();
+    }
+
+    public bool isEquippable(int id)
+    {
+        return inventory.items.FirstOrDefault(x => x.id == id).item is IEquippable ? true : false;
     }
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 public class Inventory : ScriptableObject
 {
-    public List<InventorySlot> items = new List<InventorySlot>();
     public int maxSize = 0;
+    public List<InventorySlot> items = new List<InventorySlot>();
 }
 
 [System.Serializable]
@@ -18,14 +18,16 @@ public struct Properties
 [System.Serializable]
 public class InventorySlot
 {
+    public int id;
     public Item item;
     public int count;
     [SerializeField]
     private List<Properties> _properties;
     public Dictionary<string, object> properties;
 
-    public InventorySlot(Item item, int count, Dictionary<string, object> properties = null)
+    public InventorySlot(int id, Item item, int count, Dictionary<string, object> properties = null)
     {
+        this.id = id;
         this.item = item;
         this.count = count;
         this.properties = properties ?? new Dictionary<string, object>();

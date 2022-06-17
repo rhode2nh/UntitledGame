@@ -6,26 +6,29 @@ public class GameEvents : MonoBehaviour
 {
     public static GameEvents current;
 
-    public event Action<Item, int, Dictionary<string, object>> onAddItemToPlayerInventory;
+    public event Action<int, Item, int, Dictionary<string, object>> onAddItemToPlayerInventory;
     public event Action<List<InventorySlot>> onUpdateInventoryGUI;
     public event Func<Recipe, bool> onCanCraft;
     public event Func<Recipe, bool> onCraft;
     public event Action<Item> onConsume;
     public event Func<string, Item> onGetItem;
     public event Func<string, bool> onHasItem;
-    public event Action<Item, int, Dictionary<string, object>> onEquip;
-    public event Func<Item, int, Item> onRemoveItem;
+    public event Action<int> onEquip;
+    public event Func<int, InventorySlot> onUnequip;
+    public event Func<int, InventorySlot> onRemoveItemFromPlayerInventory;
+    public event Action onClearInventory;
+    public event Func<int, bool> onIsItemEquippable;
 
     public void Awake()
     {
         current = this;
     }
 
-    public void AddItemToPlayerInventory(Item item, int amount, Dictionary<string, object> properties = null)
+    public void AddItemToPlayerInventory(int id, Item item, int amount, Dictionary<string, object> properties = null)
     {
         if (onAddItemToPlayerInventory != null)
         {
-            onAddItemToPlayerInventory(item, amount, properties);
+            onAddItemToPlayerInventory(id, item, amount, properties);
         }
     }
 
@@ -85,19 +88,47 @@ public class GameEvents : MonoBehaviour
         return false;
     }
 
-    public void Equip(Item item, int amount, Dictionary<string, object> properties = null)
+    public void Equip(int id)
     {
         if (onEquip != null)
         {
-            onEquip(item, amount, properties);
+            onEquip(id);
         }
     }
 
-    public Item RemoveItem(Item item, int amount)
+    public InventorySlot RemoveItemFromPlayerInventory(int id)
     {
-        if (onRemoveItem != null)
+        if (onRemoveItemFromPlayerInventory != null)
         {
-            return onRemoveItem(item, amount);
+            return onRemoveItemFromPlayerInventory(id);
+        }
+
+        return null;
+    }
+
+    public void ClearInventory()
+    {
+        if (onClearInventory != null)
+        {
+            onClearInventory();
+        }
+    }
+
+    public bool IsItemEquippable(int id)
+    {
+        if (onIsItemEquippable != null)
+        {
+            return onIsItemEquippable(id);
+        }
+
+        return false;
+    }
+
+    public InventorySlot Unequip(int id)
+    {
+        if (onUnequip != null)
+        {
+            return onUnequip(id);
         }
 
         return null;

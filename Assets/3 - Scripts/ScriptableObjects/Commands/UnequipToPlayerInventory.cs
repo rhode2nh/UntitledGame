@@ -1,0 +1,28 @@
+using System;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "New UnequipToPlayerInventoryCommand", menuName = "Utilities/DeveloperConsole/Commands/Unequip To Player Inventory Command")]
+public class UnequipToPlayerInventory : ConsoleCommand
+{
+    public string[] args;
+    
+    public override bool Process(string[] args)
+    {
+        if (args.Length == 0)
+            return false;
+        this.args = args;
+
+        if (Int32.TryParse(args[0], out int id))
+        {
+            InventorySlot itemToMove = GameEvents.current.Unequip(id);
+            GameEvents.current.AddItemToPlayerInventory(itemToMove.id, itemToMove.item, itemToMove.count, itemToMove.properties);
+            Debug.Log("Item was moved!");
+        }
+        else
+        {
+            Debug.Log("The id could not parsed: " + id);
+        }
+
+        return true;
+    }
+}

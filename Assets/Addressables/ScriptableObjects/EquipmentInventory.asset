@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EquipmentInventory
   m_EditorClassIdentifier: 
   items: []
-  maxSize: 0
+  maxSize: 4

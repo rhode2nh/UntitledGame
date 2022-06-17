@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class WorldItem : MonoBehaviour
 {
-    public string itemName;
     public Item item;
     public int count;
+    public int id;
     public Dictionary<string, object> properties;
     //ItemStats itemStats;
 
@@ -14,6 +14,7 @@ public class WorldItem : MonoBehaviour
     {
         tag = Constants.WORLD_ITEM;
         count = 1;
+        id = this.GetInstanceID();
         properties = new Dictionary<string, object>();
         InitializeProperties();
     }
@@ -26,7 +27,6 @@ public class WorldItem : MonoBehaviour
                 properties.Add(Constants.P_W_MODIFIERS_LIST, new List<TestModifier>());
                 goto default;
             default:
-                properties.Add(Constants.P_I_ID_STRING, this.GetInstanceID());
                 break;
         }
     }

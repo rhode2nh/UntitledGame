@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6aa726592b9bfa4db52c7267dd8017e, type: 3}
-  m_Name: PlayerInventory
+  m_Script: {fileID: 11500000, guid: 24594869aa55d7b85a7e53a58303ffce, type: 3}
+  m_Name: UnequipToPlayerInventoryCommand
   m_EditorClassIdentifier: 
-  items: []
-  maxSize: 0
+  commandWord:
+  - UnequipToPlayerInventory
+  - utpi
+  args: []

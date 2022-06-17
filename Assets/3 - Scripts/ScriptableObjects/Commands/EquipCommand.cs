@@ -1,12 +1,10 @@
+using System;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 [CreateAssetMenu(fileName = "New Equip Command", menuName = "Utilities/DeveloperConsole/Commands/Equip Command")]
 public class EquipCommand : ConsoleCommand
 {
     public string[] args;
-    private AsyncOperationHandle<Item> handle;
     
     public override bool Process(string[] args)
     {
@@ -14,37 +12,15 @@ public class EquipCommand : ConsoleCommand
             return false;
         this.args = args;
 
-        var load = "Assets/Addressables/ScriptableObjects/Items/" + args[0] + ".asset";
-        handle = Addressables.LoadAssetAsync<Item>(load);
-        handle.Completed += Handle_Completed;
-        return true;
-    }
-    private void Handle_Completed(AsyncOperationHandle<Item> operation)
-    {
-        if (args.Length == 1)
+        if (Int32.TryParse(args[0], out int id))
         {
-            if (operation.Status == AsyncOperationStatus.Failed)
-            {
-                Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
-            }
-
-            if (operation.Result is IEquippable)
-            {
-                if (GameEvents.current.HasItem(operation.Result.Name))
-                {
-                    GameEvents.current.Equip(operation.Result, 1);
-                    Debug.Log("Item was equipped!");
-                }
-                else
-                {
-                    Debug.Log("Item cannot be equppied");
-                }
-            }
+            GameEvents.current.Equip(id);
         }
-    }
+        else
+        {
+            Debug.Log("The id could not parsed: " + id);
+        }
 
-    private void OnDestroy()
-    {
-        Addressables.Release(handle);
+        return true;
     }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -77,7 +76,6 @@ namespace StarterAssets
 		//--------------------user variables--------------------
 		[Tooltip("Show debug info for first person controller function")]
 		public bool isDebug = false;
-		public Inventory inventory;
         public InputRaycast _inputRaycast;
 		public PlayerStats playerStats;
 
@@ -136,13 +134,6 @@ namespace StarterAssets
                         PickUpItem(interactable.GetComponent<WorldItem>());
                         break;
                     case Constants.CHEST:
-                        //inventoryUIController.OpenTrade(interactable.GetComponent<ChestInventory>());
-                        //var otherInventory = interactable.GetComponent<ChestInventory>();
-                        //if (otherInventory.Size() > 0)
-                        //{
-                        //    var item = otherInventory.RemoveLastItem();
-                        //    inventoryObject.AddItem(item, 1);
-                        //}
                         break;
                     default:
                         Debug.Log("I don't know what to do with this: " + _inputRaycast.hit.transform.gameObject.tag);
@@ -293,10 +284,10 @@ namespace StarterAssets
 
         public void PickUpItem(WorldItem item)
         {
-            GameEvents.current.AddItemToPlayerInventory(item.item, item.count, item.properties);
+            GameEvents.current.AddItemToPlayerInventory(item.id, item.item, item.count, item.properties);
             if (isDebug)
             {
-                //PrintPickUpItem(item);
+                Debug.Log(item.id);
             }
             Destroy(_inputRaycast.hit.transform.gameObject);
         }
@@ -312,7 +303,8 @@ namespace StarterAssets
 
         private void OnApplicationQuit()
         {
-            inventory.items.Clear();
+            // TODO Rework when save/load system is implemented
+            GameEvents.current.ClearInventory();
         }
 	}
 }

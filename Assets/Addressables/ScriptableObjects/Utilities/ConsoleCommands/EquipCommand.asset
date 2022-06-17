@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779851627161baae9ba9941b07ab2fdb, type: 3}
   m_Name: EquipCommand
   m_EditorClassIdentifier: 
-  commandWord: []
-  inventory: {fileID: 0}
-  args: []
+  commandWord:
+  - Equip
+  args:
+  - -1332

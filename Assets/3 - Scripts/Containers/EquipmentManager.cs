@@ -1,39 +1,49 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
     public Inventory equipmentInventory;
-    public bool hasItem = false;
+    private bool hasItem = false;
 
     private void Start()
     {
         GameEvents.current.onEquip += Equip;
+        GameEvents.current.onClearInventory += ClearInventory;
+        GameEvents.current.onUnequip += Unequip;
     }
 
     /// <summary>
-    /// Adds and item with the specified amount to the equipment inventory.
+    /// Adds by id to the equipment inventory.
     /// </summary>
-    /// <param name="item">The item to add.</param>
-    /// <param name="amount">The number of the item to add.</param>
-    public void Equip(Item item, int amount = 1, Dictionary<string, object> properties = null)
+    /// <param name="id">The item id.</param>
+    public void Equip(int id)
     {
-        if (properties == null)
+        if (equipmentInventory.items.Count >= equipmentInventory.maxSize)
+            return;
+        if (!GameEvents.current.IsItemEquippable(id))
         {
-            properties = new Dictionary<string, object>();
+            Debug.Log("Item is not equippable");
+            return;
         }
 
-        if (equipmentInventory.items.Count == equipmentInventory.maxSize)
-            return;
-
-        Item itemToEquip = GameEvents.current.RemoveItem(item, amount);
-
+        InventorySlot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
         if (!hasItem)
         {
-            equipmentInventory.items.Add(new InventorySlot(itemToEquip, amount));
+            equipmentInventory.items.Add(itemToEquip);
         }
         hasItem = false;
+
+    }
+
+    /// <summary>
+    /// Removes an item from the equipment inventory.
+    /// </summary>
+    public InventorySlot Unequip(int id)
+    {
+        InventorySlot itemToUnequip = equipmentInventory.items.FirstOrDefault(x => x.id == id);
+        equipmentInventory.items.Remove(itemToUnequip);
+        return itemToUnequip;
     }
 
     /// <summary>
@@ -113,5 +123,10 @@ public class EquipmentManager : MonoBehaviour
     {
         Item item = RemoveItem(equipmentInventory.items.Count - 1);
         return item;
+    }
+
+    public void ClearInventory()
+    {
+        equipmentInventory.items.Clear();
     }
 }
