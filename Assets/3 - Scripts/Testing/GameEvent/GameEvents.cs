@@ -6,14 +6,14 @@ public class GameEvents : MonoBehaviour
 {
     public static GameEvents current;
 
-    public event Action<Item, int> onAddItemToPlayerInventory;
+    public event Action<Item, int, Dictionary<string, object>> onAddItemToPlayerInventory;
     public event Action<List<InventorySlot>> onUpdateInventoryGUI;
     public event Func<Recipe, bool> onCanCraft;
     public event Func<Recipe, bool> onCraft;
     public event Action<Item> onConsume;
     public event Func<string, Item> onGetItem;
     public event Func<string, bool> onHasItem;
-    public event Action<Item, int> onEquip;
+    public event Action<Item, int, Dictionary<string, object>> onEquip;
     public event Func<Item, int, Item> onRemoveItem;
 
     public void Awake()
@@ -21,11 +21,11 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    public void AddItemToPlayerInventory(Item item, int amount)
+    public void AddItemToPlayerInventory(Item item, int amount, Dictionary<string, object> properties = null)
     {
         if (onAddItemToPlayerInventory != null)
         {
-            onAddItemToPlayerInventory(item, amount);
+            onAddItemToPlayerInventory(item, amount, properties);
         }
     }
 
@@ -85,11 +85,11 @@ public class GameEvents : MonoBehaviour
         return false;
     }
 
-    public void Equip(Item item, int amount)
+    public void Equip(Item item, int amount, Dictionary<string, object> properties = null)
     {
         if (onEquip != null)
         {
-            onEquip(item, amount);
+            onEquip(item, amount, properties);
         }
     }
 

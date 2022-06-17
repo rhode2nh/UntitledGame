@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -24,8 +25,13 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     /// <param name="item">The item to add.</param>
     /// <param name="amount">The number of the item to add.</param>
-    public void AddItem(Item item, int amount = 1)
+    public void AddItem(Item item, int amount = 1, Dictionary<string, object> properties = null)
     {
+        if (properties == null)
+        {
+            properties = new Dictionary<string, object>();
+        }
+
         for (int i = 0; i < inventory.items.Count; i++)
         {
             if (inventory.items[i].item == item)
@@ -38,7 +44,7 @@ public class InventoryManager : MonoBehaviour
 
         if (!hasItem)
         {
-            inventory.items.Add(new InventorySlot(item, amount));
+            inventory.items.Add(new InventorySlot(item, amount, properties));
         }
         hasItem = false;
         GameEvents.current.UpdateInventoryGUI(inventory.items);

@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
     public Inventory equipmentInventory;
-    private bool hasItem = false;
+    public bool hasItem = false;
 
     private void Start()
     {
@@ -16,21 +17,17 @@ public class EquipmentManager : MonoBehaviour
     /// </summary>
     /// <param name="item">The item to add.</param>
     /// <param name="amount">The number of the item to add.</param>
-    public void Equip(Item item, int amount = 1)
+    public void Equip(Item item, int amount = 1, Dictionary<string, object> properties = null)
     {
+        if (properties == null)
+        {
+            properties = new Dictionary<string, object>();
+        }
+
         if (equipmentInventory.items.Count == equipmentInventory.maxSize)
             return;
-        Item itemToEquip = GameEvents.current.RemoveItem(item, amount);
 
-        for (int i = 0; i < equipmentInventory.items.Count; i++)
-        {
-            if (equipmentInventory.items[i].item == itemToEquip)
-            {
-                hasItem = true;
-                equipmentInventory.items[i].AddCount(amount);
-                break;
-            }
-        }
+        Item itemToEquip = GameEvents.current.RemoveItem(item, amount);
 
         if (!hasItem)
         {

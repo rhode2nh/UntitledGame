@@ -293,7 +293,7 @@ namespace StarterAssets
 
         public void PickUpItem(WorldItem item)
         {
-            GameEvents.current.AddItemToPlayerInventory(item.item, item.count);
+            GameEvents.current.AddItemToPlayerInventory(item.item, item.count, item.properties);
             if (isDebug)
             {
                 //PrintPickUpItem(item);

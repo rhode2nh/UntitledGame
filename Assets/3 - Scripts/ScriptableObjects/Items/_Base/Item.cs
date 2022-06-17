@@ -9,4 +9,5 @@ public abstract class Item : ScriptableObject
     public string Name;
     public GameObject prefab;
     public Sprite sprite;
+    public bool isStackable;
 }

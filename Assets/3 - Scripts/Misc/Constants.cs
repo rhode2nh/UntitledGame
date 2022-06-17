@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Constants
 {
     // Item Indices
@@ -41,4 +37,9 @@ public class Constants
     public const string STRENGTH = "STRENGTH";
     public const string STAMINA = "STAMINA";
     public const string SPEED = "SPEED";
+
+    // Mutable Item Properties
+    // These constants will follow a convention as such: P_[item type acroynm]_[property]_[value data type]
+    public const string P_W_MODIFIERS_LIST = "P_W_MODIFIERS_LIST";
+    public const string P_I_ID_STRING = "P_I_ID_STRING";
 }
