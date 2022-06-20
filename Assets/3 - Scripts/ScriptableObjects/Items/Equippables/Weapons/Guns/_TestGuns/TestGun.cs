@@ -14,6 +14,7 @@ public class TestGun : Item, IGun
     {
         this.Name = Constants.TEST_GUN;
         this.Id = Constants.TEST_GUN_ID;
+        this.isStackable = false;
     }
 
     public float CastDelay { get => castDelay; set => castDelay = value; }

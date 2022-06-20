@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 6
   Name: TEST_MODIFIER
-  prefab: {fileID: 0}
+  worldItemPrefab: {fileID: 0}
+  equipmentMesh: {fileID: 6492669554624963454, guid: f1ee395f06674089198c92ed8e41d9b1, type: 3}
   sprite: {fileID: 0}
+  isStackable: 0
   castDelay: 0.2
   rechargeDelay: 0.2

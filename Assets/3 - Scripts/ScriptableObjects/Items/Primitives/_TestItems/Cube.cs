@@ -7,5 +7,6 @@ public class Cube : Item
     {
         this.Name = Constants.CUBE;
         this.Id = Constants.CUBE_ID;
+        this.isStackable = true;
     }
 }

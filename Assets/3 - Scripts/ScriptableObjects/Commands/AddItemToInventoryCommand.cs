@@ -6,7 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class AddItemToInventoryCommand : ConsoleCommand
 {
     public string[] args;
-    private AsyncOperationHandle<Item> handle;
+    private AsyncOperationHandle<GameObject> handle;
 
     public override bool Process(string[] args)
     {
@@ -14,22 +14,25 @@ public class AddItemToInventoryCommand : ConsoleCommand
             return false;
         this.args = args;
 
-        var load = "Assets/Addressables/ScriptableObjects/Items/" + args[0] + ".asset";
-        handle = Addressables.LoadAssetAsync<Item>(load);
+        var load = "Assets/Addressables/Prefabs/Entities/" + args[0] + ".prefab";
+        handle = Addressables.LoadAssetAsync<GameObject>(load);
         handle.Completed += Handle_Completed;
         return true;
     }
 
-    private void Handle_Completed(AsyncOperationHandle<Item> operation)
+    private void Handle_Completed(AsyncOperationHandle<GameObject> operation)
     {
         if (operation.Status == AsyncOperationStatus.Failed)
         {
             Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
         }
 
-        else if (args.Length == 1)
+        var instantiatedObject = Instantiate(operation.Result);
+        WorldItem worldItem = instantiatedObject.GetComponent<WorldItem>();
+
+        if (args.Length == 1)
         {
-            GameEvents.current.AddItemToPlayerInventory(operation.Result.GetInstanceID(), operation.Result, 1);
+            GameEvents.current.AddItemToPlayerInventory(new InventorySlot(worldItem.id, worldItem.item, 1, worldItem.properties));
             Debug.Log("Item added");
         }
 
@@ -37,10 +40,12 @@ public class AddItemToInventoryCommand : ConsoleCommand
         {
             if (int.TryParse(args[1], out int result))
             {
-                GameEvents.current.AddItemToPlayerInventory(operation.Result.GetInstanceID(), operation.Result, result);
+                GameEvents.current.AddItemToPlayerInventory(new InventorySlot(worldItem.id, worldItem.item, result, worldItem.properties));
                 Debug.Log("Items added");
             }
         }
+
+        Destroy(instantiatedObject);
     }
 
     private void OnDestroy()

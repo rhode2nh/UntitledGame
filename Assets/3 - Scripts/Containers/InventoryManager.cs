@@ -18,7 +18,7 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.onHasItem += HasItem;
         GameEvents.current.onRemoveItemFromPlayerInventory += RemoveItem;
         GameEvents.current.onClearInventory += ClearInventory;
-        GameEvents.current.onIsItemEquippable += isEquippable;
+        GameEvents.current.onIsItemEquippable += IsEquippable;
         hasItem = false;
     }
 
@@ -27,26 +27,30 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     /// <param name="item">The item to add.</param>
     /// <param name="amount">The number of the item to add.</param>
-    public void AddItem(int id, Item item, int amount = 1, Dictionary<string, object> properties = null)
+    public void AddItem(InventorySlot item)
     {
-        if (properties == null)
+        if (item.properties == null)
         {
-            properties = new Dictionary<string, object>();
+            item.properties = new Dictionary<string, object>();
         }
 
-        for (int i = 0; i < inventory.items.Count; i++)
+        Debug.Log(item.item.isStackable);
+        if (item.item.isStackable)
         {
-            if (inventory.items[i].item == item)
+            for (int i = 0; i < inventory.items.Count; i++)
             {
-                hasItem = true;
-                inventory.items[i].AddCount(amount);
-                break;
+                if (inventory.items[i].item == item.item)
+                {
+                    hasItem = true;
+                    inventory.items[i].AddCount(item.count);
+                    break;
+                }
             }
         }
 
         if (!hasItem)
         {
-            inventory.items.Add(new InventorySlot(id, item, amount, properties));
+            inventory.items.Add(item);
         }
         hasItem = false;
         GameEvents.current.UpdateInventoryGUI(inventory.items);
@@ -177,7 +181,7 @@ public class InventoryManager : MonoBehaviour
         inventory.items.Clear();
     }
 
-    public bool isEquippable(int id)
+    public bool IsEquippable(int id)
     {
         return inventory.items.FirstOrDefault(x => x.id == id).item is IEquippable ? true : false;
     }

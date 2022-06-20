@@ -12,6 +12,7 @@ public class TestModifier : Item, IModifier
     {
         this.Name = Constants.TEST_MODIFIER;
         this.Id = Constants.TEST_MODIFIER_ID;
+        this.isStackable = false;
     }
 
     public float CastDelay { get => castDelay; }

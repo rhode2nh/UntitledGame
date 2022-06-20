@@ -10,7 +10,7 @@ public class WorldItem : MonoBehaviour
     //ItemStats itemStats;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         tag = Constants.WORLD_ITEM;
         count = 1;

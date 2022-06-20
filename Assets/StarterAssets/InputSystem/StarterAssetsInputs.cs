@@ -21,6 +21,7 @@ namespace StarterAssets
 		private InventoryUIController inventoryUIController;
 		private FirstPersonController firstPersonController;
 		public DeveloperConsoleBehavior developerConsole;
+        private EquipmentContainer equipmentContainer;
 
 #if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
@@ -33,6 +34,7 @@ namespace StarterAssets
             playerInput = GetComponent<PlayerInput>();
             inventoryUIController = GetComponent<InventoryUIController>();
 			firstPersonController = GetComponent<FirstPersonController>();
+            equipmentContainer = GetComponent<EquipmentContainer>();
         }
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -95,6 +97,26 @@ namespace StarterAssets
 		public void OnNextCommand(InputValue value)
         {
 			NextCommandInput();	
+        }
+
+        public void OnSwitchEquipment(InputValue value)
+        {
+            SwitchEquipment(0);
+        }
+
+        public void OnSwitchEquipment1(InputValue value)
+        {
+            SwitchEquipment(1);
+        }
+
+        public void OnSwitchEquipment2(InputValue value)
+        {
+            SwitchEquipment(2);
+        }
+
+        public void OnSwitchEquipment3(InputValue value)
+        {
+            SwitchEquipment(3);
         }
         #endregion
 #else
@@ -167,6 +189,11 @@ namespace StarterAssets
 		public void PreviousCommandInput()
         {
 			developerConsole.PreviousCommand();
+        }
+
+        public void SwitchEquipment(int index)
+        {
+            equipmentContainer.SwitchEquipment(index);
         }
 
 #if !UNITY_IOS || !UNITY_ANDROID

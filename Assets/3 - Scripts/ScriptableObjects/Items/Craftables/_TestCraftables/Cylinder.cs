@@ -10,6 +10,7 @@ public class Cylinder : Item, ICraftable
     {
         this.Name = Constants.CYLINDER;
         this.Id = Constants.CYLINDER_ID;
+        this.isStackable = true;
     }
     public Recipe Recipe { get => recipe; }
 }

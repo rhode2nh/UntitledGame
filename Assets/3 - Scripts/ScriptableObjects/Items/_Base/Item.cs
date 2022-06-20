@@ -7,7 +7,8 @@ public abstract class Item : ScriptableObject
 {
     public int Id;
     public string Name;
-    public GameObject prefab;
+    public GameObject worldItemPrefab;
+    public Mesh equipmentMesh;
     public Sprite sprite;
     public bool isStackable;
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -33,7 +34,6 @@ public class EquipmentManager : MonoBehaviour
             equipmentInventory.items.Add(itemToEquip);
         }
         hasItem = false;
-
     }
 
     /// <summary>

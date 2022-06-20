@@ -7,5 +7,6 @@ public class Sphere : Item
     {
         this.Name = Constants.SPHERE;
         this.Id = Constants.SPHERE_ID;
+        this.isStackable = false;
     }
 }

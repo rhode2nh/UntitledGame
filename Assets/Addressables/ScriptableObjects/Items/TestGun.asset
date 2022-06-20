@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 7
   Name: TEST_GUN
-  prefab: {fileID: 0}
+  worldItemPrefab: {fileID: 0}
+  equipmentMesh: {fileID: 6492669554624963454, guid: 126fea0dbeaaaafb792e6d0b08e00ffd, type: 3}
   sprite: {fileID: 0}
+  isStackable: 0
   castDelay: 0
   rechargeTime: 0
   spread: 0

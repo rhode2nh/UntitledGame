@@ -12,6 +12,7 @@ public class TestConsumable : Item, ICraftable, IConsumable
     {
         this.Name = Constants.TEST_CONSUMABLE;
         this.Id = Constants.TEST_CONSUMABLE_ID;
+        this.isStackable = true;
     }
     public ItemStats ItemStats { get => itemStats; }
     public Recipe Recipe { get => recipe; }
