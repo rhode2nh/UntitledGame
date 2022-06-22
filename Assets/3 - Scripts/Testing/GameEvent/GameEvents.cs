@@ -11,13 +11,13 @@ public class GameEvents : MonoBehaviour
     public event Func<Recipe, bool> onCanCraft;
     public event Func<Recipe, bool> onCraft;
     public event Action<Item> onConsume;
-    public event Func<string, Item> onGetItem;
-    public event Func<string, bool> onHasItem;
+    public event Func<int, InventorySlot> onGetItem;
+    public event Func<int, bool> onHasItem;
     public event Action<int> onEquip;
     public event Func<int, InventorySlot> onUnequip;
     public event Func<int, InventorySlot> onRemoveItemFromPlayerInventory;
     public event Action onClearInventory;
-    public event Func<int, bool> onIsItemEquippable;
+    public event Func<int, System.Type[], bool> onCheckType;
     public event Action onUpdateEquipmentContainer;
 
     public void Awake()
@@ -69,21 +69,21 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public Item GetItem(string name)
+    public InventorySlot GetItem(int id)
     {
         if (onGetItem != null)
         {
-            return onGetItem(name);
+            return onGetItem(id);
         }
 
         return null;
     }
 
-    public bool HasItem(string name)
+    public bool HasItem(int id)
     {
         if (onHasItem != null)
         {
-            return onHasItem(name);
+            return onHasItem(id);
         }
         
         return false;
@@ -115,11 +115,11 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public bool IsItemEquippable(int id)
+    public bool CheckType(int id, params Type[] types)
     {
-        if (onIsItemEquippable != null)
+        if (onCheckType != null)
         {
-            return onIsItemEquippable(id);
+            return onCheckType(id, types);
         }
 
         return false;

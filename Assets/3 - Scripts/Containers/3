@@ -10,7 +10,7 @@ public class EquipmentContainer : MonoBehaviour
     public Transform projectileSpawner;
 
     private Vector3[] meshVertices;
-    public List<TestModifier> modifiers;
+    private List<TestModifier> modifiers;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +52,6 @@ public class EquipmentContainer : MonoBehaviour
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
             equipmentMesh = null;
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
-            modifiers.Clear();
         }
     }
 

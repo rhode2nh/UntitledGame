@@ -18,7 +18,7 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.onHasItem += HasItem;
         GameEvents.current.onRemoveItemFromPlayerInventory += RemoveItem;
         GameEvents.current.onClearInventory += ClearInventory;
-        GameEvents.current.onIsItemEquippable += IsEquippable;
+        GameEvents.current.onCheckType += CheckType;
         hasItem = false;
     }
 
@@ -34,7 +34,6 @@ public class InventoryManager : MonoBehaviour
             item.properties = new Dictionary<string, object>();
         }
 
-        Debug.Log(item.item.isStackable);
         if (item.item.isStackable)
         {
             for (int i = 0; i < inventory.items.Count; i++)
@@ -56,9 +55,9 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.UpdateInventoryGUI(inventory.items);
     }
 
-    public bool HasItem(string name)
+    public bool HasItem(int id)
     {
-        return inventory.items.Any(x => x.item.Name.Equals(name));
+        return inventory.items.Any(x => x.id == id);
     }
 
     public bool HasItem(Item item, int count = 1)
@@ -107,10 +106,10 @@ public class InventoryManager : MonoBehaviour
         return removedItem.item;
     }
 
-    public Item GetItem(string name)
+    public InventorySlot GetItem(int id)
     {
-        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
-        return removedItem.item;
+        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
+        return removedItem;
     }
 
     /// <summary>
@@ -181,8 +180,9 @@ public class InventoryManager : MonoBehaviour
         inventory.items.Clear();
     }
 
-    public bool IsEquippable(int id)
+    public bool CheckType(int id, params System.Type[] types)
     {
-        return inventory.items.FirstOrDefault(x => x.id == id).item is IEquippable ? true : false;
+        var item = inventory.items.FirstOrDefault(x => x.id == id);
+        return types.All(type => type.IsAssignableFrom(item.item.GetType()));
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ public class EquipmentManager : MonoBehaviour
     {
         if (equipmentInventory.items.Count >= equipmentInventory.maxSize)
             return;
-        if (!GameEvents.current.IsItemEquippable(id))
+        if (!GameEvents.current.CheckType(id, typeof(IEquippable)))
         {
             Debug.Log("Item is not equippable");
             return;

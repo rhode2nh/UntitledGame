@@ -10,18 +10,18 @@ public class ConsumeCommand : ConsoleCommand
 
         if (args.Length == 1)
         {
-            if (!GameEvents.current.HasItem(args[0]))
-            {
-                Debug.Log("You do not have this item, or it cannot be consumed.");
-                return false;
-            }
+            //if (!GameEvents.current.HasItem(args[0]))
+            //{
+            //    Debug.Log("You do not have this item, or it cannot be consumed.");
+            //    return false;
+            //}
 
-            Item item = GameEvents.current.GetItem(args[0]);
-            if (item is IConsumable)
-            {
-                GameEvents.current.Consume(item);
-                Debug.Log("Item Consumed!");
-            }
+            //Item item = GameEvents.current.GetItem(args[0]);
+            //if (item is IConsumable)
+            //{
+            //    GameEvents.current.Consume(item);
+            //    Debug.Log("Item Consumed!");
+            //}
         }
         return true;
     }

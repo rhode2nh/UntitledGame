@@ -12,6 +12,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     [SerializeField] private GameObject uiCanvas = null;
     [SerializeField] private TMP_InputField inputField = null;
     [SerializeField] private TMP_Text historyText = null;
+    [SerializeField] private TMP_Text suggestionsText = null;
 
     private static DeveloperConsoleBehavior instance;
 
@@ -32,6 +33,11 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
+        inputField.onValueChanged.AddListener(delegate { GiveSuggestions(); });
     }
 
     public void Toggle()
@@ -85,5 +91,35 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
         inputField.text = commandHistory[historyIndex++];
         inputField.ActivateInputField();
+    }
+
+    public void GiveSuggestions()
+    {
+        if (inputField.text.Length == 0)
+        {
+            suggestionsText.text = "";
+            return;
+        }
+
+        List<string> commandNames = new List<string>();
+
+        for (int i = 0; i < commands.Length; i++)
+        {
+            commandNames.Add(commands[i].CommandWord[0].ToLower());
+        }
+
+        string suggestions = "";
+
+        int matches = 0;
+        foreach (string command in commandNames)
+        {
+            if (command.StartsWith(inputField.text.Substring(1).ToLower()))
+            {
+                suggestions += command + "\n";
+                matches++;
+            }
+        }
+        suggestionsText.text = suggestions;
+        //suggestionsText.rectTransform.sizeDelta = new Vector2(200, matches * 20);
     }
 }
