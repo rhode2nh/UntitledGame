@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeveloperConsoleBehavior : MonoBehaviour
 {
@@ -105,21 +105,21 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
         for (int i = 0; i < commands.Length; i++)
         {
-            commandNames.Add(commands[i].CommandWord[0].ToLower());
+            commandNames.Add(commands[i].CommandWord[0]);
         }
 
         string suggestions = "";
 
         int matches = 0;
+
         foreach (string command in commandNames)
         {
-            if (command.StartsWith(inputField.text.Substring(1).ToLower()))
+            if (command.ToLower().StartsWith(inputField.text.Substring(1).ToLower()))
             {
                 suggestions += command + "\n";
                 matches++;
             }
         }
         suggestionsText.text = suggestions;
-        //suggestionsText.rectTransform.sizeDelta = new Vector2(200, matches * 20);
     }
 }
