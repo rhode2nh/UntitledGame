@@ -95,7 +95,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
     public void GiveSuggestions()
     {
-        if (inputField.text.Length == 0)
+        if (inputField.text.Length == 0 || !inputField.text.StartsWith('/'))
         {
             suggestionsText.text = "";
             return;

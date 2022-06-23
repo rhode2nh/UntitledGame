@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b1f58f74693cac739f0dc77df77d515, type: 3}
   m_Name: AddModifierCommand
   m_EditorClassIdentifier: 
-  commandWord: []
-  args: []
+  commandWord:
+  - AddModifier
+  - am
+  args:
+  - -4794
+  - -35562

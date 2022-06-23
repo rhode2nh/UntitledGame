@@ -118,6 +118,11 @@ namespace StarterAssets
         {
             SwitchEquipment(3);
         }
+
+        public void OnAttack(InputValue value)
+        {
+            Attack(value.isPressed);
+        }
         #endregion
 #else
 		// old input sys if we do decide to have it (most likely wont)...
@@ -194,6 +199,11 @@ namespace StarterAssets
         public void SwitchEquipment(int index)
         {
             equipmentContainer.SwitchEquipment(index);
+        }
+
+        public void Attack(bool isPressed)
+        {
+            equipmentContainer.setIsAttacking(isPressed);
         }
 
 #if !UNITY_IOS || !UNITY_ANDROID
