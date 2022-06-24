@@ -30,8 +30,8 @@ public class AddModifierCommand : ConsoleCommand
             }
             InventorySlot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
             InventorySlot modifier = GameEvents.current.RemoveItemFromPlayerInventory(modifierId);
-            List<TestModifier> modifierList = (List<TestModifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
-            modifierList.Add((TestModifier)modifier.item);
+            List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
+            modifierList.Add((Modifier)modifier.item);
             GameEvents.current.AddItemToPlayerInventory(equipment);
             return true;
         }

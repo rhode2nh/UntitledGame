@@ -14,7 +14,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
             return false;
         this.args = args;
 
-        var load = "Assets/Addressables/Prefabs/Entities/" + args[0] + ".prefab";
+        var load = "Assets/Addressables/Prefabs/Entities/WI_" + args[0] + ".prefab";
         handle = Addressables.LoadAssetAsync<GameObject>(load);
         handle.Completed += Handle_Completed;
         return true;
@@ -27,25 +27,31 @@ public class AddItemToInventoryCommand : ConsoleCommand
             Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
         }
 
-        var instantiatedObject = Instantiate(operation.Result);
-        WorldItem worldItem = instantiatedObject.GetComponent<WorldItem>();
 
         if (args.Length == 1)
         {
+            var instantiatedObject = Instantiate(operation.Result);
+            WorldItem worldItem = instantiatedObject.GetComponent<WorldItem>();
             GameEvents.current.AddItemToPlayerInventory(new InventorySlot(worldItem.id, worldItem.item, 1, worldItem.properties));
-            Debug.Log("Item added");
+            Debug.Log("Item added: " + worldItem.id);
+            Destroy(instantiatedObject);
         }
 
         else if (args.Length >= 2)
         {
             if (int.TryParse(args[1], out int result))
             {
-                GameEvents.current.AddItemToPlayerInventory(new InventorySlot(worldItem.id, worldItem.item, result, worldItem.properties));
-                Debug.Log("Items added");
+                for (int i = 0; i < result; i++)
+                {
+                    var instantiatedObject = Instantiate(operation.Result);
+                    WorldItem worldItem = instantiatedObject.GetComponent<WorldItem>();
+                    GameEvents.current.AddItemToPlayerInventory(new InventorySlot(worldItem.id, worldItem.item, 1, worldItem.properties));
+                    Debug.Log("Item added: " + worldItem.id);
+                    Destroy(instantiatedObject);
+                }
             }
         }
 
-        Destroy(instantiatedObject);
     }
 
     private void OnDestroy()

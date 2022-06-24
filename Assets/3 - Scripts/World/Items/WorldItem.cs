@@ -24,7 +24,7 @@ public class WorldItem : MonoBehaviour
         switch(item)
         {
             case IWeapon w:
-                properties.Add(Constants.P_W_MODIFIERS_LIST, new List<TestModifier>());
+                properties.Add(Constants.P_W_MODIFIERS_LIST, new List<Modifier>());
                 goto default;
             default:
                 break;

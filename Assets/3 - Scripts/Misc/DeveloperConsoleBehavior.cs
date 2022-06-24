@@ -13,6 +13,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     [SerializeField] private TMP_InputField inputField = null;
     [SerializeField] private TMP_Text historyText = null;
     [SerializeField] private TMP_Text suggestionsText = null;
+    [SerializeField] private GameObject suggestionsBox = null;
 
     private static DeveloperConsoleBehavior instance;
 
@@ -38,6 +39,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
     void Start()
     {
         inputField.onValueChanged.AddListener(delegate { GiveSuggestions(); });
+        suggestionsBox.SetActive(false);
     }
 
     public void Toggle()
@@ -79,6 +81,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
         inputField.text = commandHistory[--historyIndex];
         inputField.ActivateInputField();
+        inputField.caretPosition = inputField.text.Length;
     }
 
     public void NextCommand()
@@ -91,6 +94,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
 
         inputField.text = commandHistory[historyIndex++];
         inputField.ActivateInputField();
+        inputField.caretPosition = inputField.text.Length;
     }
 
     public void GiveSuggestions()
@@ -98,6 +102,7 @@ public class DeveloperConsoleBehavior : MonoBehaviour
         if (inputField.text.Length == 0 || !inputField.text.StartsWith('/'))
         {
             suggestionsText.text = "";
+            suggestionsBox.SetActive(false);
             return;
         }
 
@@ -121,5 +126,10 @@ public class DeveloperConsoleBehavior : MonoBehaviour
             }
         }
         suggestionsText.text = suggestions;
+        
+        if (matches == 0)
+            suggestionsBox.SetActive(false);
+        else
+            suggestionsBox.SetActive(true);
     }
 }

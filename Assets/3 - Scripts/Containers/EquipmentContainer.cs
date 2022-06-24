@@ -11,24 +11,29 @@ public class EquipmentContainer : MonoBehaviour
     public Transform projectileSpawner;
 
     private Vector3[] meshVertices;
-    public List<TestModifier> modifiers;
-    private bool isAttacking;
+    public List<Modifier> modifiers;
+    public bool isAttacking;
+    public int curModifierIndex;
     private bool coroutineStarted;
+    private InventorySlot currentItem;
 
     // Start is called before the first frame update
     void Start()
     {
         GameEvents.current.onUpdateEquipmentContainer += UpdateEquipmentContainer;
-        modifiers = new List<TestModifier>();
+        
+        modifiers = new List<Modifier>();
         curEquipmentIndex = 0;
         isAttacking = false;
+        curModifierIndex = 0;
         coroutineStarted = false;
+        currentItem = null;
         UpdateEquipmentContainer();
     }
 
     void Update()
     {
-        if (isAttacking && coroutineStarted == false)
+        if (isAttacking && coroutineStarted == false && currentItem != null)
         {
             coroutineStarted = true;
             StartCoroutine(Attack());
@@ -37,7 +42,7 @@ public class EquipmentContainer : MonoBehaviour
 
     public void SwitchEquipment(int index)
     {
-        if (index < equipmentManager.equipmentInventory.maxSize)
+        if (index < equipmentManager.MaxSize())
         {
             curEquipmentIndex = index;
             UpdateEquipmentContainer();
@@ -46,9 +51,10 @@ public class EquipmentContainer : MonoBehaviour
 
     void UpdateEquipmentContainer()
     {
-        if (equipmentManager.equipmentInventory.items.Count > 0 && curEquipmentIndex < equipmentManager.equipmentInventory.items.Count)
+        if (!equipmentManager.IsEmpty() && curEquipmentIndex < equipmentManager.Count())
         {
-            equipmentMesh = equipmentManager.equipmentInventory.items[curEquipmentIndex].item.equipmentMesh;
+            currentItem = equipmentManager.GetItem(curEquipmentIndex);
+            equipmentMesh = currentItem.item.equipmentMesh;
             meshVertices = equipmentMesh.vertices;
             for (int i = 0; i < meshVertices.Length; i++)
             {
@@ -58,12 +64,13 @@ public class EquipmentContainer : MonoBehaviour
                 }
             }
             equipmentContainer.GetComponent<MeshFilter>().mesh = equipmentMesh;
-            modifiers = (List<TestModifier>)equipmentManager.equipmentInventory.items[curEquipmentIndex].properties[Constants.P_W_MODIFIERS_LIST];
+            modifiers = (List<Modifier>)currentItem.properties[Constants.P_W_MODIFIERS_LIST];
             
         }
         else
         {
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
+            currentItem = null;
             equipmentMesh = null;
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
             modifiers.Clear();
@@ -72,24 +79,42 @@ public class EquipmentContainer : MonoBehaviour
 
     IEnumerator Attack()
     {
-        if (equipmentManager.equipmentInventory.items.Count == 0)
+        var weapon = currentItem.item as IWeapon;
+        float finalRechargeTime = weapon.RechargeTime;
+
+        if (modifiers.Count == 0)
         {
-            yield return null;
+            Debug.Log("Recharge Time: " + finalRechargeTime);
+            yield return new WaitForSeconds(finalRechargeTime);
+            coroutineStarted = false;
+            yield break;
         }
-        else
+        
+        for (int i = curModifierIndex; i < modifiers.Count; i++)
         {
-            var test = equipmentManager.equipmentInventory.items[curEquipmentIndex].item as IWeapon;
-            float time = test.RechargeTime;
-            Debug.Log("Recharge Time: " + time);
-            yield return new WaitForSeconds(time);
+            var finalCastDelay = modifiers[curModifierIndex].castDelay + weapon.CastDelay;
+            var projectile = modifiers[curModifierIndex] as IProjectile;
+            var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, projectileSpawner.rotation);
+            instantiatedProjectile.GetComponent<Rigidbody>().AddForce(projectileSpawner.transform.right * 1000);
+            Debug.Log("Cast Delay: " + finalCastDelay);
+            curModifierIndex++;
+            if (curModifierIndex == modifiers.Count)
+            {
+                break;
+            }
+            yield return new WaitForSeconds(finalCastDelay);
+            if (!isAttacking)
+            {
+                coroutineStarted = false;
+                yield break;
+            }
+
         }
+
+        Debug.Log("Recharge Time: " + finalRechargeTime);
+        yield return new WaitForSeconds(finalRechargeTime);
         coroutineStarted = false;
-        //if (modifiers.Count == 0)
-        //{
-        //    var test = equipmentManager.equipmentInventory.items[curEquipmentIndex].item as IWeapon;
-        //    float time = test.RechargeTime;
-        //    yield return new WaitForSeconds(time);
-        //}
+        curModifierIndex = 0;
     }
 
     public void setIsAttacking(bool isAttacking)

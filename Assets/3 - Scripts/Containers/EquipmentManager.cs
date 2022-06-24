@@ -49,7 +49,7 @@ public class EquipmentManager : MonoBehaviour
     /// Get the number of unique items in the inventory.
     /// </summary>
     /// <returns>The number of unique items.</returns>
-    public int NumUniqueItems()
+    public int Count()
     {
         return equipmentInventory.items.Count;
     }
@@ -97,6 +97,11 @@ public class EquipmentManager : MonoBehaviour
         return removedItem.item;
     }
 
+    public InventorySlot GetItem(int index)
+    {
+        return equipmentInventory.items[index];
+    }
+
     /// <summary>
     /// Remove the specified item from the inventory.
     /// </summary>
@@ -122,6 +127,16 @@ public class EquipmentManager : MonoBehaviour
     {
         Item item = RemoveItem(equipmentInventory.items.Count - 1);
         return item;
+    }
+
+    public bool IsEmpty()
+    {
+        return !equipmentInventory.items.Any();
+    }
+
+    public int MaxSize()
+    {
+        return equipmentInventory.maxSize;
     }
 
     public void ClearInventory()

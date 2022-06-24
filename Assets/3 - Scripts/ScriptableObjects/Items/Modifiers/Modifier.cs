@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TestModifier", menuName = "Items/Modifiers/TestModifier", order = 1)]
-public class TestModifier : Item, IModifier
+[CreateAssetMenu(fileName = "Modifier", menuName = "Items/Modifiers/New Modifier", order = 1)]
+public class Modifier : Item, IModifier
 {
     [SerializeField]
     public float castDelay;
