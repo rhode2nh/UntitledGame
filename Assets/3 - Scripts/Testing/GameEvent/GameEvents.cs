@@ -14,10 +14,14 @@ public class GameEvents : MonoBehaviour
     public event Func<int, InventorySlot> onGetItem;
     public event Func<int, bool> onHasItem;
     public event Action<int> onEquip;
+    public event Action onEquipFirstOccurence;
+    public event Action onUnEquipFirstOccurence;
     public event Func<int, InventorySlot> onUnequip;
     public event Func<int, InventorySlot> onRemoveItemFromPlayerInventory;
     public event Action onClearInventory;
     public event Func<int, System.Type[], bool> onCheckType;
+    public event Func<System.Type, InventorySlot> onRemoveItemByType;
+    public event Func<List<InventorySlot>> onGetAllModifiers;
     public event Action onUpdateEquipmentContainer;
 
     public void Awake()
@@ -97,6 +101,22 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public void EquipFirstOccurence()
+    {
+        if (onEquipFirstOccurence != null)
+        {
+            onEquipFirstOccurence();
+        }
+    }
+
+    public void UnEquipFirstOccurence()
+    {
+        if (onUnEquipFirstOccurence != null)
+        {
+            onUnEquipFirstOccurence();
+        }
+    }
+
     public InventorySlot RemoveItemFromPlayerInventory(int id)
     {
         if (onRemoveItemFromPlayerInventory != null)
@@ -123,6 +143,26 @@ public class GameEvents : MonoBehaviour
         }
 
         return false;
+    }
+
+    public InventorySlot RemoveItemByType(Type type)
+    {
+        if (onRemoveItemByType != null)
+        {
+            return onRemoveItemByType(type);
+        }
+
+        return null;
+    }
+
+    public List<InventorySlot> GetAllModifiers()
+    {
+        if (onGetAllModifiers != null)
+        {
+            return onGetAllModifiers();
+        }
+
+        return new List<InventorySlot>();
     }
 
     public InventorySlot Unequip(int id)

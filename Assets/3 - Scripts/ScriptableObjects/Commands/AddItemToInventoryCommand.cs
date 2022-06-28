@@ -14,7 +14,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
             return false;
         this.args = args;
 
-        var load = "Assets/Addressables/Prefabs/Entities/WI_" + args[0] + ".prefab";
+        var load = "Assets/Addressables/Prefabs/Entities/" + Constants.WORLD_ITEM_PREFIX + "_" + args[0] + ".prefab";
         handle = Addressables.LoadAssetAsync<GameObject>(load);
         handle.Completed += Handle_Completed;
         return true;

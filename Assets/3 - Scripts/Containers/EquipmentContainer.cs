@@ -1,6 +1,18 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
+[System.Serializable]
+public struct Output
+{
+    public Modifier projectile;
+
+    public Output(Modifier projectile)
+    {
+        this.projectile = projectile;
+    }
+}
 
 public class EquipmentContainer : MonoBehaviour
 {
@@ -13,8 +25,18 @@ public class EquipmentContainer : MonoBehaviour
     private Vector3[] meshVertices;
     public List<Modifier> modifiers;
     public bool isAttacking;
+    public bool isRecharging;
     public int curModifierIndex;
-    private bool coroutineStarted;
+    public int curProjectileIndex;
+    public float totalCastDelay;
+    public float totalRechargeTime;
+    public List<Output> curOutput;
+    public List<Output> lastOutput;
+    public List<int> usedCastXIds;
+    public List<int> usedModifierIds;
+    public int projectilesToGroup;
+
+    public bool coroutineStarted;
     private InventorySlot currentItem;
 
     // Start is called before the first frame update
@@ -23,11 +45,18 @@ public class EquipmentContainer : MonoBehaviour
         GameEvents.current.onUpdateEquipmentContainer += UpdateEquipmentContainer;
         
         modifiers = new List<Modifier>();
+        curOutput = new List<Output>();
+        lastOutput = new List<Output>();
+        usedCastXIds = new List<int>();
+        usedModifierIds = new List<int>();
         curEquipmentIndex = 0;
         isAttacking = false;
+        isRecharging = false;
         curModifierIndex = 0;
+        curProjectileIndex = 0;
         coroutineStarted = false;
         currentItem = null;
+        projectilesToGroup = 1;
         UpdateEquipmentContainer();
     }
 
@@ -45,6 +74,15 @@ public class EquipmentContainer : MonoBehaviour
         if (index < equipmentManager.MaxSize())
         {
             curEquipmentIndex = index;
+            if (isRecharging)
+            {
+                curModifierIndex = 0;
+                curProjectileIndex = 0;
+                usedCastXIds.Clear();
+                usedModifierIds.Clear();
+            }
+            StopAllCoroutines();
+            coroutineStarted = false;
             UpdateEquipmentContainer();
         }
     }
@@ -64,8 +102,10 @@ public class EquipmentContainer : MonoBehaviour
                 }
             }
             equipmentContainer.GetComponent<MeshFilter>().mesh = equipmentMesh;
-            modifiers = (List<Modifier>)currentItem.properties[Constants.P_W_MODIFIERS_LIST];
-            
+            modifiers = new List<Modifier>((List<Modifier>)currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
+            totalCastDelay = TotalCastDelay();
+            totalRechargeTime = TotalRechargeTime();
+            isRecharging = false;
         }
         else
         {
@@ -74,47 +114,140 @@ public class EquipmentContainer : MonoBehaviour
             equipmentMesh = null;
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
             modifiers.Clear();
+            totalCastDelay = 0.0f;
+            totalRechargeTime = 0.0f;
+            isRecharging = false;
+            curModifierIndex = 0;
+            curProjectileIndex = 0;
         }
     }
 
     IEnumerator Attack()
     {
         var weapon = currentItem.item as IWeapon;
-        float finalRechargeTime = weapon.RechargeTime;
+        projectilesToGroup = 1;
 
         if (modifiers.Count == 0)
         {
-            Debug.Log("Recharge Time: " + finalRechargeTime);
-            yield return new WaitForSeconds(finalRechargeTime);
+            yield return new WaitForSeconds(totalRechargeTime);
             coroutineStarted = false;
             yield break;
         }
-        
-        for (int i = curModifierIndex; i < modifiers.Count; i++)
+
+        bool hasWrapped = false;
+        while (projectilesToGroup != 0)
         {
-            var finalCastDelay = modifiers[curModifierIndex].castDelay + weapon.CastDelay;
-            var projectile = modifiers[curModifierIndex] as IProjectile;
-            var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, projectileSpawner.rotation);
-            instantiatedProjectile.GetComponent<Rigidbody>().AddForce(projectileSpawner.transform.right * 1000);
-            Debug.Log("Cast Delay: " + finalCastDelay);
-            curModifierIndex++;
-            if (curModifierIndex == modifiers.Count)
+            var modifier = modifiers[curModifierIndex];
+            if (modifier is IProjectile)
             {
-                break;
+                curOutput.Add(new Output(modifier));
             }
-            yield return new WaitForSeconds(finalCastDelay);
-            if (!isAttacking)
+            
+            else if (modifier is ICastX)
             {
-                coroutineStarted = false;
-                yield break;
+                if (usedCastXIds.Contains(curModifierIndex))
+                {
+                    usedCastXIds.Clear();
+                    projectilesToGroup = 1;
+                    break;
+                }
+                var castX = modifier as ICastX;
+                projectilesToGroup += castX.ModifiersPerCast;
+                usedCastXIds.Add(curModifierIndex);
             }
 
+            else
+            {
+                if (!usedModifierIds.Contains(curModifierIndex))
+                {
+                    usedModifierIds.Add(curModifierIndex);
+                }
+                curModifierIndex++;
+                continue;
+            }
+
+            if (!usedModifierIds.Contains(curModifierIndex))
+            {
+                usedModifierIds.Add(curModifierIndex);
+            }
+
+            curModifierIndex++;
+            projectilesToGroup--;
+
+            if (curModifierIndex >= modifiers.Count())
+            {
+                curModifierIndex = curModifierIndex % modifiers.Count();
+                hasWrapped = true;
+            }
         }
 
-        Debug.Log("Recharge Time: " + finalRechargeTime);
-        yield return new WaitForSeconds(finalRechargeTime);
-        coroutineStarted = false;
-        curModifierIndex = 0;
+        InstantiateOutput(curOutput);
+        lastOutput = new List<Output>(curOutput);
+
+        if (usedModifierIds.Count() >= modifiers.Count())
+        {
+            usedModifierIds.Clear();
+            usedCastXIds.Clear();
+            isRecharging = true;
+            curOutput.Clear();
+            yield return new WaitForSeconds(totalRechargeTime);
+            projectilesToGroup = 1;
+            isRecharging = false;
+            coroutineStarted = false;
+        }
+        else
+        {
+            if (hasWrapped)
+            {
+                hasWrapped = false;
+                curModifierIndex = 0;
+            }
+            curOutput.Clear();
+            usedModifierIds.Clear();
+            usedCastXIds.Clear();
+            yield return new WaitForSeconds(totalCastDelay);
+            coroutineStarted = false;
+        }
+    }
+
+    private void InstantiateOutput(List<Output> output)
+    {
+        foreach (var modifier in output)
+        {
+            var projectile = modifier.projectile as IProjectile;
+            var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, projectileSpawner.rotation);
+            instantiatedProjectile.GetComponent<Rigidbody>().AddForce(projectileSpawner.transform.right * 1000);
+        }
+    }
+
+    private float TotalCastDelay()
+    {
+        float totalCastDelay = 0.0f;
+        if (currentItem.item is IWeapon)
+        {
+            var weapon = currentItem.item as IWeapon;
+            totalCastDelay = weapon.CastDelay;
+            foreach (var modifier in modifiers)
+            {
+                totalCastDelay += modifier.castDelay;
+            }
+        }
+        return totalCastDelay < 0.0f ? 0.01f : totalCastDelay;
+    }
+
+    private float TotalRechargeTime()
+    {
+        float totalRechargeTime = 0.0f;
+        if (currentItem.item is IWeapon)
+        {
+            var weapon = currentItem.item as IWeapon;
+            totalRechargeTime = weapon.RechargeTime;
+            foreach (var modifier in modifiers)
+            {
+                totalRechargeTime += modifier.rechargeDelay;
+            }
+        }
+        return totalRechargeTime < 0.0f ? 0.01f : totalRechargeTime;
     }
 
     public void setIsAttacking(bool isAttacking)

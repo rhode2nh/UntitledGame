@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ExtensionMethods;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
@@ -30,7 +31,19 @@ public class InventorySlot
         this.id = id;
         this.item = item;
         this.count = count;
-        this.properties = properties ?? new Dictionary<string, object>();
+        this.properties = properties.CopyProperties() ?? new Dictionary<string, object>();
+        this._properties = new List<Properties>();
+
+        // Show key value pairs in the inspector.
+        SerializeProperties();
+    }
+
+    public InventorySlot(InventorySlot item)
+    {
+        this.id = item.id;
+        this.item = item.item;
+        this.count = item.count;
+        this.properties = item.properties.CopyProperties() ?? new Dictionary<string, object>(); 
         this._properties = new List<Properties>();
 
         // Show key value pairs in the inspector.

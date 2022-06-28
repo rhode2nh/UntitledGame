@@ -10,6 +10,7 @@ public class Constants
     public const int TEST_MODIFIER_ID = 6;
     public const int TEST_GUN_ID = 7;
     public const int MOD_PROJECTILE_ID = 8;
+    public const int MOD_CASTX_ID = 9;
 
     // Prefixes
     public const string INVENTORY_ITEM_PREFIX = "II";
@@ -33,6 +34,7 @@ public class Constants
     public const string TEST_MODIFIER = "TEST_MODIFIER";
     public const string TEST_GUN = "TEST_GUN";
     public const string MOD_PROJECTILE = "MOD_PROJECTILE";
+    public const string MOD_CASTX = "MOD_CASTX";
 
     // Stat Names
     public const string AGILITY = "AGILITY";

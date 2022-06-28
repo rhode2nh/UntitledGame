@@ -9,7 +9,11 @@ public class EquipCommand : ConsoleCommand
     public override bool Process(string[] args)
     {
         if (args.Length == 0)
-            return false;
+        {
+            GameEvents.current.EquipFirstOccurence();
+            GameEvents.current.UpdateEquipmentContainer();
+            return true;
+        }
         this.args = args;
 
         if (Int32.TryParse(args[0], out int id))
@@ -20,6 +24,7 @@ public class EquipCommand : ConsoleCommand
         else
         {
             Debug.Log("The id could not parsed: " + id);
+            return false;
         }
 
         return true;

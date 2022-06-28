@@ -30,6 +30,11 @@ public class InventoryManager : MonoBehaviour
     /// <param name="item">The item to add.</param>
     public void AddItem(InventorySlot item)
     {
+        if (item.properties == null)
+        {
+            item.properties = new Dictionary<string, object>();
+        }
+
         if (item.item.isStackable)
         {
             for (int i = 0; i < inventory.items.Count; i++)
@@ -45,8 +50,14 @@ public class InventoryManager : MonoBehaviour
 
         if (!hasItem)
         {
-            inventory.items.Add(new InventorySlot(item));
-        }
+            inventory.items.Add(item);
+            var test = GetItem(item.id);
+            if (test.properties.ContainsKey(Constants.P_W_MODIFIERS_LIST))
+            {
+                List<Modifier> modifiers = (List<Modifier>)test.properties[Constants.P_W_MODIFIERS_LIST];
+                Debug.Log("Modifiers after add: " + modifiers.Count);
+            }
+                            }
         hasItem = false;
         GameEvents.current.UpdateInventoryGUI(inventory.items);
     }

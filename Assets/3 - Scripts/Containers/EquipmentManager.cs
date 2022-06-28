@@ -9,6 +9,8 @@ public class EquipmentManager : MonoBehaviour
     private void Start()
     {
         GameEvents.current.onEquip += Equip;
+        GameEvents.current.onEquipFirstOccurence += Equip;
+        GameEvents.current.onUnEquipFirstOccurence += UnEquipFirstOccurence;
         GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onUnequip += Unequip;
     }
@@ -33,6 +35,36 @@ public class EquipmentManager : MonoBehaviour
             equipmentInventory.items.Add(itemToEquip);
         }
         hasItem = false;
+    }
+
+    /// <summary>
+    /// Removes the first occurence of an equippable item and moves it back to the player inventory
+    /// </summary>
+    public void UnEquipFirstOccurence()
+    {
+        if (equipmentInventory.items.Count() != 0)
+        {
+            var itemToMove = equipmentInventory.items[0];
+            GameEvents.current.AddItemToPlayerInventory(itemToMove);
+            equipmentInventory.items.RemoveAt(0);
+        }
+    }
+    
+    /// <summary>
+    /// Equip the first item found in the player inventory.
+    /// </summary>
+    public void Equip()
+    {
+        if (equipmentInventory.items.Count >= equipmentInventory.maxSize)
+            return;
+
+        InventorySlot itemToEquip = GameEvents.current.RemoveItemByType(typeof(IEquippable));
+        equipmentInventory.items.Add(itemToEquip);
+        //InventorySlot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
+        //if (!hasItem)
+        //{
+        //    equipmentInventory.items.Add(itemToEquip);
+        //}
     }
 
     /// <summary>
@@ -99,7 +131,7 @@ public class EquipmentManager : MonoBehaviour
 
     public InventorySlot GetItem(int index)
     {
-        return equipmentInventory.items[index];
+        return new InventorySlot(equipmentInventory.items[index]);
     }
 
     /// <summary>
