@@ -18,6 +18,6 @@ MonoBehaviour:
   equipmentMesh: {fileID: 0}
   sprite: {fileID: 0}
   isStackable: 0
-  castDelay: 0
-  rechargeDelay: 0
+  castDelay: -0.5
+  rechargeDelay: -3
   powerConsumption: 0

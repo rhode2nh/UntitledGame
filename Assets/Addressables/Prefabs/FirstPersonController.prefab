@@ -140,7 +140,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1035694137204606967}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.010216, y: 10.161317, z: -23.948788}
+  m_LocalPosition: {x: -22.210217, y: 10.161317, z: -23.948788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -177,7 +177,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.5793991, y: 1}
+    m_SensorSize: {x: 1.6186895, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -196,8 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1035694137836419020}
   - component: {fileID: 1035694137836419021}
-  - component: {fileID: 1035694137836419017}
-  - component: {fileID: 1035694137836419016}
+  - component: {fileID: 469185745}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -232,24 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1035694137836419017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1035694137836419019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 1}
-  m_AmplitudeGain: 0.5
-  m_FrequencyGain: 0.3
-  mNoiseOffsets: {x: -451.37964, y: 684.7062, z: 648.0488}
---- !u!114 &1035694137836419016
+--- !u!114 &469185745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -261,18 +243,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.1, z: 0.3}
-  ShoulderOffset: {x: 1, y: 0, z: 0}
+  Damping: {x: 0, y: 0, z: 0}
+  ShoulderOffset: {x: 0, y: 0, z: 0}
   VerticalArmLength: 0
-  CameraSide: 0.6
+  CameraSide: 1
   CameraDistance: 0
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 1
-  IgnoreTag: Player
-  CameraRadius: 0.15
+    m_Bits: 0
+  IgnoreTag: 
+  CameraRadius: 0.2
   DampingIntoCollision: 0
-  DampingFromCollision: 0
+  DampingFromCollision: 2
 --- !u!1 &1360898404185882678
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +267,7 @@ GameObject:
   - component: {fileID: 1360898404185882682}
   - component: {fileID: 1360898404185882683}
   - component: {fileID: 1360898404185882676}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +378,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3019484515291503009}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.20000076, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -479,7 +461,7 @@ GameObject:
   - component: {fileID: 278515033}
   - component: {fileID: 899284470}
   - component: {fileID: 899284479}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: PlayerCapsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -750,7 +732,17 @@ MonoBehaviour:
   equipmentManager: {fileID: 899284470}
   equipmentContainer: {fileID: 735607150621769378}
   projectileSpawner: {fileID: 613585573}
+  mainCamera: {fileID: 7981024157124996384}
   modifiers: []
+  lastOutput: []
+  isAttacking: 0
+  isRecharging: 0
+  coroutineStarted: 0
+  curModifierIndex: 0
+  gunCastDelay: 0
+  gunRechargeTime: 0
+  totalCastDelay: 0
+  totalRechargeTime: 0
 --- !u!1 &5445187745215308248
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +835,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7981024157124996386}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.010216, y: 10.161317, z: -23.948788}
+  m_LocalPosition: {x: -22.210217, y: 10.161317, z: -23.948788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

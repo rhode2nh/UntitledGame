@@ -21,23 +21,30 @@ public class EquipmentContainer : MonoBehaviour
     public EquipmentManager equipmentManager;
     public GameObject equipmentContainer;
     public Transform projectileSpawner;
+    public Camera mainCamera;
+    public LayerMask layerMask;
 
-    private Vector3[] meshVertices;
     public List<Modifier> modifiers;
+    public List<Output> lastOutput;
     public bool isAttacking;
     public bool isRecharging;
+    public bool coroutineStarted;
     public int curModifierIndex;
-    public int curProjectileIndex;
+    public float gunCastDelay;
+    public float gunRechargeTime;
+    public float gunXSpread;
+    public float gunYSpread;
+    public float totalXSpread;
+    public float totalYSpread;
     public float totalCastDelay;
     public float totalRechargeTime;
-    public List<Output> curOutput;
-    public List<Output> lastOutput;
-    public List<int> usedCastXIds;
-    public List<int> usedModifierIds;
-    public int projectilesToGroup;
 
-    public bool coroutineStarted;
-    private InventorySlot currentItem;
+    private Vector3[] _meshVertices;
+    private InventorySlot _currentItem;
+    private List<int> _usedCastXIds;
+    private List<int> _usedModifierIds;
+    private int _projectilesToGroup;
+    private List<Output> _curOutput;
 
     // Start is called before the first frame update
     void Start()
@@ -45,24 +52,23 @@ public class EquipmentContainer : MonoBehaviour
         GameEvents.current.onUpdateEquipmentContainer += UpdateEquipmentContainer;
         
         modifiers = new List<Modifier>();
-        curOutput = new List<Output>();
+        _curOutput = new List<Output>();
         lastOutput = new List<Output>();
-        usedCastXIds = new List<int>();
-        usedModifierIds = new List<int>();
+        _usedCastXIds = new List<int>();
+        _usedModifierIds = new List<int>();
         curEquipmentIndex = 0;
         isAttacking = false;
         isRecharging = false;
         curModifierIndex = 0;
-        curProjectileIndex = 0;
         coroutineStarted = false;
-        currentItem = null;
-        projectilesToGroup = 1;
+        _currentItem = null;
+        _projectilesToGroup = 1;
         UpdateEquipmentContainer();
     }
 
     void Update()
     {
-        if (isAttacking && coroutineStarted == false && currentItem != null)
+        if (isAttacking && coroutineStarted == false && _currentItem != null)
         {
             coroutineStarted = true;
             StartCoroutine(Attack());
@@ -77,9 +83,8 @@ public class EquipmentContainer : MonoBehaviour
             if (isRecharging)
             {
                 curModifierIndex = 0;
-                curProjectileIndex = 0;
-                usedCastXIds.Clear();
-                usedModifierIds.Clear();
+                _usedCastXIds.Clear();
+                _usedModifierIds.Clear();
             }
             StopAllCoroutines();
             coroutineStarted = false;
@@ -91,18 +96,18 @@ public class EquipmentContainer : MonoBehaviour
     {
         if (!equipmentManager.IsEmpty() && curEquipmentIndex < equipmentManager.Count())
         {
-            currentItem = equipmentManager.GetItem(curEquipmentIndex);
-            equipmentMesh = currentItem.item.equipmentMesh;
-            meshVertices = equipmentMesh.vertices;
-            for (int i = 0; i < meshVertices.Length; i++)
+            _currentItem = equipmentManager.GetItem(curEquipmentIndex);
+            equipmentMesh = _currentItem.item.equipmentMesh;
+            _meshVertices = equipmentMesh.vertices;
+            for (int i = 0; i < _meshVertices.Length; i++)
             {
-                if (projectileSpawner.localPosition.x < meshVertices[i].x)
+                if (projectileSpawner.localPosition.x < _meshVertices[i].x)
                 {
-                    projectileSpawner.localPosition = meshVertices[i];
+                    projectileSpawner.localPosition = _meshVertices[i];
                 }
             }
             equipmentContainer.GetComponent<MeshFilter>().mesh = equipmentMesh;
-            modifiers = new List<Modifier>((List<Modifier>)currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
+            modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
             isRecharging = false;
@@ -110,22 +115,23 @@ public class EquipmentContainer : MonoBehaviour
         else
         {
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
-            currentItem = null;
+            _currentItem = null;
             equipmentMesh = null;
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
             modifiers.Clear();
+            gunCastDelay = 0.0f;
+            gunRechargeTime = 0.0f;
             totalCastDelay = 0.0f;
             totalRechargeTime = 0.0f;
             isRecharging = false;
             curModifierIndex = 0;
-            curProjectileIndex = 0;
         }
     }
 
     IEnumerator Attack()
     {
-        var weapon = currentItem.item as IWeapon;
-        projectilesToGroup = 1;
+        var weapon = _currentItem.item as IWeapon;
+        _projectilesToGroup = 1;
 
         if (modifiers.Count == 0)
         {
@@ -135,44 +141,49 @@ public class EquipmentContainer : MonoBehaviour
         }
 
         bool hasWrapped = false;
-        while (projectilesToGroup != 0)
+        while (_projectilesToGroup != 0)
         {
             var modifier = modifiers[curModifierIndex];
             if (modifier is IProjectile)
             {
-                curOutput.Add(new Output(modifier));
+                _curOutput.Add(new Output(modifier));
             }
             
             else if (modifier is ICastX)
             {
-                if (usedCastXIds.Contains(curModifierIndex))
+                if (_usedCastXIds.Contains(curModifierIndex))
                 {
-                    usedCastXIds.Clear();
-                    projectilesToGroup = 1;
+                    _usedCastXIds.Clear();
+                    _projectilesToGroup = 1;
                     break;
                 }
                 var castX = modifier as ICastX;
-                projectilesToGroup += castX.ModifiersPerCast;
-                usedCastXIds.Add(curModifierIndex);
+                _projectilesToGroup += castX.ModifiersPerCast;
+                _usedCastXIds.Add(curModifierIndex);
             }
 
             else
             {
-                if (!usedModifierIds.Contains(curModifierIndex))
+                if (!_usedModifierIds.Contains(curModifierIndex))
                 {
-                    usedModifierIds.Add(curModifierIndex);
+                    _usedModifierIds.Add(curModifierIndex);
                 }
                 curModifierIndex++;
+                if (curModifierIndex >= modifiers.Count())
+                {
+                    curModifierIndex = curModifierIndex % modifiers.Count();
+                    hasWrapped = true;
+                }
                 continue;
             }
 
-            if (!usedModifierIds.Contains(curModifierIndex))
+            if (!_usedModifierIds.Contains(curModifierIndex))
             {
-                usedModifierIds.Add(curModifierIndex);
+                _usedModifierIds.Add(curModifierIndex);
             }
 
             curModifierIndex++;
-            projectilesToGroup--;
+            _projectilesToGroup--;
 
             if (curModifierIndex >= modifiers.Count())
             {
@@ -181,17 +192,19 @@ public class EquipmentContainer : MonoBehaviour
             }
         }
 
-        InstantiateOutput(curOutput);
-        lastOutput = new List<Output>(curOutput);
+        InstantiateOutput(_curOutput);
+        lastOutput = new List<Output>(_curOutput);
 
-        if (usedModifierIds.Count() >= modifiers.Count())
+        if (_usedModifierIds.Count() >= modifiers.Count())
         {
-            usedModifierIds.Clear();
-            usedCastXIds.Clear();
+            hasWrapped = false;
+            curModifierIndex = 0;
+            _usedModifierIds.Clear();
+            _usedCastXIds.Clear();
+            _curOutput.Clear();
             isRecharging = true;
-            curOutput.Clear();
             yield return new WaitForSeconds(totalRechargeTime);
-            projectilesToGroup = 1;
+            _projectilesToGroup = 1;
             isRecharging = false;
             coroutineStarted = false;
         }
@@ -202,9 +215,8 @@ public class EquipmentContainer : MonoBehaviour
                 hasWrapped = false;
                 curModifierIndex = 0;
             }
-            curOutput.Clear();
-            usedModifierIds.Clear();
-            usedCastXIds.Clear();
+            _curOutput.Clear();
+            _usedCastXIds.Clear();
             yield return new WaitForSeconds(totalCastDelay);
             coroutineStarted = false;
         }
@@ -215,17 +227,41 @@ public class EquipmentContainer : MonoBehaviour
         foreach (var modifier in output)
         {
             var projectile = modifier.projectile as IProjectile;
-            var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, projectileSpawner.rotation);
-            instantiatedProjectile.GetComponent<Rigidbody>().AddForce(projectileSpawner.transform.right * 1000);
+            Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+
+            Vector3 targetPoint;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            {
+                targetPoint = hit.point;
+            }
+            else
+            {
+                targetPoint = ray.GetPoint(75);
+            }
+
+            Vector3 directionWithoutSpread = targetPoint - projectileSpawner.position;
+
+            float x = Random.Range(-gunXSpread * 0.5f, gunXSpread * 0.5f);
+            float y = Random.Range(-gunYSpread * 0.5f, gunYSpread * 0.5f);
+            
+            //Vector3 directionWithSpread = directionWithoutSpread + new Vector3(Mathf.Cos(xRad), (float)Mathf.Sin(yRad), 0);
+            //Vector3 directionWithSpread = directionWithoutSpread.normalized + transform.TransformVector(new Vector3(x, y, 0));
+            Vector3 directionWithSpread = Quaternion.AngleAxis(x, projectileSpawner.up) * Quaternion.AngleAxis(y, projectileSpawner.forward) * directionWithoutSpread;
+
+            var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, Quaternion.identity);
+            instantiatedProjectile.transform.forward = directionWithSpread.normalized;
+            instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
     }
 
     private float TotalCastDelay()
     {
         float totalCastDelay = 0.0f;
-        if (currentItem.item is IWeapon)
+        if (_currentItem.item is IWeapon)
         {
-            var weapon = currentItem.item as IWeapon;
+            var weapon = _currentItem.item as IWeapon;
+            gunCastDelay = weapon.CastDelay;
             totalCastDelay = weapon.CastDelay;
             foreach (var modifier in modifiers)
             {
@@ -238,9 +274,10 @@ public class EquipmentContainer : MonoBehaviour
     private float TotalRechargeTime()
     {
         float totalRechargeTime = 0.0f;
-        if (currentItem.item is IWeapon)
+        if (_currentItem.item is IWeapon)
         {
-            var weapon = currentItem.item as IWeapon;
+            var weapon = _currentItem.item as IWeapon;
+            gunRechargeTime = weapon.RechargeTime;
             totalRechargeTime = weapon.RechargeTime;
             foreach (var modifier in modifiers)
             {
