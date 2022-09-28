@@ -19,6 +19,7 @@ public class Constants
 
     // Tags
     public const string WORLD_ITEM = "WORLD_ITEM";
+    public const string BUTTON = "BUTTON";
     public const string CHEST = "CHEST";
     public const string PLAYER = "Player";
 

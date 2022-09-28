@@ -71,5 +71,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: WI_ModifierNegValues
       objectReference: {fileID: 0}
+    - target: {fileID: 301281462973478531, guid: eb63039a6e0d7fb479b4916f55c5ff3f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 613ac734231fad2dbaacd9a30a2ddb47, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb63039a6e0d7fb479b4916f55c5ff3f, type: 3}

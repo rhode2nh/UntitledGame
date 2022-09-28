@@ -23,6 +23,7 @@ public class GameEvents : MonoBehaviour
     public event Func<System.Type, InventorySlot> onRemoveItemByType;
     public event Func<List<InventorySlot>> onGetAllModifiers;
     public event Action onUpdateEquipmentContainer;
+    public event Action<int> onSpawnObject;
 
     public void Awake()
     {
@@ -180,6 +181,14 @@ public class GameEvents : MonoBehaviour
         if (onUpdateEquipmentContainer != null)
         {
             onUpdateEquipmentContainer();
+        }
+    }
+
+    public void SpawnObject(int id)
+    {
+        if (onSpawnObject != null)
+        {
+            onSpawnObject(id);
         }
     }
 }

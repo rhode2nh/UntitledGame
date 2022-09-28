@@ -135,6 +135,9 @@ namespace StarterAssets
                         break;
                     case Constants.CHEST:
                         break;
+                    case Constants.BUTTON:
+                        interactable.GetComponent<WButton>().Execute();;
+                        break;
                     default:
                         Debug.Log("I don't know what to do with this: " + _inputRaycast.hit.transform.gameObject.tag);
                         break;

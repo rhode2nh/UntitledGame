@@ -38,6 +38,7 @@ public class EquipmentContainer : MonoBehaviour
     public float totalYSpread;
     public float totalCastDelay;
     public float totalRechargeTime;
+    public AudioSource gunShotAudio;
 
     private Vector3[] _meshVertices;
     private InventorySlot _currentItem;
@@ -110,6 +111,8 @@ public class EquipmentContainer : MonoBehaviour
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
+            totalXSpread = TotalYSpread();
+            totalYSpread = TotalYSpread();
             isRecharging = false;
         }
         else
@@ -123,6 +126,8 @@ public class EquipmentContainer : MonoBehaviour
             gunRechargeTime = 0.0f;
             totalCastDelay = 0.0f;
             totalRechargeTime = 0.0f;
+            totalXSpread = 0.0f;
+            totalYSpread = 0.0f;
             isRecharging = false;
             curModifierIndex = 0;
         }
@@ -242,17 +247,46 @@ public class EquipmentContainer : MonoBehaviour
 
             Vector3 directionWithoutSpread = targetPoint - projectileSpawner.position;
 
-            float x = Random.Range(-gunXSpread * 0.5f, gunXSpread * 0.5f);
-            float y = Random.Range(-gunYSpread * 0.5f, gunYSpread * 0.5f);
+            float x = Random.Range(-totalXSpread * 0.5f, totalXSpread * 0.5f);
+            float y = Random.Range(-totalYSpread * 0.5f, totalYSpread * 0.5f);
             
-            //Vector3 directionWithSpread = directionWithoutSpread + new Vector3(Mathf.Cos(xRad), (float)Mathf.Sin(yRad), 0);
-            //Vector3 directionWithSpread = directionWithoutSpread.normalized + transform.TransformVector(new Vector3(x, y, 0));
             Vector3 directionWithSpread = Quaternion.AngleAxis(x, projectileSpawner.up) * Quaternion.AngleAxis(y, projectileSpawner.forward) * directionWithoutSpread;
 
             var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, Quaternion.identity);
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
             instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
+        //gunShotAudio.Play(0);
+    }
+
+    private float TotalXSpread()
+    {
+        float totalXSpread = 0.0f;
+        if (_currentItem.item is IWeapon)
+        {
+            var weapon = _currentItem.item as IWeapon;
+            totalXSpread = weapon.XSpread;
+            foreach (var modifier in modifiers)
+            {
+                totalXSpread += modifier.XSpread;
+            }
+        }
+        return totalXSpread < 0.0f ? 0.01f : totalXSpread;
+    }
+    
+    private float TotalYSpread()
+    {
+        float totalYSpread = 0.0f;
+        if (_currentItem.item is IWeapon)
+        {
+            var weapon = _currentItem.item as IWeapon;
+            totalYSpread = weapon.YSpread;
+            foreach (var modifier in modifiers)
+            {
+                totalYSpread += modifier.YSpread;
+            }
+        }
+        return totalYSpread < 0.0f ? 0.01f : totalYSpread;
     }
 
     private float TotalCastDelay()

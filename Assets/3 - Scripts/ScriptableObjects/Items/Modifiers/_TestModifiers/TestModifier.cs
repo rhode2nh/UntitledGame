@@ -9,6 +9,10 @@ public class TestModifier : Item, IModifier
     public float rechargeDelay;
     [SerializeField]
     public float powerConsumption;
+    [SerializeField]
+    public float spreadX;
+    [SerializeField]
+    public float spreadY;
 
     public void Awake() 
     {
@@ -20,5 +24,7 @@ public class TestModifier : Item, IModifier
     public float CastDelay { get => castDelay; }
     public float RechargeDelay { get => rechargeDelay; }
     public float PowerConsumption { get => powerConsumption; }
+    public float XSpread { get => spreadX; }
+    public float YSpread { get => spreadY; }
 
 }

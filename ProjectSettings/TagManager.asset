@@ -6,6 +6,8 @@ TagManager:
   tags:
   - WORLD_ITEM
   - CHEST
+  - CinemachineTarget
+  - BUTTON
   layers:
   - Default
   - TransparentFX
@@ -13,7 +15,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Projectile
   - 
   - 
   - 
