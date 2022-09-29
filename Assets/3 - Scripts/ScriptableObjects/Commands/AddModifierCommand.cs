@@ -18,6 +18,7 @@ public class AddModifierCommand : ConsoleCommand
             if (!GameEvents.current.CheckType(equipmentId, typeof(IEquippable)))
             {
                 Debug.Log("Item must be equippable.");
+                Debug.Log("Usage: [equipment id] [modifier ids]");
                 return false;
             }
 
@@ -39,6 +40,7 @@ public class AddModifierCommand : ConsoleCommand
                 {
                     GameEvents.current.AddItemToPlayerInventory(equipment);
                     Debug.Log("Modifier id could not parsed: " + args[i]);
+                    Debug.Log("Usage: [equipment id] [modifier ids]");
                     return false;
                 }
             }
@@ -48,6 +50,7 @@ public class AddModifierCommand : ConsoleCommand
         else
         {
             Debug.Log("Equipment id could not parsed: " + args[0]);
+            Debug.Log("Usage: [equipment id] [modifier ids]");
             return false;
         }
     }

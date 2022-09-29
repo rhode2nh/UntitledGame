@@ -10,8 +10,10 @@ public class AddItemToInventoryCommand : ConsoleCommand
 
     public override bool Process(string[] args)
     {
-        if (args.Length == 0)
+        if (args.Length == 0) {
+            Debug.Log("Usage: [item ids]");
             return false;
+        }
         this.args = args;
 
         var load = "Assets/Addressables/Prefabs/Entities/" + Constants.WORLD_ITEM_PREFIX + "_" + args[0] + ".prefab";
@@ -25,6 +27,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
         if (operation.Status == AsyncOperationStatus.Failed)
         {
             Debug.LogError("\"" + args[0] + "\"" + " does not exist.");
+            Debug.Log("Usage: [item ids]");
         }
 
 

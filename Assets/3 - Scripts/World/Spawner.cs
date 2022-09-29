@@ -1,9 +1,11 @@
 using UnityEngine;
+using TMPro;
 
 public class Spawner : MonoBehaviour, IExecutable
 {
     public Transform spawnPos;
     public GameObject objectToSpawn;
+    public TextMeshPro itemName;
     public int id;
 
     // Start is called before the first frame update
@@ -11,6 +13,7 @@ public class Spawner : MonoBehaviour, IExecutable
     {
         GameEvents.current.onSpawnObject += SpawnObject;
         id = this.GetInstanceID();
+        itemName.SetText(objectToSpawn.GetComponent<WorldItem>().item.name);
     }
 
     public void SpawnObject(int id)

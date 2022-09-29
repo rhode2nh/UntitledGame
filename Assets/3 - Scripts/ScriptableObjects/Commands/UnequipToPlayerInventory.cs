@@ -26,6 +26,7 @@ public class UnequipToPlayerInventory : ConsoleCommand
         else
         {
             Debug.Log("The id could not parsed: " + id);
+            Debug.Log("Usage: [equipment id]");
         }
 
         return true;

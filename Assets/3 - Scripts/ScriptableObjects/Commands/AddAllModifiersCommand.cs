@@ -34,7 +34,7 @@ public class AddAllModifiersCommand : ConsoleCommand
         }
         else
         {
-            Debug.Log("Equipment id could not parsed: " + args[0]);
+            Debug.Log("Usage: [equipment id] [modifier ids]");
             return false;
         }
     }
