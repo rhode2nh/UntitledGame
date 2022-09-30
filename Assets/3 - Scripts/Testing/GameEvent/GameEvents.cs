@@ -8,6 +8,8 @@ public class GameEvents : MonoBehaviour
 
     public event Action<InventorySlot> onAddItemToPlayerInventory;
     public event Action<List<InventorySlot>> onUpdateInventoryGUI;
+    public event Action<string[]> onUpdateWeaponStatsGUI;
+    public event Action onIsCastDelayBarLoading;
     public event Func<Recipe, bool> onCanCraft;
     public event Func<Recipe, bool> onCraft;
     public event Action<Item> onConsume;
@@ -43,6 +45,14 @@ public class GameEvents : MonoBehaviour
         if (onUpdateInventoryGUI != null)
         {
             onUpdateInventoryGUI(items);
+        }
+    }
+
+    public void UpdateWeaponStatsGUI(string[] stats)
+    {
+        if (onUpdateWeaponStatsGUI != null)
+        {
+            onUpdateWeaponStatsGUI(stats);
         }
     }
 
@@ -189,6 +199,14 @@ public class GameEvents : MonoBehaviour
         if (onSpawnObject != null)
         {
             onSpawnObject(id);
+        }
+    }
+
+    public void CastDelayBarLoading()
+    {
+        if (onIsCastDelayBarLoading != null)
+        {
+            onIsCastDelayBarLoading();
         }
     }
 }

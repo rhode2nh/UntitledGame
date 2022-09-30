@@ -111,9 +111,11 @@ public class EquipmentContainer : MonoBehaviour
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
-            totalXSpread = TotalYSpread();
+            totalXSpread = TotalXSpread();
             totalYSpread = TotalYSpread();
             isRecharging = false;
+            string[] test = { totalCastDelay.ToString("0.0"), totalRechargeTime.ToString("0.0"), totalXSpread.ToString("0.0"), totalYSpread.ToString("0.0")}; 
+            GameEvents.current.UpdateWeaponStatsGUI(test);
         }
         else
         {
@@ -130,6 +132,7 @@ public class EquipmentContainer : MonoBehaviour
             totalYSpread = 0.0f;
             isRecharging = false;
             curModifierIndex = 0;
+            GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
         }
     }
 
@@ -222,6 +225,7 @@ public class EquipmentContainer : MonoBehaviour
             }
             _curOutput.Clear();
             _usedCastXIds.Clear();
+            GameEvents.current.CastDelayBarLoading();
             yield return new WaitForSeconds(totalCastDelay);
             coroutineStarted = false;
         }
@@ -255,6 +259,8 @@ public class EquipmentContainer : MonoBehaviour
             var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, Quaternion.identity);
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
             instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
+            //TODO: Create destroy property in projectile interface
+            Object.Destroy(instantiatedProjectile, 1.0f);
         }
         //gunShotAudio.Play(0);
     }

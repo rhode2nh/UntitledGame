@@ -9,16 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cec6ebe0272499ba9df2d8efa0e265a, type: 3}
-  m_Name: TestGun
+  m_Script: {fileID: 11500000, guid: ea70fa8f261da6fd99e5c6464e8dd41a, type: 3}
+  m_Name: DoubleShot
   m_EditorClassIdentifier: 
-  Id: 7
-  Name: TEST_GUN
+  Id: 9
+  Name: MOD_CASTX
   worldItemPrefab: {fileID: 0}
-  equipmentMesh: {fileID: 6492669554624963454, guid: 126fea0dbeaaaafb792e6d0b08e00ffd, type: 3}
+  equipmentMesh: {fileID: 0}
   sprite: {fileID: 0}
   isStackable: 0
   castDelay: 0
-  rechargeTime: 2
-  xSpread: 0.4
-  ySpread: 0.2
+  rechargeDelay: 0
+  powerConsumption: 0
+  spreadX: 9
+  spreadY: 0
+  modifiersPerCast: 2
