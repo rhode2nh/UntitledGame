@@ -28,6 +28,7 @@ public class GameEvents : MonoBehaviour
     public event Func<List<InventorySlot>> onGetAllModifiers;
     public event Action onUpdateEquipmentContainer;
     public event Action<int> onSpawnObject;
+    public event Action<int, int> onRemoveModifierFromWeapon;
 
     public void Awake()
     {
@@ -225,6 +226,14 @@ public class GameEvents : MonoBehaviour
         if (onIsRechargeDelayBarLoading != null)
         {
             onIsRechargeDelayBarLoading();
+        }
+    }
+
+    public void RemoveModifierFromWeapon(int index, int equipmentId)
+    {
+        if (onRemoveModifierFromWeapon != null)
+        {
+            onRemoveModifierFromWeapon(index, equipmentId);
         }
     }
 }

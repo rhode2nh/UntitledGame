@@ -52,6 +52,7 @@ public class EquipmentContainer : MonoBehaviour
     void Start()
     {
         GameEvents.current.onUpdateEquipmentContainer += UpdateEquipmentContainer;
+        GameEvents.current.onRemoveModifierFromWeapon += RemoveModifierFromWeapon;
         
         modifiers = new List<Modifier>();
         _curOutput = new List<Output>();
@@ -352,5 +353,19 @@ public class EquipmentContainer : MonoBehaviour
     public void setIsAttacking(bool isAttacking)
     {
         this.isAttacking = isAttacking;
+    }
+
+    //TODO: Cleanup function
+    public void RemoveModifierFromWeapon(int index, int equipmentId)
+    {
+        if (index == -1)
+        {
+            return;
+        }
+        modifiers.RemoveAt(index);
+        _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Modifier>(modifiers);
+        equipmentManager.RemoveItem(curEquipmentIndex);
+        equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
+        UpdateEquipmentContainer();
     }
 }

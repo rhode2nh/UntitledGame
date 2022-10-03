@@ -25,16 +25,19 @@ public class ModfierUI : MonoBehaviour
         for (int i = 0; i < maxSlots; i++)
         {
             GameObject instantiatedSlot = Instantiate(modifierUISlot);
+            ModifierUISlot slot = instantiatedSlot.GetComponent<ModifierUISlot>();
             instantiatedSlot.transform.SetParent(modifiersParent);
             Image slotImage = instantiatedSlot.GetComponentInChildren<Image>();
             if (i < items.Count)
             {
                 slotImage.enabled = true;
                 slotImage.sprite = items[i].sprite;
+                slot.index = i;
             }
             else
             {
                 slotImage.enabled = false;
+                slot.index = -1;
             }
             slots.Add(instantiatedSlot.GetComponentInChildren<ModifierUISlot>());
         }

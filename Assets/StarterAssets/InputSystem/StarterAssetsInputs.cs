@@ -66,6 +66,11 @@ namespace StarterAssets
 			InteractInput(value.isPressed);
         }
 
+        public void OnOpenEquipment(InputValue value)
+        {
+            OpenEquipmentInput(value.isPressed);
+        }
+
 		public void OnOpenInventory(InputValue value)
         {
 			OpenInventoryInput(value.isPressed);
@@ -80,6 +85,13 @@ namespace StarterAssets
         public void OnCloseInventory(InputValue value)
         {
 			CloseInventoryInput(value.isPressed);
+        }
+        #endregion
+
+        #region Equipment Action Map Functions
+        public void OnCloseEquipment(InputValue value)
+        {
+			CloseEquipmentInput(value.isPressed);
         }
         #endregion
 
@@ -154,12 +166,30 @@ namespace StarterAssets
 			firstPersonController.HandleInteractable();
         }
 
+		public void OpenEquipmentInput(bool openEquipmentState)
+        {
+			if (openEquipmentState)
+            {
+				playerInput.currentActionMap = playerInput.actions.FindActionMap("Equipment");
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
+
 		public void OpenInventoryInput(bool openInventoryState)
         {
 			if (openInventoryState)
             {
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Inventory");
 				inventoryUIController.OpenInventory();
+            }
+        }
+
+		public void CloseEquipmentInput(bool closeEquipmentState)
+        {
+			if (closeEquipmentState)
+            {
+				playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
 

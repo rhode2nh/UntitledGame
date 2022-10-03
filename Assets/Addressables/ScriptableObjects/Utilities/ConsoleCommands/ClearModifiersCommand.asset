@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72e0e8033010040b8c57650f206dfd4, type: 3}
   m_Name: ClearModifiersCommand
   m_EditorClassIdentifier: 
-  commandWord: []
-  args: []
+  commandWord:
+  - ClearModifiers
+  - cm
+  args:
+  - -2206
