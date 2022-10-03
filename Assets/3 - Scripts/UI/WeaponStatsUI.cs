@@ -9,20 +9,24 @@ public class WeaponStatsUI : MonoBehaviour
     public TMP_Text xSpread;
     public TMP_Text ySpread;
     public RectTransform castDelayBar;
+    public RectTransform rechargeDelayBar;
     private bool isCastDelayBarLoading;
-    private bool isRechargeBarLoading;
+    private bool isRechargeDelayBarLoading;
     private bool coroutineStarted;
-    private float test;
+    private float castDelayTime;
+    private float rechargeDelayTime;
 
     // Start is called before the first frame update
     void Start()
     {
         GameEvents.current.onUpdateWeaponStatsGUI += UpdateWeaponStatsGUI;
         GameEvents.current.onIsCastDelayBarLoading += CastDelayBarIsLoading;
+        GameEvents.current.onIsRechargeDelayBarLoading += RechargeDelayBarIsLoading;
         isCastDelayBarLoading = false;
-        isRechargeBarLoading = false;
+        isRechargeDelayBarLoading = false;
         coroutineStarted = false;
-        test = 0.0f;
+        castDelayTime = 0.0f;
+        rechargeDelayTime = 0.0f;
     }
 
     void Update() 
@@ -31,25 +35,47 @@ public class WeaponStatsUI : MonoBehaviour
         {
             StartCoroutine(CastDelayBarLoading());
         }
+        if (isRechargeDelayBarLoading && !coroutineStarted)
+        {
+            StartCoroutine(RechargeDelayBarLoading());
+        }
     }
 
     IEnumerator CastDelayBarLoading()
     {
-        Debug.Log("HERE!");
-        for (float xScale = 0.0f; xScale <= 1.0f; xScale += 1.0f/test)
+        coroutineStarted = true;
+        float elapsedTime = 0.0f;
+        while (elapsedTime < castDelayTime)
         {
-            castDelayBar.localScale = new Vector3(xScale, 1.0f, 1.0f);
+            elapsedTime += Time.deltaTime;
+            castDelayBar.localScale = new Vector3(elapsedTime / castDelayTime, 1.0f, 1.0f);
+            yield return null;
         }
         coroutineStarted = false;
         isCastDelayBarLoading = false;
         castDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
-        yield return null;
+    }
+
+    IEnumerator RechargeDelayBarLoading()
+    {
+        coroutineStarted = true;
+        float elapsedTime = 0.0f;
+        while (elapsedTime < rechargeDelayTime)
+        {
+            elapsedTime += Time.deltaTime;
+            rechargeDelayBar.localScale = new Vector3(elapsedTime / rechargeDelayTime, 1.0f, 1.0f);
+            yield return null;
+        }
+        coroutineStarted = false;
+        isRechargeDelayBarLoading = false;
+        rechargeDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
     }
 
     public void UpdateWeaponStatsGUI(string[] stats)
     {
         castDelay.SetText("Cast Delay: " + stats[0]);
-        test = float.Parse(stats[0]);
+        castDelayTime = float.Parse(stats[0]);
+        rechargeDelayTime = float.Parse(stats[1]);
         rechargeTime.SetText("Recharge Time: " + stats[1]);
         xSpread.SetText("X Spread (Deg): " + stats[2]);
         ySpread.SetText("Y Spread (Deg): " + stats[3]);
@@ -58,5 +84,10 @@ public class WeaponStatsUI : MonoBehaviour
     public void CastDelayBarIsLoading()
     {
         isCastDelayBarLoading = true;
+    }
+
+    public void RechargeDelayBarIsLoading()
+    {
+        isRechargeDelayBarLoading = true;
     }
 }

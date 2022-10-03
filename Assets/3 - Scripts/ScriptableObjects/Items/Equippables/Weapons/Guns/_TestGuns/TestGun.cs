@@ -11,6 +11,8 @@ public class TestGun : Item, IGun
     private float xSpread = 0.0f;
     [SerializeField]
     private float ySpread = 0.0f;
+    [SerializeField]
+    private float maxSlots = 0.0f;
 
     private void Awake()
     {
@@ -23,4 +25,5 @@ public class TestGun : Item, IGun
     public float RechargeTime { get => rechargeTime; set => rechargeTime = value; }
     public float XSpread { get => xSpread; set => xSpread = value; }
     public float YSpread { get => ySpread; set => ySpread = value; }
+    public float MaxSlots { get => maxSlots; set => maxSlots = value; }
 }

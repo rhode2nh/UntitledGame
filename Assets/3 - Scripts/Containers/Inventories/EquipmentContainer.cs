@@ -30,6 +30,7 @@ public class EquipmentContainer : MonoBehaviour
     public bool isRecharging;
     public bool coroutineStarted;
     public int curModifierIndex;
+    public int maxSlots;
     public float gunCastDelay;
     public float gunRechargeTime;
     public float gunXSpread;
@@ -58,6 +59,7 @@ public class EquipmentContainer : MonoBehaviour
         _usedCastXIds = new List<int>();
         _usedModifierIds = new List<int>();
         curEquipmentIndex = 0;
+        maxSlots = 0;
         isAttacking = false;
         isRecharging = false;
         curModifierIndex = 0;
@@ -109,6 +111,7 @@ public class EquipmentContainer : MonoBehaviour
             }
             equipmentContainer.GetComponent<MeshFilter>().mesh = equipmentMesh;
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
+            maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
             totalXSpread = TotalXSpread();
@@ -132,8 +135,10 @@ public class EquipmentContainer : MonoBehaviour
             totalYSpread = 0.0f;
             isRecharging = false;
             curModifierIndex = 0;
+            maxSlots = 0;
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
         }
+        GameEvents.current.UpdateModifierGUI(modifiers, maxSlots);
     }
 
     IEnumerator Attack()
@@ -143,6 +148,7 @@ public class EquipmentContainer : MonoBehaviour
 
         if (modifiers.Count == 0)
         {
+            GameEvents.current.RechargeDelayBarLoading();
             yield return new WaitForSeconds(totalRechargeTime);
             coroutineStarted = false;
             yield break;
@@ -200,6 +206,21 @@ public class EquipmentContainer : MonoBehaviour
             }
         }
 
+        while (!(modifiers[curModifierIndex] is ICastX) && !(modifiers[curModifierIndex] is IProjectile))
+        {
+            if (!_usedModifierIds.Contains(curModifierIndex))
+            {
+                _usedModifierIds.Add(curModifierIndex);
+            }
+            curModifierIndex++;
+            if (curModifierIndex >= modifiers.Count())
+            {
+                curModifierIndex = curModifierIndex % modifiers.Count();
+                hasWrapped = true;
+                break;
+            }
+        }
+
         InstantiateOutput(_curOutput);
         lastOutput = new List<Output>(_curOutput);
 
@@ -211,6 +232,7 @@ public class EquipmentContainer : MonoBehaviour
             _usedCastXIds.Clear();
             _curOutput.Clear();
             isRecharging = true;
+            GameEvents.current.RechargeDelayBarLoading();
             yield return new WaitForSeconds(totalRechargeTime);
             _projectilesToGroup = 1;
             isRecharging = false;

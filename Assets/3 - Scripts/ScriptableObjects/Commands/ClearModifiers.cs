@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Add All Modifiers Command", menuName = "Utilities/DeveloperConsole/Commands/Add All Modifiers Command")]
-public class AddAllModifiersCommand : ConsoleCommand
+[CreateAssetMenu(fileName = "New Clear Modifiers Command", menuName = "Utilities/DeveloperConsole/Commands/Clear Modifiers Command")]
+public class ClearModifiers : ConsoleCommand
 {
     public string[] args;
     
@@ -23,17 +23,7 @@ public class AddAllModifiersCommand : ConsoleCommand
 
             InventorySlot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
             List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
-            int maxSlots = (int)equipment.properties[Constants.P_W_MAX_SLOTS];
-            var modifiersToAdd = GameEvents.current.GetAllModifiers();
-            for (int i = 0; i < modifiersToAdd.Count; i++)
-            {
-                if (modifierList.Count >= maxSlots)
-                {
-                    break;
-                }
-                var modifier = GameEvents.current.RemoveItemFromPlayerInventory(modifiersToAdd[i].id);
-                modifierList.Add((Modifier)modifier.item);
-            }
+            modifierList.Clear();
             GameEvents.current.AddItemToPlayerInventory(equipment);
             return true;
         }

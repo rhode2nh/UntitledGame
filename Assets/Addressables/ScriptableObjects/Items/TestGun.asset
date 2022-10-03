@@ -22,3 +22,4 @@ MonoBehaviour:
   rechargeTime: 2
   xSpread: 0.4
   ySpread: 0.2
+  maxSlots: 5

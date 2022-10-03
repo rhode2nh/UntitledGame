@@ -699,10 +699,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4e06b94c1ccddb67d908b1b5d597563a, type: 2}
   - {fileID: 11400000, guid: 774a94fbb81c5d702a2e02f517020c63, type: 2}
   - {fileID: 11400000, guid: 4302a1dec608523a89f717a4ea8bf70e, type: 2}
+  - {fileID: 11400000, guid: fa263eeed67bd04ceb5bcf74bf47b40c, type: 2}
+  - {fileID: 11400000, guid: a9a819a2bfc1f37ada8d1db7bc9d8534, type: 2}
   uiCanvas: {fileID: 9033728450243243136}
   inputField: {fileID: 9033728451181444103}
   historyText: {fileID: 9033728449664483261}
   suggestionsText: {fileID: 1670800201}
+  suggestionsBox: {fileID: 996526280}
 --- !u!1 &9033728450842119835
 GameObject:
   m_ObjectHideFlags: 0
