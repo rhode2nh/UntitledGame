@@ -8,7 +8,7 @@ public class GameEvents : MonoBehaviour
 
     public event Action<InventorySlot> onAddItemToPlayerInventory;
     public event Action<List<InventorySlot>> onUpdateInventoryGUI;
-    public event Action<List<Modifier>, int> onUpdateModifierGUI;
+    public event Action<List<Modifier>, List<int>, int> onUpdateModifierGUI;
     public event Action<string[]> onUpdateWeaponStatsGUI;
     public event Action onIsCastDelayBarLoading;
     public event Action onIsRechargeDelayBarLoading;
@@ -51,11 +51,11 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void UpdateModifierGUI(List<Modifier> items, int maxSlots)
+    public void UpdateModifierGUI(List<Modifier> items, List<int> modifierSlotIndices, int maxSlots)
     {
         if (onUpdateModifierGUI != null)
         {
-            onUpdateModifierGUI(items, maxSlots);
+            onUpdateModifierGUI(items, modifierSlotIndices, maxSlots);
         }
     }
 

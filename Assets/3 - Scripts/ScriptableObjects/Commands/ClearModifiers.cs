@@ -23,7 +23,9 @@ public class ClearModifiers : ConsoleCommand
 
             InventorySlot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
             List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
+            List<int> modifierSlotIndices = (List<int>)equipment.properties[Constants.P_W_MODIFIER_SLOT_INDICES];
             modifierList.Clear();
+            modifierSlotIndices.Clear();
             GameEvents.current.AddItemToPlayerInventory(equipment);
             return true;
         }

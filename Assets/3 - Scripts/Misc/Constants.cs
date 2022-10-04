@@ -47,4 +47,5 @@ public class Constants
     // These constants will follow a convention as such: P_[item type acroynm]_[property]_[value data type]
     public const string P_W_MODIFIERS_LIST = "P_W_MODIFIERS_LIST";
     public const string P_W_MAX_SLOTS = "P_W_MAX_SLOTS";
+    public const string P_W_MODIFIER_SLOT_INDICES = "P_W_MODIFIER_SLOT_INDICES";
 }

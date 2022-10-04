@@ -25,6 +25,7 @@ public class EquipmentContainer : MonoBehaviour
     public LayerMask layerMask;
 
     public List<Modifier> modifiers;
+    public List<int> modifierSlotIndices;
     public List<Output> lastOutput;
     public bool isAttacking;
     public bool isRecharging;
@@ -55,6 +56,7 @@ public class EquipmentContainer : MonoBehaviour
         GameEvents.current.onRemoveModifierFromWeapon += RemoveModifierFromWeapon;
         
         modifiers = new List<Modifier>();
+        modifierSlotIndices = new List<int>();
         _curOutput = new List<Output>();
         lastOutput = new List<Output>();
         _usedCastXIds = new List<int>();
@@ -112,6 +114,7 @@ public class EquipmentContainer : MonoBehaviour
             }
             equipmentContainer.GetComponent<MeshFilter>().mesh = equipmentMesh;
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
+            modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES]);
             maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
@@ -128,6 +131,7 @@ public class EquipmentContainer : MonoBehaviour
             equipmentMesh = null;
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
             modifiers.Clear();
+            modifierSlotIndices.Clear();
             gunCastDelay = 0.0f;
             gunRechargeTime = 0.0f;
             totalCastDelay = 0.0f;
@@ -139,7 +143,7 @@ public class EquipmentContainer : MonoBehaviour
             maxSlots = 0;
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
         }
-        GameEvents.current.UpdateModifierGUI(modifiers, maxSlots);
+        GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
     }
 
     IEnumerator Attack()
@@ -356,14 +360,16 @@ public class EquipmentContainer : MonoBehaviour
     }
 
     //TODO: Cleanup function
-    public void RemoveModifierFromWeapon(int index, int equipmentId)
+    public void RemoveModifierFromWeapon(int modifierIndex, int modifierSlotIndex)
     {
-        if (index == -1)
+        if (modifierSlotIndex == -1)
         {
             return;
         }
-        modifiers.RemoveAt(index);
+        modifiers.RemoveAt(modifierIndex);
+        modifierSlotIndices.RemoveAt(modifierIndex);
         _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Modifier>(modifiers);
+        _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES] = new List<int>(modifierSlotIndices);
         equipmentManager.RemoveItem(curEquipmentIndex);
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
         UpdateEquipmentContainer();

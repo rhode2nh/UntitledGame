@@ -15,7 +15,7 @@ public class ModfierUI : MonoBehaviour
         GameEvents.current.onUpdateModifierGUI += UpdateUI;
     }
 
-    void UpdateUI(List<Modifier> modifiers, List<int> modifierSlotIndices, int maxSlots)
+    void UpdateUI(List<Modifier> items, List<int> modifierSlotIndices, int maxSlots)
     {
         foreach (Transform child in modifiersParent.transform)
         {
@@ -35,29 +35,26 @@ public class ModfierUI : MonoBehaviour
                 {
                     found = true;
                     slotImage.enabled = true;
-                    slotImage.sprite = modifiers[j].sprite;
-                    slot.slotUIIndex = modifierSlotIndices[j];
-                    slot.modifierIndex = j;
-                    break;
+                    slotImage.sprite = items[i].sprite;
+                    slot.index = modifierSlotIndices[i];
                 }
             }
             if (!found)
             {
                 slotImage.enabled = false;
-                slot.slotUIIndex = -1;
-                slot.modifierIndex = -1;
+                slot.index = -1;
             }
             slots.Add(instantiatedSlot.GetComponentInChildren<ModifierUISlot>());
         }
 
-        //for (int i = 0; i < modifierSlotIndices.Count; i++)
-        //{
-        //    ModifierUISlot slot = modifiersParent.transform.GetChild(modifierSlotIndices[i]).gameObject.GetComponent<ModifierUISlot>();
-        //    Image slotImage = slot.GetComponentInChildren<Image>();
-        //    slotImage.enabled = true;
-        //    slotImage.sprite = items[i].sprite;
-        //    slot.index = modifierSlotIndices[i];
-        //}
+        for (int i = 0; i < modifierSlotIndices.Count; i++)
+        {
+            ModifierUISlot slot = modifiersParent.transform.GetChild(modifierSlotIndices[i]).gameObject.GetComponent<ModifierUISlot>();
+            Image slotImage = slot.GetComponentInChildren<Image>();
+            slotImage.enabled = true;
+            slotImage.sprite = items[i].sprite;
+            slot.index = modifierSlotIndices[i];
+        }
 
         //for (int i = 0; i < maxSlots; i++)
         //{

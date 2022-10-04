@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class ModifierUISlot : MonoBehaviour
 {
-    public int index;
+    public int slotUIIndex;
+    public int modifierIndex;
     public int equipmentId;
 
     public void OnRemoveButton()
     {
-        GameEvents.current.RemoveModifierFromWeapon(index, equipmentId);
+        GameEvents.current.RemoveModifierFromWeapon(modifierIndex, equipmentId);
     }
 }
