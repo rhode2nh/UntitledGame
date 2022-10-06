@@ -29,6 +29,8 @@ public class GameEvents : MonoBehaviour
     public event Action onUpdateEquipmentContainer;
     public event Action<int> onSpawnObject;
     public event Action<int, int> onRemoveModifierFromWeapon;
+    public event Func<bool, InventorySlot> onGetCurrentWeapon;
+    public event Action<InventorySlot> onUpdateCurrentWeapon;
 
     public void Awake()
     {
@@ -197,6 +199,16 @@ public class GameEvents : MonoBehaviour
         return null;
     }
 
+    public InventorySlot GetCurrentWeapon()
+    {
+        if (onGetCurrentWeapon != null)
+        {
+            return onGetCurrentWeapon(false);
+        }
+
+        return null;
+    }
+
     public void UpdateEquipmentContainer()
     {
         if (onUpdateEquipmentContainer != null)
@@ -226,6 +238,14 @@ public class GameEvents : MonoBehaviour
         if (onIsRechargeDelayBarLoading != null)
         {
             onIsRechargeDelayBarLoading();
+        }
+    }
+
+    public void UpdateCurrentWeapon(InventorySlot updatedWeapon)
+    {
+        if (onUpdateCurrentWeapon != null)
+        {
+            onUpdateCurrentWeapon(updatedWeapon);
         }
     }
 

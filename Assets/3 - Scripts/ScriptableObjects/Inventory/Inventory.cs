@@ -31,7 +31,7 @@ public class InventorySlot
         this.id = id;
         this.item = item;
         this.count = count;
-        this.properties = properties.CopyProperties() ?? new Dictionary<string, object>();
+        this.properties = properties.CopyProperties();
         this._properties = new List<Properties>();
 
         // Show key value pairs in the inspector.

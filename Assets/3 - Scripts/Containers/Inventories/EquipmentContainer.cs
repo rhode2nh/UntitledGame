@@ -54,6 +54,8 @@ public class EquipmentContainer : MonoBehaviour
     {
         GameEvents.current.onUpdateEquipmentContainer += UpdateEquipmentContainer;
         GameEvents.current.onRemoveModifierFromWeapon += RemoveModifierFromWeapon;
+        GameEvents.current.onGetCurrentWeapon += GetCurrentWeapon;
+        GameEvents.current.onUpdateCurrentWeapon += UpdateCurrentWeapon;
         
         modifiers = new List<Modifier>();
         modifierSlotIndices = new List<int>();
@@ -121,6 +123,7 @@ public class EquipmentContainer : MonoBehaviour
             totalXSpread = TotalXSpread();
             totalYSpread = TotalYSpread();
             isRecharging = false;
+            curModifierIndex = 0;
             string[] test = { totalCastDelay.ToString("0.0"), totalRechargeTime.ToString("0.0"), totalXSpread.ToString("0.0"), totalYSpread.ToString("0.0")}; 
             GameEvents.current.UpdateWeaponStatsGUI(test);
         }
@@ -362,16 +365,34 @@ public class EquipmentContainer : MonoBehaviour
     //TODO: Cleanup function
     public void RemoveModifierFromWeapon(int modifierIndex, int modifierSlotIndex)
     {
-        if (modifierSlotIndex == -1)
+        if (modifierIndex == -1)
         {
             return;
         }
+        Modifier modifier = modifiers[modifierIndex];
         modifiers.RemoveAt(modifierIndex);
         modifierSlotIndices.RemoveAt(modifierIndex);
         _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Modifier>(modifiers);
         _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES] = new List<int>(modifierSlotIndices);
         equipmentManager.RemoveItem(curEquipmentIndex);
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
+        var inventorySlot = new InventorySlot(modifier.GetInstanceID(), modifier, 1);
+        GameEvents.current.AddItemToPlayerInventory(inventorySlot);
+        UpdateEquipmentContainer();
+    }
+
+    public InventorySlot GetCurrentWeapon(bool test)
+    {
+        if (equipmentManager.equipmentInventory.items.Count == 0)
+        {
+            return null;
+        }
+        return equipmentManager.GetItem(curEquipmentIndex);;
+    }
+
+    public void UpdateCurrentWeapon(InventorySlot updatedWeapon)
+    {
+        equipmentManager.equipmentInventory.items[curEquipmentIndex] = new InventorySlot(updatedWeapon);
         UpdateEquipmentContainer();
     }
 }

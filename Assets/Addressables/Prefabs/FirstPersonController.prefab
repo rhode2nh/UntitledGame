@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 613585573}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ProjectileSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4879986930253255115}
   - component: {fileID: 1166681867}
   - component: {fileID: 1166681868}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EquipmentContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735607150621769378}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.339, y: -0.276, z: 0.507}
+  m_LocalPosition: {x: 0.649, y: -0.542, z: 0.507}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1035694137204606472}
   - component: {fileID: 1035694137204606473}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerFollowCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1035694137204606967}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.210217, y: 10.161317, z: -23.948788}
+  m_LocalPosition: {x: -22.210217, y: 10.208, z: -23.948788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 7014611542333730172}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 80
     OrthographicSize: 10
     NearClipPlane: 0.2
     FarClipPlane: 500
@@ -177,7 +177,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.6186895, y: 1}
+    m_SensorSize: {x: 1.5793991, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 1035694137836419020}
   - component: {fileID: 1035694137836419021}
   - component: {fileID: 469185745}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 1360898404185882682}
   - component: {fileID: 1360898404185882683}
   - component: {fileID: 1360898404185882676}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3019484515291503011}
   - component: {fileID: 3019484515291503010}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InputRaycast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -408,7 +408,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3019484516496365832}
   - component: {fileID: 3019484516496365833}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DropItemSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 278515033}
   - component: {fileID: 899284470}
   - component: {fileID: 899284479}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerCapsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -476,7 +476,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3435951012020343840}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.210217, y: 8.786317, z: -23.948788}
+  m_LocalPosition: {x: -22.210217, y: 8.833, z: -23.948788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -528,7 +528,7 @@ MonoBehaviour:
   GroundedRadius: 0.5
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 521
   CinemachineCameraTarget: {fileID: 7014611542333730171}
   TopClamp: 90
   BottomClamp: -90
@@ -733,16 +733,26 @@ MonoBehaviour:
   equipmentContainer: {fileID: 735607150621769378}
   projectileSpawner: {fileID: 613585573}
   mainCamera: {fileID: 7981024157124996384}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   modifiers: []
+  modifierSlotIndices: 
   lastOutput: []
   isAttacking: 0
   isRecharging: 0
   coroutineStarted: 0
   curModifierIndex: 0
+  maxSlots: 0
   gunCastDelay: 0
   gunRechargeTime: 0
+  gunXSpread: 0
+  gunYSpread: 0
+  totalXSpread: 0
+  totalYSpread: 0
   totalCastDelay: 0
   totalRechargeTime: 0
+  gunShotAudio: {fileID: 0}
 --- !u!1 &5445187745215308248
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,7 +762,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8294491245543404360}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirstPersonController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -786,7 +796,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7014611542333730172}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerCameraRoot
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
@@ -820,7 +830,7 @@ GameObject:
   - component: {fileID: 7981024157124996384}
   - component: {fileID: 7981024157124996385}
   - component: {fileID: 8006820899709718847}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -835,7 +845,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7981024157124996386}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.210217, y: 10.161317, z: -23.948788}
+  m_LocalPosition: {x: -22.210217, y: 10.208, z: -23.948788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -870,7 +880,7 @@ Camera:
     height: 1
   near clip plane: 0.2
   far clip plane: 500
-  field of view: 40
+  field of view: 80
   orthographic: 0
   orthographic size: 10
   m_Depth: -1

@@ -158,6 +158,7 @@ namespace StarterAssets
 			if (_input.look.sqrMagnitude >= _threshold)
 			{
 				_cinemachineTargetPitch += _input.look.y * RotationSpeed * Time.deltaTime;
+				//_rotationVelocity = _input.look.x * RotationSpeed * Time.deltaTime;
 				_rotationVelocity = _input.look.x * RotationSpeed * Time.deltaTime;
 
 				// clamp our pitch rotation

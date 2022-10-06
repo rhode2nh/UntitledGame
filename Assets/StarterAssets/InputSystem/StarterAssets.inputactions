@@ -114,7 +114,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "OpenEquipment",
+                    "name": "(Inactive)OpenEquipment",
                     "type": "Button",
                     "id": "b6b2b9f2-fd36-4f10-9f6c-e4a6d80cc5eb",
                     "expectedControlType": "Button",
@@ -303,7 +303,7 @@
                 {
                     "name": "",
                     "id": "06d2a734-210b-4644-a43f-2c35911c421d",
-                    "path": "<Keyboard>/i",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -395,7 +395,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "OpenEquipment",
+                    "action": "(Inactive)OpenEquipment",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -437,7 +437,7 @@
                 {
                     "name": "",
                     "id": "fb060aea-6c92-4a15-a34e-c3b71963c427",
-                    "path": "<Keyboard>/i",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",

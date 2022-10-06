@@ -11,6 +11,10 @@ namespace ExtensionMethods
         /// <returns>The copied properties.</returns>
         public static Dictionary<string, object> CopyProperties(this Dictionary<string, object> properties)
         {
+            if (properties == null)
+            {
+                return new Dictionary<string, object>();
+            }
             Dictionary<string, object> propertiesToReturn = new Dictionary<string, object>();
 
             foreach (string key in properties.Keys)

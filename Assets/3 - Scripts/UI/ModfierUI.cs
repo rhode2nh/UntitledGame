@@ -26,7 +26,7 @@ public class ModfierUI : MonoBehaviour
         {
             GameObject instantiatedSlot = Instantiate(modifierUISlot);
             ModifierUISlot slot = instantiatedSlot.GetComponent<ModifierUISlot>();
-            instantiatedSlot.transform.SetParent(modifiersParent);
+            instantiatedSlot.transform.SetParent(modifiersParent, false);
             Image slotImage = instantiatedSlot.GetComponentInChildren<Image>();
             bool found = false;
             for (int j = 0; j < modifierSlotIndices.Count; j++)
@@ -49,34 +49,5 @@ public class ModfierUI : MonoBehaviour
             }
             slots.Add(instantiatedSlot.GetComponentInChildren<ModifierUISlot>());
         }
-
-        //for (int i = 0; i < modifierSlotIndices.Count; i++)
-        //{
-        //    ModifierUISlot slot = modifiersParent.transform.GetChild(modifierSlotIndices[i]).gameObject.GetComponent<ModifierUISlot>();
-        //    Image slotImage = slot.GetComponentInChildren<Image>();
-        //    slotImage.enabled = true;
-        //    slotImage.sprite = items[i].sprite;
-        //    slot.index = modifierSlotIndices[i];
-        //}
-
-        //for (int i = 0; i < maxSlots; i++)
-        //{
-        //    GameObject instantiatedSlot = Instantiate(modifierUISlot);
-        //    ModifierUISlot slot = instantiatedSlot.GetComponent<ModifierUISlot>();
-        //    instantiatedSlot.transform.SetParent(modifiersParent);
-        //    Image slotImage = instantiatedSlot.GetComponentInChildren<Image>();
-        //    if (i == modifierSlotIndices[i])
-        //    {
-        //        slotImage.enabled = true;
-        //        slotImage.sprite = items[i].sprite;
-        //        slot.index = i;
-        //    }
-        //    else
-        //    {
-        //        slotImage.enabled = false;
-        //        slot.index = -1;
-        //    }
-        //    slots.Add(instantiatedSlot.GetComponentInChildren<ModifierUISlot>());
-        //}
     }
 }
