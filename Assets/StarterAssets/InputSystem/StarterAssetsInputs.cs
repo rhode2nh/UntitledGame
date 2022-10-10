@@ -21,6 +21,7 @@ namespace StarterAssets
 		private InventoryUIController inventoryUIController;
 		private FirstPersonController firstPersonController;
 		public DeveloperConsoleBehavior developerConsole;
+        public PauseMenuUI pauseMenu;
         private EquipmentContainer equipmentContainer;
 
 #if !UNITY_IOS || !UNITY_ANDROID
@@ -79,6 +80,16 @@ namespace StarterAssets
 		public void OnOpenConsole(InputValue value)
         {
 			OpenConsoleInput();
+        }
+
+		public void OnOpenPause(InputValue value)
+        {
+			OpenPauseInput();
+        }
+
+		public void OnClosePause(InputValue value)
+        {
+			ClosePauseInput();
         }
 
         #region Inventory Action Map Functions
@@ -200,6 +211,22 @@ namespace StarterAssets
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
 				inventoryUIController.CloseInventory();
             }
+        }
+
+		public void OpenPauseInput()
+        {
+			Time.timeScale = 0.0f;
+			playerInput.currentActionMap = playerInput.actions.FindActionMap("Pause");
+            pauseMenu.Toggle();
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+		public void ClosePauseInput()
+        {
+			Time.timeScale = 1.0f;
+			playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+            pauseMenu.Toggle();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
 		public void OpenConsoleInput()

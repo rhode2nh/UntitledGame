@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8573872353430096659
 RectTransform:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsParent: {fileID: 8573872353584400422}
   slotPrefab: {fileID: 2408364458965521862, guid: d7bb67938924af7469f6bed92bcaa1b9, type: 3}
-  numSlots: 10
+  numSlots: 20
 --- !u!1 &8573872353584400421
 GameObject:
   m_ObjectHideFlags: 0
