@@ -7,14 +7,12 @@ public class InventoryUISlot : MonoBehaviour
 {
     public Inventory inventory;
     private InventorySlot item;
-    public Text inventorySlotText;
     public Image inventorySlotSprite;
     public Button button;
 
     public void AddItem(InventorySlot newItem)
     {
         item = newItem;
-        inventorySlotText.text = item.item.Name + ": " + item.count;
         inventorySlotSprite.sprite = item.item.sprite;
         inventorySlotSprite.enabled = true;
         button.interactable = true;
@@ -23,7 +21,6 @@ public class InventoryUISlot : MonoBehaviour
     public void ClearSlot()
     {
         item = null;
-        inventorySlotText.text = null;
         inventorySlotSprite.sprite = null;
         inventorySlotSprite.enabled = false;
         button.interactable = false;

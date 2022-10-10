@@ -240,6 +240,7 @@ public class EquipmentContainer : MonoBehaviour
             _usedCastXIds.Clear();
             _curOutput.Clear();
             isRecharging = true;
+            yield return new WaitForEndOfFrame();
             GameEvents.current.RechargeDelayBarLoading();
             yield return new WaitForSeconds(totalRechargeTime);
             _projectilesToGroup = 1;
@@ -255,6 +256,7 @@ public class EquipmentContainer : MonoBehaviour
             }
             _curOutput.Clear();
             _usedCastXIds.Clear();
+            yield return new WaitForEndOfFrame();
             GameEvents.current.CastDelayBarLoading();
             yield return new WaitForSeconds(totalCastDelay);
             coroutineStarted = false;

@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: TEST_GUN
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 6492669554624963454, guid: 126fea0dbeaaaafb792e6d0b08e00ffd, type: 3}
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 17321577760473fd6b680f5f2f280753, type: 3}
   isStackable: 0
   castDelay: 0
   rechargeTime: 2
