@@ -23,6 +23,7 @@ namespace StarterAssets
 		public DeveloperConsoleBehavior developerConsole;
         public PauseMenuUI pauseMenu;
         private EquipmentContainer equipmentContainer;
+        private InputActionMap previousActionMap;
 
 #if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
@@ -36,6 +37,7 @@ namespace StarterAssets
             inventoryUIController = GetComponent<InventoryUIController>();
 			firstPersonController = GetComponent<FirstPersonController>();
             equipmentContainer = GetComponent<EquipmentContainer>();
+            previousActionMap = playerInput.currentActionMap;
         }
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -182,6 +184,7 @@ namespace StarterAssets
 			if (openEquipmentState)
             {
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Equipment");
+                previousActionMap = playerInput.currentActionMap;
                 Cursor.lockState = CursorLockMode.None;
             }
         }
@@ -191,6 +194,7 @@ namespace StarterAssets
 			if (openInventoryState)
             {
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Inventory");
+                previousActionMap = playerInput.currentActionMap;
 				inventoryUIController.OpenInventory();
             }
         }
@@ -200,6 +204,7 @@ namespace StarterAssets
 			if (closeEquipmentState)
             {
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+                previousActionMap = playerInput.currentActionMap;
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
@@ -209,6 +214,7 @@ namespace StarterAssets
 			if (closeInventoryState)
             {
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+                previousActionMap = playerInput.currentActionMap;
 				inventoryUIController.CloseInventory();
             }
         }
@@ -224,7 +230,7 @@ namespace StarterAssets
 		public void ClosePauseInput()
         {
 			Time.timeScale = 1.0f;
-			playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+			playerInput.currentActionMap = previousActionMap;
             pauseMenu.Toggle();
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -233,6 +239,7 @@ namespace StarterAssets
         {
 			Time.timeScale = 0.0f;
 			playerInput.currentActionMap = playerInput.actions.FindActionMap("Console");
+            previousActionMap = playerInput.currentActionMap;
 			developerConsole.Toggle();
         }
 
@@ -240,6 +247,7 @@ namespace StarterAssets
         {
 			Time.timeScale = 1.0f;
 			playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
+            previousActionMap = playerInput.currentActionMap;
 			developerConsole.Toggle();
         }
 

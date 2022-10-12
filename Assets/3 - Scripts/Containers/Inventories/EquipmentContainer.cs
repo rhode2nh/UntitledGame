@@ -7,10 +7,12 @@ using System.Linq;
 public struct Output
 {
     public Modifier projectile;
+    public List<Output> postModifiers;
 
     public Output(Modifier projectile)
     {
         this.projectile = projectile;
+        postModifiers = new List<Output>();
     }
 }
 
@@ -31,6 +33,7 @@ public class EquipmentContainer : MonoBehaviour
     public bool isRecharging;
     public bool coroutineStarted;
     public int curModifierIndex;
+    public int curGroupIndex;
     public int maxSlots;
     public float gunCastDelay;
     public float gunRechargeTime;
@@ -68,6 +71,7 @@ public class EquipmentContainer : MonoBehaviour
         isAttacking = false;
         isRecharging = false;
         curModifierIndex = 0;
+        curGroupIndex = 0;
         coroutineStarted = false;
         _currentItem = null;
         _projectilesToGroup = 1;
@@ -91,6 +95,7 @@ public class EquipmentContainer : MonoBehaviour
             if (isRecharging)
             {
                 curModifierIndex = 0;
+                curGroupIndex = 0;
                 _usedCastXIds.Clear();
                 _usedModifierIds.Clear();
             }
@@ -124,6 +129,7 @@ public class EquipmentContainer : MonoBehaviour
             totalYSpread = TotalYSpread();
             isRecharging = false;
             curModifierIndex = 0;
+            curGroupIndex = 0;
             string[] test = { totalCastDelay.ToString("0.0"), totalRechargeTime.ToString("0.0"), totalXSpread.ToString("0.0"), totalYSpread.ToString("0.0")}; 
             GameEvents.current.UpdateWeaponStatsGUI(test);
         }
@@ -143,6 +149,7 @@ public class EquipmentContainer : MonoBehaviour
             totalYSpread = 0.0f;
             isRecharging = false;
             curModifierIndex = 0;
+            curGroupIndex = 0;
             maxSlots = 0;
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
         }
@@ -151,10 +158,13 @@ public class EquipmentContainer : MonoBehaviour
 
     IEnumerator Attack()
     {
-        var weapon = _currentItem.item as IWeapon;
-        _projectilesToGroup = 1;
+        List<List<Output>> firstPass = CalculateFirstPass();
+        List<List<Output>> secondPass = CalculateSecondPass(firstPass);
+        Debug.Log(secondPass[0][0].postModifiers.Count);
+        secondPass = RemoveNonProjectiles(secondPass);
 
-        if (modifiers.Count == 0)
+        // No projectiles are in the weapon
+        if (secondPass.Count == 0)
         {
             GameEvents.current.RechargeDelayBarLoading();
             yield return new WaitForSeconds(totalRechargeTime);
@@ -162,105 +172,186 @@ public class EquipmentContainer : MonoBehaviour
             yield break;
         }
 
-        bool hasWrapped = false;
-        while (_projectilesToGroup != 0)
+        InstantiateOutput(secondPass[curGroupIndex]);
+        curGroupIndex++;
+
+        if (curGroupIndex == secondPass.Count)
         {
-            var modifier = modifiers[curModifierIndex];
-            if (modifier is IProjectile)
-            {
-                _curOutput.Add(new Output(modifier));
-            }
-            
-            else if (modifier is ICastX)
-            {
-                if (_usedCastXIds.Contains(curModifierIndex))
-                {
-                    _usedCastXIds.Clear();
-                    _projectilesToGroup = 1;
-                    break;
-                }
-                var castX = modifier as ICastX;
-                _projectilesToGroup += castX.ModifiersPerCast;
-                _usedCastXIds.Add(curModifierIndex);
-            }
-
-            else
-            {
-                if (!_usedModifierIds.Contains(curModifierIndex))
-                {
-                    _usedModifierIds.Add(curModifierIndex);
-                }
-                curModifierIndex++;
-                if (curModifierIndex >= modifiers.Count())
-                {
-                    curModifierIndex = curModifierIndex % modifiers.Count();
-                    hasWrapped = true;
-                }
-                continue;
-            }
-
-            if (!_usedModifierIds.Contains(curModifierIndex))
-            {
-                _usedModifierIds.Add(curModifierIndex);
-            }
-
-            curModifierIndex++;
-            _projectilesToGroup--;
-
-            if (curModifierIndex >= modifiers.Count())
-            {
-                curModifierIndex = curModifierIndex % modifiers.Count();
-                hasWrapped = true;
-            }
-        }
-
-        while (!(modifiers[curModifierIndex] is ICastX) && !(modifiers[curModifierIndex] is IProjectile))
-        {
-            if (!_usedModifierIds.Contains(curModifierIndex))
-            {
-                _usedModifierIds.Add(curModifierIndex);
-            }
-            curModifierIndex++;
-            if (curModifierIndex >= modifiers.Count())
-            {
-                curModifierIndex = curModifierIndex % modifiers.Count();
-                hasWrapped = true;
-                break;
-            }
-        }
-
-        InstantiateOutput(_curOutput);
-        lastOutput = new List<Output>(_curOutput);
-
-        if (_usedModifierIds.Count() >= modifiers.Count())
-        {
-            hasWrapped = false;
-            curModifierIndex = 0;
-            _usedModifierIds.Clear();
-            _usedCastXIds.Clear();
-            _curOutput.Clear();
             isRecharging = true;
             yield return new WaitForEndOfFrame();
             GameEvents.current.RechargeDelayBarLoading();
             yield return new WaitForSeconds(totalRechargeTime);
-            _projectilesToGroup = 1;
             isRecharging = false;
             coroutineStarted = false;
+            curGroupIndex = 0;
         }
         else
         {
-            if (hasWrapped)
-            {
-                hasWrapped = false;
-                curModifierIndex = 0;
-            }
-            _curOutput.Clear();
-            _usedCastXIds.Clear();
             yield return new WaitForEndOfFrame();
             GameEvents.current.CastDelayBarLoading();
             yield return new WaitForSeconds(totalCastDelay);
             coroutineStarted = false;
         }
+    }
+
+    private List<List<Output>> CalculateFirstPass()
+    {
+        List<List<Output>> firstPass = new List<List<Output>>();
+        List<Output> currentGroup = new List<Output>();
+        List<int> potentialWrapModifiers = new List<int>();
+        bool hasWrapped = false;
+        int projectilesToGroup = 1;
+
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            if (modifiers[i] is IProjectile)
+            {
+                if (modifiers[i] is ITrigger)
+                {
+                    currentGroup.Add(new Output(modifiers[i]));
+                    potentialWrapModifiers.Add(i);
+                }
+                else
+                {
+                    currentGroup.Add(new Output(modifiers[i]));
+                    projectilesToGroup--;
+                }
+            }
+
+            else if (modifiers[i] is ICastX)
+            {
+                var castX = modifiers[i] as ICastX;
+                projectilesToGroup += castX.ModifiersPerCast;
+                currentGroup.Add(new Output(modifiers[i]));
+                potentialWrapModifiers.Add(i);
+                projectilesToGroup--;
+            }
+            
+            // TODO: Figure out what to do with the rest of modifiers
+            else
+            {
+                firstPass.Add(new List<Output>());
+            }
+
+            // We've reached the end of the list, check if we need to wrap
+            if (i == modifiers.Count - 1 && projectilesToGroup > 0)
+            {
+                firstPass.Add(new List<Output>(currentGroup));
+                hasWrapped = true;
+                break;
+            }
+
+            if (projectilesToGroup == 0)
+            {
+                firstPass.Add(new List<Output>(currentGroup));
+                potentialWrapModifiers.Clear();
+                currentGroup = new List<Output>();
+                projectilesToGroup = 1;
+            }
+        }
+
+        if (hasWrapped)
+        {
+            // Add modifiers until we reach the modifier that caused a wrap
+            for (int i = 0; i < projectilesToGroup; i++)
+            {
+                if (potentialWrapModifiers.Contains(i))
+                {
+                    break;
+                }
+                else
+                {
+                    firstPass[firstPass.Count - 1].Add(new Output(modifiers[i]));
+                }
+            }
+        }
+
+        return firstPass;
+    }
+
+    private List<List<Output>> CalculateSecondPass(List<List<Output>> firstPass)
+    {
+        List<List<Output>> secondPass = new List<List<Output>>();
+
+        for (int i = 0; i < firstPass.Count; i++)
+        {
+            secondPass.Add(new List<Output>());
+            int postProjectilesToGroup = 0;
+            int triggerIndex = 0;
+            bool foundTrigger = false;
+            for (int j = 0; j < firstPass[i].Count; j++)
+            {
+                // First occurence of a trigger
+                if (firstPass[i][j].projectile is ITrigger)
+                {
+                    if (foundTrigger == false)
+                    {
+                        foundTrigger = true;
+                        triggerIndex = j;
+                        secondPass[i].Add(firstPass[i][j]);
+                        postProjectilesToGroup++;
+                        continue;
+                    }
+                    else
+                    {
+                        secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
+                    }
+                }
+                else if (firstPass[i][j].projectile is ICastX)
+                {
+                    if (foundTrigger)
+                    {
+                        var castX = firstPass[i][j].projectile as ICastX;
+                        // TODO: Not sure if this is needed
+                        //secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
+                        postProjectilesToGroup += castX.ModifiersPerCast;
+                        postProjectilesToGroup--;
+                    }
+                    else
+                    {
+                        secondPass[i].Add(firstPass[i][j]);
+                    }
+                }
+                else
+                {
+                    if (foundTrigger)
+                    {
+                        secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
+                        postProjectilesToGroup--;
+                    }
+                    else
+                    {
+                        secondPass[i].Add(firstPass[i][j]);
+                    }
+                }
+                if (foundTrigger && postProjectilesToGroup == 0)
+                {
+                    break;
+                }
+            }
+        }
+
+        return secondPass;
+    }
+
+    private List<List<Output>> RemoveNonProjectiles(List<List<Output>> firstPass)
+    {
+        List<List<Output>> nonEmpty = firstPass.Where(x => x.Count != 0).ToList();
+        List<List<Output>> finalPass = new List<List<Output>>();
+
+        for (int i = 0; i < nonEmpty.Count(); i++)
+        {
+            finalPass.Add(new List<Output>());
+            for (int j = 0; j < nonEmpty[i].Count; j++)
+            {
+                if (nonEmpty[i][j].projectile is IProjectile)
+                {
+                    finalPass[i].Add(nonEmpty[i][j]);
+                }
+            }
+        }
+
+        return finalPass.Where(x => x.Count != 0).ToList();
     }
 
     private void InstantiateOutput(List<Output> output)
@@ -289,6 +380,13 @@ public class EquipmentContainer : MonoBehaviour
             Vector3 directionWithSpread = Quaternion.AngleAxis(x, projectileSpawner.up) * Quaternion.AngleAxis(y, projectileSpawner.forward) * directionWithoutSpread;
 
             var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, Quaternion.identity);
+            var triggerList = instantiatedProjectile.GetComponent<TriggerList>();
+            if (triggerList != null)
+            {
+                triggerList.triggerList = modifier.postModifiers; 
+                triggerList.cameraDirection = ray.direction;
+                triggerList.hitNormal = hit.normal;
+            }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
             instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
             //TODO: Create destroy property in projectile interface

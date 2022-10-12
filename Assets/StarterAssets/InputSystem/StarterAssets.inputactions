@@ -451,6 +451,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenPause",
+                    "type": "Button",
+                    "id": "50bb69c0-7165-42dc-b1f0-1d3bb4a5c8b1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -486,6 +495,17 @@
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7b37117e-5d67-4607-ae87-05983f13ad5f",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "OpenPause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -515,6 +535,15 @@
                     "name": "NextCommand",
                     "type": "Button",
                     "id": "44780648-be93-451d-b9bc-717c4dc4ec64",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenPause",
+                    "type": "Button",
+                    "id": "a6ecf8df-e5de-4f63-891d-83bf954bbe71",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -552,6 +581,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "NextCommand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba74a324-6c4b-4711-89ce-b38014499be5",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "OpenPause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

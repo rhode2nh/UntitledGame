@@ -22,7 +22,6 @@ public class PauseMenuUI : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
         #elif UNITY_WEBPLAYER
         Application.OpenURL(webplayerQuitURL);
-        return true;
         #else
         Application.Quit();
         #endif
