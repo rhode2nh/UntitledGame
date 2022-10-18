@@ -15,7 +15,7 @@ public class TriggerList : MonoBehaviour
         triggerList = new List<Output>();
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionExit(Collision collision)
     {
         camDir = Camera.main.transform.TransformDirection(Vector3.forward);
         if (spawnedFromTrigger)
@@ -36,19 +36,19 @@ public class TriggerList : MonoBehaviour
                     redirect.shouldRedirect = false;
                 }
                 instantiatedProjectile.transform.position = transform.position;
+                instantiatedProjectile.transform.rotation = transform.rotation;
                 var triggers = instantiatedProjectile.GetComponent<TriggerList>();
                 if (triggers != null)
                 {
                     triggers.spawnedFromTrigger = true;
                     triggers.triggerList = new List<Output>(triggerList);
                     triggers.triggerList.RemoveAt(0);
-                    instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
-                    Debug.Log("here");
+                    instantiatedProjectile.GetComponent<Rigidbody>().AddForce(gameObject.GetComponent<Rigidbody>().velocity.normalized * 4, ForceMode.Impulse);
                     break;
                 }
                 instantiatedProjectile.transform.rotation = Quaternion.LookRotation(camDir);
                 instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, Vector3.up) * instantiatedProjectile.transform.rotation;
-                instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
+                instantiatedProjectile.GetComponent<Rigidbody>().AddForce((instantiatedProjectile.transform.forward + gameObject.GetComponent<Rigidbody>().velocity.normalized) * 4, ForceMode.Impulse);
             }
             Destroy(gameObject);
         }

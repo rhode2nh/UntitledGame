@@ -156,8 +156,9 @@ public class EquipmentContainer : MonoBehaviour
     IEnumerator Attack()
     {
         List<List<Output>> firstPass = CalculateFirstPass();
+        //PrintOutput(firstPass);
         List<List<Output>> secondPass = CalculateSecondPass(firstPass);
-        PrintOutput(secondPass);
+        //PrintOutput(secondPass);
         secondPass = RemoveNonProjectiles(secondPass);
 
         // No projectiles are in the weapon
@@ -278,14 +279,16 @@ public class EquipmentContainer : MonoBehaviour
             bool foundTrigger = false;
             for (int j = 0; j < firstPass[i].Count; j++)
             {
+                var curProjectile = firstPass[i][j].projectile;
                 // First occurence of a trigger
-                if (firstPass[i][j].projectile is ITrigger)
+                if (curProjectile is ITrigger)
                 {
                     if (!foundTrigger)
                     {
                         foundTrigger = true;
-                        triggerIndex = j;
+                        //triggerIndex = j;
                         secondPass[i].Add(firstPass[i][j]);
+                        triggerIndex = secondPass[i].Count - 1;
                         postProjectilesToGroup++;
                         continue;
                     }
@@ -294,11 +297,11 @@ public class EquipmentContainer : MonoBehaviour
                         secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                     }
                 }
-                else if (firstPass[i][j].projectile is ICastX)
+                else if (curProjectile is ICastX)
                 {
                     if (foundTrigger)
                     {
-                        var castX = firstPass[i][j].projectile as ICastX;
+                        var castX = curProjectile as ICastX;
                         // TODO: Not sure if this is needed
                         //secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                         postProjectilesToGroup += castX.ModifiersPerCast;
@@ -313,6 +316,12 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     if (foundTrigger)
                     {
+                        //Debug.Log("Trigger Index: " + triggerIndex);
+                        //Debug.Log("i: " + i);
+                        //Debug.Log("j: " + j);
+                        //Debug.Log("First Pass i Count: " + firstPass[i].Count);
+                        //Debug.Log(secondPass[i][triggerIndex]);
+                        //Debug.Log(firstPass[i][j]);
                         secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                         postProjectilesToGroup--;
                     }
@@ -386,10 +395,7 @@ public class EquipmentContainer : MonoBehaviour
             }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
             instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
-            //TODO: Create destroy property in projectile interface
-            //Object.Destroy(instantiatedProjectile, 1.0f);
         }
-        //gunShotAudio.Play(0);
     }
 
     private float TotalXSpread()
