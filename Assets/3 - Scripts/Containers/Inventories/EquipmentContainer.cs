@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-[System.Serializable]
 public struct Output
 {
     public Modifier projectile;
@@ -49,7 +48,6 @@ public class EquipmentContainer : MonoBehaviour
     private InventorySlot _currentItem;
     private List<int> _usedCastXIds;
     private List<int> _usedModifierIds;
-    private int _projectilesToGroup;
     private List<Output> _curOutput;
 
     // Start is called before the first frame update
@@ -74,7 +72,6 @@ public class EquipmentContainer : MonoBehaviour
         curGroupIndex = 0;
         coroutineStarted = false;
         _currentItem = null;
-        _projectilesToGroup = 1;
         UpdateEquipmentContainer();
     }
 
@@ -160,7 +157,7 @@ public class EquipmentContainer : MonoBehaviour
     {
         List<List<Output>> firstPass = CalculateFirstPass();
         List<List<Output>> secondPass = CalculateSecondPass(firstPass);
-        Debug.Log(secondPass[0][0].postModifiers.Count);
+        PrintOutput(secondPass);
         secondPass = RemoveNonProjectiles(secondPass);
 
         // No projectiles are in the weapon
@@ -284,7 +281,7 @@ public class EquipmentContainer : MonoBehaviour
                 // First occurence of a trigger
                 if (firstPass[i][j].projectile is ITrigger)
                 {
-                    if (foundTrigger == false)
+                    if (!foundTrigger)
                     {
                         foundTrigger = true;
                         triggerIndex = j;
@@ -326,7 +323,7 @@ public class EquipmentContainer : MonoBehaviour
                 }
                 if (foundTrigger && postProjectilesToGroup == 0)
                 {
-                    break;
+                    foundTrigger = false;
                 }
             }
         }
@@ -384,13 +381,13 @@ public class EquipmentContainer : MonoBehaviour
             if (triggerList != null)
             {
                 triggerList.triggerList = modifier.postModifiers; 
-                triggerList.cameraDirection = ray.direction;
-                triggerList.hitNormal = hit.normal;
+                triggerList.xSpread = totalXSpread;
+                triggerList.ySpread = totalYSpread;
             }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
             instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
             //TODO: Create destroy property in projectile interface
-            Object.Destroy(instantiatedProjectile, 1.0f);
+            //Object.Destroy(instantiatedProjectile, 1.0f);
         }
         //gunShotAudio.Play(0);
     }
@@ -494,5 +491,17 @@ public class EquipmentContainer : MonoBehaviour
     {
         equipmentManager.equipmentInventory.items[curEquipmentIndex] = new InventorySlot(updatedWeapon);
         UpdateEquipmentContainer();
+    }
+
+    private void PrintOutput(List<List<Output>> outputList)
+    {
+        for (int i = 0; i < outputList.Count; i++)
+        {
+            Debug.Log("Group " + i + ":");
+            for (int j = 0; j < outputList[i].Count; j++)
+            {
+                Debug.Log("\t" + outputList[i][j].projectile.name);
+            }
+        }
     }
 }

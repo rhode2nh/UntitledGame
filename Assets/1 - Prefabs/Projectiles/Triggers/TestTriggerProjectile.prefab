@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6120488893816796990}
   - component: {fileID: 6120488893816796977}
   - component: {fileID: -2899713455156413073}
+  - component: {fileID: 3780529680362230095}
+  - component: {fileID: -8193293678035524329}
   m_Layer: 6
   m_Name: TestTriggerProjectile
   m_TagString: Untagged
@@ -27,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6120488893816796976}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6120488894322298915}
@@ -62,10 +64,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a16c91fb250e428d1b87f75539c4877e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerList: []
   spawnedFromTrigger: 0
-  cameraDirection: {x: 0, y: 0, z: 0}
-  hitNormal: {x: 0, y: 0, z: 0}
+  xSpread: 0
+  ySpread: 0
+--- !u!114 &3780529680362230095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120488893816796976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3191c5a607daa451ea16b54b203d9f77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileSO: {fileID: 11400000, guid: 9a073574f5ad45bb7b00033830082a92, type: 2}
+--- !u!114 &-8193293678035524329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120488893816796976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b1536649ee135dfae6be7f0d0ad056, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camDir: {x: 0, y: 0, z: 0}
+  shouldRedirect: 0
 --- !u!1 &6120488894322298914
 GameObject:
   m_ObjectHideFlags: 0
