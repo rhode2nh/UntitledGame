@@ -8,6 +8,7 @@ public class TriggerList : MonoBehaviour
     private Vector3 camDir;
     public float xSpread;
     public float ySpread;
+    public bool collided = false;
     public int numFramesSinceLastCollision = 0;
     public int maxFramesToDestroy = 3;
 
@@ -19,19 +20,18 @@ public class TriggerList : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (gameObject.GetComponent<Rigidbody>().velocity != Vector3.zero)
+        if (collided)
         {
-            transform.rotation = Quaternion.LookRotation(gameObject.GetComponent<Rigidbody>().velocity);
-        }
-
-        if (numFramesSinceLastCollision < maxFramesToDestroy)
-        {
-            numFramesSinceLastCollision++;
+            if (numFramesSinceLastCollision < maxFramesToDestroy)
+            {
+                numFramesSinceLastCollision++;
+            }
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        collided = true;
         camDir = Camera.main.transform.TransformDirection(Vector3.forward);
         if (spawnedFromTrigger)
         {
@@ -65,11 +65,7 @@ public class TriggerList : MonoBehaviour
                 instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, Vector3.up) * instantiatedProjectile.transform.rotation;
                 instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
             }
-
-            if (numFramesSinceLastCollision >= maxFramesToDestroy)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 }

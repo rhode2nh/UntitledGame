@@ -286,7 +286,6 @@ public class EquipmentContainer : MonoBehaviour
                     if (!foundTrigger)
                     {
                         foundTrigger = true;
-                        //triggerIndex = j;
                         secondPass[i].Add(firstPass[i][j]);
                         triggerIndex = secondPass[i].Count - 1;
                         postProjectilesToGroup++;
@@ -316,12 +315,6 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     if (foundTrigger)
                     {
-                        //Debug.Log("Trigger Index: " + triggerIndex);
-                        //Debug.Log("i: " + i);
-                        //Debug.Log("j: " + j);
-                        //Debug.Log("First Pass i Count: " + firstPass[i].Count);
-                        //Debug.Log(secondPass[i][triggerIndex]);
-                        //Debug.Log(firstPass[i][j]);
                         secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                         postProjectilesToGroup--;
                     }
