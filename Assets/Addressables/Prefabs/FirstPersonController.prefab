@@ -571,6 +571,7 @@ MonoBehaviour:
   checkInteractable: 0
   analogMovement: 0
   developerConsole: {fileID: 0}
+  pauseMenu: {fileID: 0}
   cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &3435951012020343852
@@ -735,14 +736,14 @@ MonoBehaviour:
   mainCamera: {fileID: 7981024157124996384}
   layerMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 191
   modifiers: []
   modifierSlotIndices: 
-  lastOutput: []
   isAttacking: 0
   isRecharging: 0
   coroutineStarted: 0
   curModifierIndex: 0
+  curGroupIndex: 0
   maxSlots: 0
   gunCastDelay: 0
   gunRechargeTime: 0

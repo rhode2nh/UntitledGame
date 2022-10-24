@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6120488893816796990}
   - component: {fileID: 6120488893816796977}
-  - component: {fileID: -5981304144961251789}
   - component: {fileID: 5040308596260968704}
+  - component: {fileID: 5029991914343648643}
   m_Layer: 6
   m_Name: TestProjectile
   m_TagString: Untagged
@@ -51,20 +51,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &-5981304144961251789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6120488893816796976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6b1536649ee135dfae6be7f0d0ad056, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camDir: {x: 0, y: 0, z: 0}
-  shouldRedirect: 0
 --- !u!114 &5040308596260968704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +64,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileSO: {fileID: 11400000, guid: 9a073574f5ad45bb7b00033830082a92, type: 2}
+--- !u!114 &5029991914343648643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120488893816796976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b1536649ee135dfae6be7f0d0ad056, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camDir: {x: 0, y: 0, z: 0}
+  shouldRedirect: 0
 --- !u!1 &6120488894322298914
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 32abf569a9e2c6b6a9ba682835981767, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

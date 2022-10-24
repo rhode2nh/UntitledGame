@@ -31,6 +31,7 @@ public class EquipmentContainer : MonoBehaviour
     public bool isAttacking;
     public bool isRecharging;
     public bool coroutineStarted;
+    public bool shooting;
     public int curModifierIndex;
     public int curGroupIndex;
     public int maxSlots;
@@ -50,6 +51,8 @@ public class EquipmentContainer : MonoBehaviour
     private List<int> _usedModifierIds;
     private List<Output> _curOutput;
 
+    private Animator equipmentContainerAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +62,7 @@ public class EquipmentContainer : MonoBehaviour
         GameEvents.current.onUpdateCurrentWeapon += UpdateCurrentWeapon;
         
         modifiers = new List<Modifier>();
+        equipmentContainerAnimator = equipmentContainer.GetComponent<Animator>();
         modifierSlotIndices = new List<int>();
         _curOutput = new List<Output>();
         lastOutput = new List<Output>();
@@ -68,6 +72,7 @@ public class EquipmentContainer : MonoBehaviour
         maxSlots = 0;
         isAttacking = false;
         isRecharging = false;
+        shooting = false;
         curModifierIndex = 0;
         curGroupIndex = 0;
         coroutineStarted = false;
@@ -81,6 +86,12 @@ public class EquipmentContainer : MonoBehaviour
         {
             coroutineStarted = true;
             StartCoroutine(Attack());
+        }
+
+        if (shooting)
+        {
+            equipmentContainerAnimator.SetTrigger("TrRecoil");
+            shooting = false;
         }
     }
 
@@ -158,7 +169,7 @@ public class EquipmentContainer : MonoBehaviour
         List<List<Output>> firstPass = CalculateFirstPass();
         //PrintOutput(firstPass);
         List<List<Output>> secondPass = CalculateSecondPass(firstPass);
-        //PrintOutput(secondPass);
+        PrintOutput(secondPass);
         secondPass = RemoveNonProjectiles(secondPass);
 
         // No projectiles are in the weapon
@@ -302,7 +313,7 @@ public class EquipmentContainer : MonoBehaviour
                     {
                         var castX = curProjectile as ICastX;
                         // TODO: Not sure if this is needed
-                        //secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
+                        secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                         postProjectilesToGroup += castX.ModifiersPerCast;
                         postProjectilesToGroup--;
                     }
@@ -389,6 +400,7 @@ public class EquipmentContainer : MonoBehaviour
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
             instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
+        shooting = true;
     }
 
     private float TotalXSpread()
@@ -494,13 +506,23 @@ public class EquipmentContainer : MonoBehaviour
 
     private void PrintOutput(List<List<Output>> outputList)
     {
+        var debugString = "";
         for (int i = 0; i < outputList.Count; i++)
         {
-            Debug.Log("Group " + i + ":");
+            debugString += "Group " + i + ":\n";
             for (int j = 0; j < outputList[i].Count; j++)
             {
-                Debug.Log("\t" + outputList[i][j].projectile.name);
+                debugString += "   - " + outputList[i][j].projectile.name + "\n";
+                if (outputList[i][j].projectile is ITrigger)
+                {
+                    var postProjectiles = outputList[i][j].postModifiers;
+                    for (int k = 0; k < postProjectiles.Count; k++)
+                    {
+                        debugString += "      * " + postProjectiles[k].projectile.name + "\n";
+                    }
+                }
             }
         }
+        Debug.Log(debugString);
     }
 }
