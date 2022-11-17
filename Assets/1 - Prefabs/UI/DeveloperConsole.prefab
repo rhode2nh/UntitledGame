@@ -701,6 +701,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4302a1dec608523a89f717a4ea8bf70e, type: 2}
   - {fileID: 11400000, guid: fa263eeed67bd04ceb5bcf74bf47b40c, type: 2}
   - {fileID: 11400000, guid: a9a819a2bfc1f37ada8d1db7bc9d8534, type: 2}
+  - {fileID: 11400000, guid: 69827b47b7a2acba18a631a9006ece74, type: 2}
   uiCanvas: {fileID: 9033728450243243136}
   inputField: {fileID: 9033728451181444103}
   historyText: {fileID: 9033728449664483261}
