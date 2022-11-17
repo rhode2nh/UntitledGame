@@ -19,5 +19,27 @@ public class InputRaycast : MonoBehaviour
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
         isHitting = Physics.Raycast(transform.position, fwd, out hit, maxDistance);
         Debug.DrawRay(transform.position, fwd * maxDistance, Color.green);
+        DisplayHoverText();
+    }
+
+    public void DisplayHoverText()
+    {
+        if (isHitting)
+        {
+            var tag = hit.transform.gameObject.tag;
+            if ( tag == Constants.WORLD_ITEM)
+            {
+                var objectHit = hit.transform.gameObject.GetComponent<WorldItem>();
+                GameEvents.current.UpdateHoverText("Pick up " + objectHit.item.name);
+            }
+            else if (tag == Constants.BUTTON)
+            {
+                GameEvents.current.UpdateHoverText("Press E to execute");
+            }
+            else
+            {
+                GameEvents.current.UpdateHoverText("");
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@ public class GameEvents : MonoBehaviour
     public event Action<int, int> onRemoveModifierFromWeapon;
     public event Func<bool, InventorySlot> onGetCurrentWeapon;
     public event Action<InventorySlot> onUpdateCurrentWeapon;
+    public event Action<string> onUpdateHoverText;
 
     public void Awake()
     {
@@ -254,6 +255,14 @@ public class GameEvents : MonoBehaviour
         if (onRemoveModifierFromWeapon != null)
         {
             onRemoveModifierFromWeapon(index, equipmentId);
+        }
+    }
+
+    public void UpdateHoverText(string text)
+    {
+        if (onUpdateHoverText != null)
+        {
+            onUpdateHoverText(text);
         }
     }
 }

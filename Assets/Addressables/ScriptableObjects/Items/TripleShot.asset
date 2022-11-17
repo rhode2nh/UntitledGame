@@ -16,11 +16,12 @@ MonoBehaviour:
   Name: MOD_CASTX
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 16dc7a5306245bfc399d1ea9d4a75748, type: 3}
   isStackable: 0
   castDelay: 0
   rechargeDelay: 0
   powerConsumption: 0
-  spreadX: 20
+  spreadX: 3
   spreadY: 4
   modifiersPerCast: 3

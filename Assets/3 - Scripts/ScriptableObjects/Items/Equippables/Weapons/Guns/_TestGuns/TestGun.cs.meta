@@ -3,7 +3,11 @@ guid: 5cec6ebe0272499ba9df2d8efa0e265a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - worldItemPrefab: {instanceID: 0}
+  - equipmentMesh: {instanceID: 0}
+  - testPrefab: {instanceID: 0}
+  - sprite: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

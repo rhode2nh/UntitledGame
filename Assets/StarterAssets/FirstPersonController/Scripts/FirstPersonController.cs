@@ -12,7 +12,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
+	public class FirstPersonController : LifeEntity
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -94,6 +94,7 @@ namespace StarterAssets
 
 		private void Start()
 		{
+            health = 100.0f;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 

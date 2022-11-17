@@ -18,7 +18,8 @@ public struct Output
 public class EquipmentContainer : MonoBehaviour
 {
     public int curEquipmentIndex;
-    public Mesh equipmentMesh;
+    public GameObject testGun;
+    public GameObject instantiatedGun;
     public EquipmentManager equipmentManager;
     public GameObject equipmentContainer;
     public Transform projectileSpawner;
@@ -117,17 +118,16 @@ public class EquipmentContainer : MonoBehaviour
     {
         if (!equipmentManager.IsEmpty() && curEquipmentIndex < equipmentManager.Count())
         {
-            _currentItem = equipmentManager.GetItem(curEquipmentIndex);
-            equipmentMesh = _currentItem.item.equipmentMesh;
-            _meshVertices = equipmentMesh.vertices;
-            for (int i = 0; i < _meshVertices.Length; i++)
+            if (instantiatedGun != null)
             {
-                if (projectileSpawner.localPosition.x < _meshVertices[i].x)
-                {
-                    projectileSpawner.localPosition = _meshVertices[i];
-                }
+                Destroy(instantiatedGun);
             }
-            equipmentContainer.GetComponent<MeshFilter>().mesh = equipmentMesh;
+            _currentItem = equipmentManager.GetItem(curEquipmentIndex);
+            testGun = _currentItem.item.testPrefab;
+            instantiatedGun = Instantiate(testGun, equipmentContainer.transform);
+            instantiatedGun.transform.parent = equipmentContainer.transform;
+            instantiatedGun.transform.localPosition = instantiatedGun.GetComponent<Gun>().gunPos;
+            projectileSpawner.localPosition = instantiatedGun.GetComponent<Gun>().bulletSpawnPos.localPosition + instantiatedGun.GetComponent<Gun>().gunPos;
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
             modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES]);
             maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
@@ -145,7 +145,7 @@ public class EquipmentContainer : MonoBehaviour
         {
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
             _currentItem = null;
-            equipmentMesh = null;
+            Destroy(instantiatedGun);
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
             modifiers.Clear();
             modifierSlotIndices.Clear();

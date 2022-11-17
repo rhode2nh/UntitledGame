@@ -1,19 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RedirectProjectile : MonoBehaviour
 {
     public Vector3 camDir;
     public bool shouldRedirect;
+    public Projectile projectileSO;
+    public int numFramesSinceLastCollision = 0;
+    public int maxFramesToCollideAgain = 3;
+    public bool canHit;
 
     void Awake()
     {
         shouldRedirect = true;
+        canHit = true;
     }
 
     void FixedUpdate()
     {
+        if (numFramesSinceLastCollision < maxFramesToCollideAgain)
+        {
+            numFramesSinceLastCollision++;
+        }
         if (gameObject.GetComponent<Rigidbody>().velocity != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(gameObject.GetComponent<Rigidbody>().velocity);
@@ -32,5 +39,15 @@ public class RedirectProjectile : MonoBehaviour
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * 4, ForceMode.Impulse);
         }
+
+        var hittable = collision.gameObject.GetComponentInParent<IHittable>();
+        if (hittable != null)
+        {
+            if (numFramesSinceLastCollision >= maxFramesToCollideAgain)
+            {
+                hittable.ModifyHealth(projectileSO.HitPoints);
+            }
+        }
+        numFramesSinceLastCollision = 0;
     }
 }

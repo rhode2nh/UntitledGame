@@ -6,6 +6,7 @@ public class Projectile : Modifier, IProjectile
     [SerializeField]
     public GameObject projectilePrefab;
     public float timeAlive;
+    public float hitPoints;
 
     public new void Awake() 
     {
@@ -13,7 +14,9 @@ public class Projectile : Modifier, IProjectile
         this.Id = Constants.MOD_PROJECTILE_ID;
         this.isStackable = false;
         this.timeAlive = 2.0f;
+        this.hitPoints = 20.0f;
     }
 
     public GameObject ProjectilePrefab { get => projectilePrefab; }
+    public float HitPoints { get => hitPoints; }
 }
