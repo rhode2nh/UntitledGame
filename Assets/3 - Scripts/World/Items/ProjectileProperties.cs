@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RedirectProjectile : MonoBehaviour
+public class ProjectileProperties : MonoBehaviour
 {
     public Vector3 camDir;
     public bool shouldRedirect;
@@ -33,13 +33,14 @@ public class RedirectProjectile : MonoBehaviour
         // it's rendered a few frames until the next call to FixedUpdate. This hides that artifact.
         if (shouldRedirect)
         {
-            shouldRedirect = false;
-            camDir = Camera.main.transform.TransformDirection(Vector3.forward);
-            transform.rotation = Quaternion.LookRotation(camDir);
-            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * 4, ForceMode.Impulse);
+            RedirectProjectile();
         }
 
+        AlterCollidedObject(collision);
+    }
+
+    void AlterCollidedObject(Collision collision)
+    {
         var hittable = collision.gameObject.GetComponentInParent<IHittable>();
         if (hittable != null)
         {
@@ -49,5 +50,15 @@ public class RedirectProjectile : MonoBehaviour
             }
         }
         numFramesSinceLastCollision = 0;
+
+    }
+
+    void RedirectProjectile()
+    {
+        shouldRedirect = false;
+        camDir = Camera.main.transform.TransformDirection(Vector3.forward);
+        transform.rotation = Quaternion.LookRotation(camDir);
+        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * 4, ForceMode.Impulse);
     }
 }

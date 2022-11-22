@@ -169,7 +169,7 @@ public class EquipmentContainer : MonoBehaviour
         List<List<Output>> firstPass = CalculateFirstPass();
         //PrintOutput(firstPass);
         List<List<Output>> secondPass = CalculateSecondPass(firstPass);
-        PrintOutput(secondPass);
+        //PrintOutput(secondPass);
         secondPass = RemoveNonProjectiles(secondPass);
 
         // No projectiles are in the weapon
@@ -398,7 +398,7 @@ public class EquipmentContainer : MonoBehaviour
                 triggerList.ySpread = totalYSpread;
             }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
-            instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
+            //instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
         shooting = true;
     }

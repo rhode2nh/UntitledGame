@@ -16,6 +16,7 @@ MonoBehaviour:
   Name: MOD_PROJECTILE
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 92ebe0f9f214bfc7495f7caa6b7f1b79, type: 3}
   isStackable: 0
   castDelay: 0.3
@@ -23,4 +24,6 @@ MonoBehaviour:
   powerConsumption: 0
   spreadX: 0
   spreadY: 0
-  projectilePrefab: {fileID: 6120488893816796976, guid: e884b10663e5cdf5da6158230bc5c950, type: 3}
+  projectilePrefab: {fileID: 6034798356384963098, guid: e454178a126ea1dde8ea9241e740e1bb, type: 3}
+  timeAlive: 2
+  hitPoints: 20

@@ -8,8 +8,6 @@ public class TriggerList : MonoBehaviour
     private Vector3 camDir;
     public float xSpread;
     public float ySpread;
-    public int numFramesSinceLastCollision = 0;
-    public int maxFramesToDestroy = 3;
 
     // Start is called before the first frame update
     void Awake()
@@ -17,20 +15,7 @@ public class TriggerList : MonoBehaviour
         triggerList = new List<Output>();
     }
 
-    void FixedUpdate()
-    {
-        if (gameObject.GetComponent<Rigidbody>().velocity != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(gameObject.GetComponent<Rigidbody>().velocity);
-        }
-
-        if (numFramesSinceLastCollision < maxFramesToDestroy)
-        {
-            numFramesSinceLastCollision++;
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
+    public void CalculateTriggerChildren() 
     {
         camDir = Camera.main.transform.TransformDirection(Vector3.forward);
         if (spawnedFromTrigger)
@@ -55,7 +40,7 @@ public class TriggerList : MonoBehaviour
                         continue;
                     }
                     var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab);
-                    var redirect = instantiatedProjectile.GetComponent<RedirectProjectile>();
+                    var redirect = instantiatedProjectile.GetComponent<RaycastProjectile>();
                     if (redirect != null)
                     {
                         redirect.shouldRedirect = false;
@@ -73,13 +58,7 @@ public class TriggerList : MonoBehaviour
                     }
                     instantiatedProjectile.transform.rotation = Quaternion.LookRotation(camDir);
                     instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, Vector3.up) * instantiatedProjectile.transform.rotation;
-                    instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
                 }
-            }
-            
-            if (numFramesSinceLastCollision >= maxFramesToDestroy)
-            {
-                Destroy(gameObject);
             }
         }
     }
