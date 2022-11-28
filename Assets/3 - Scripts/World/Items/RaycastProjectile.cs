@@ -103,7 +103,7 @@ public class RaycastProjectile : MonoBehaviour
         }
         else if (_curSpeed > gasProps.maxSpeed + speed)
         {
-            _curSpeed = gasProps.maxSpeed;
+            _curSpeed = gasProps.maxSpeed + speed;
             inGas = false;
         }
     }

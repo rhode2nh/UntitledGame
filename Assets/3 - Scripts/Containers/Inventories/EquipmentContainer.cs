@@ -409,6 +409,11 @@ public class EquipmentContainer : MonoBehaviour
             }
             //instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
+        var gunSmoke = instantiatedGun.GetComponentInChildren<ParticleSystem>();
+        if (gunSmoke != null)
+        {
+            gunSmoke.Play();
+        }
         shooting = true;
     }
 
