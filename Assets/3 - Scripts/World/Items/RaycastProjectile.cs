@@ -16,6 +16,7 @@ public class RaycastProjectile : MonoBehaviour
     private int _numBounces;
     private float _curSpeed;
     private TriggerList _triggerList;
+    private Vector3 _camDir;
 
     // Start is called before the first frame update
     void Awake()
@@ -27,6 +28,7 @@ public class RaycastProjectile : MonoBehaviour
         _triggerList = GetComponent<TriggerList>();
         Destroy(gameObject, projectileSO.timeAlive);
         _curSpeed = speed;
+        _camDir = Camera.main.transform.TransformDirection(Vector3.forward);
     }
 
     void Update()
@@ -89,8 +91,7 @@ public class RaycastProjectile : MonoBehaviour
     void RedirectProjectile()
     {
         shouldRedirect = false;
-        var camDir = Camera.main.transform.TransformDirection(Vector3.forward);
-        transform.rotation = Quaternion.LookRotation(camDir);
+        transform.rotation = Quaternion.LookRotation(_camDir);
     }
 
     void ApplyGasProperties()
