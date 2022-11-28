@@ -25,6 +25,8 @@ public class EquipmentContainer : MonoBehaviour
     public Transform projectileSpawner;
     public Camera mainCamera;
     public LayerMask layerMask;
+    public bool inGas;
+    public GasProps curGasProps;
 
     public List<Modifier> modifiers;
     public List<int> modifierSlotIndices;
@@ -74,6 +76,7 @@ public class EquipmentContainer : MonoBehaviour
         isAttacking = false;
         isRecharging = false;
         shooting = false;
+        inGas = false;
         curModifierIndex = 0;
         curGroupIndex = 0;
         coroutineStarted = false;
@@ -398,6 +401,12 @@ public class EquipmentContainer : MonoBehaviour
                 triggerList.ySpread = totalYSpread;
             }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
+            if (inGas)
+            {
+                var raycastProjectile = instantiatedProjectile.GetComponent<RaycastProjectile>();
+                raycastProjectile.inGas = true;
+                raycastProjectile.gasProps = curGasProps;
+            }
             //instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
         shooting = true;
