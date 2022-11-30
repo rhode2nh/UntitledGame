@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ModfierUI : MonoBehaviour
+public class ModifierUI : MonoBehaviour
 {
     public GameObject modifierUISlot;
     public Transform modifiersParent; 

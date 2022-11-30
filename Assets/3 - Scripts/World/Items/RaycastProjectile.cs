@@ -42,9 +42,14 @@ public class RaycastProjectile : MonoBehaviour
             {
                 //TODO: Figure out what to do when a collision occurs
                 _numBounces++;
+                if (shouldRedirect)
+                {
+                    RedirectProjectile();
+                }
 
                 if (_triggerList != null)
                 {
+                    transform.forward = Vector3.Reflect(transform.forward, hitInfo.normal);
                    _triggerList.CalculateTriggerChildren(); 
                 }
 
@@ -59,10 +64,6 @@ public class RaycastProjectile : MonoBehaviour
                     Destroy(gameObject);
                 }
 
-                if (shouldRedirect)
-                {
-                    RedirectProjectile();
-                }
                 transform.forward = Vector3.Reflect(transform.forward, hitInfo.normal);
             }
             else

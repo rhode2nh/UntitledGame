@@ -63,6 +63,7 @@ public class EquipmentContainer : MonoBehaviour
         GameEvents.current.onRemoveModifierFromWeapon += RemoveModifierFromWeapon;
         GameEvents.current.onGetCurrentWeapon += GetCurrentWeapon;
         GameEvents.current.onUpdateCurrentWeapon += UpdateCurrentWeapon;
+        GameEvents.current.onRemoveWeaponFromEquipmentInventory += RemoveWeaponFromEquipmentInventory;
         
         modifiers = new List<Modifier>();
         equipmentContainerAnimator = equipmentContainer.GetComponent<Animator>();
@@ -165,6 +166,7 @@ public class EquipmentContainer : MonoBehaviour
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
         }
         GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
+        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), equipmentManager.MaxSize());
     }
 
     IEnumerator Attack()
@@ -500,6 +502,17 @@ public class EquipmentContainer : MonoBehaviour
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
         var inventorySlot = new InventorySlot(modifier.GetInstanceID(), modifier, 1);
         GameEvents.current.AddItemToPlayerInventory(inventorySlot);
+        UpdateEquipmentContainer();
+    }
+
+    public void RemoveWeaponFromEquipmentInventory(int equipmentIndex)
+    {
+        if (equipmentIndex == -1)
+        {
+            return;
+        }
+        InventorySlot equipment = equipmentManager.Unequip(equipmentManager.equipmentInventory.items[equipmentIndex].id);
+        GameEvents.current.AddItemToPlayerInventory(equipment); 
         UpdateEquipmentContainer();
     }
 

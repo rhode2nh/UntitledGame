@@ -9,6 +9,8 @@ public class GameEvents : MonoBehaviour
     public event Action<InventorySlot> onAddItemToPlayerInventory;
     public event Action<List<InventorySlot>> onUpdateInventoryGUI;
     public event Action<List<Modifier>, List<int>, int> onUpdateModifierGUI;
+    //TODO: CREATE A GUN SCRIPTABLE SO!!!!
+    public event Action<List<Item>, int> onUpdateWeaponGUI;
     public event Action<string[]> onUpdateWeaponStatsGUI;
     public event Action onIsCastDelayBarLoading;
     public event Action onIsRechargeDelayBarLoading;
@@ -29,6 +31,7 @@ public class GameEvents : MonoBehaviour
     public event Action onUpdateEquipmentContainer;
     public event Action<int> onSpawnObject;
     public event Action<int, int> onRemoveModifierFromWeapon;
+    public event Action<int> onRemoveWeaponFromEquipmentInventory;
     public event Func<bool, InventorySlot> onGetCurrentWeapon;
     public event Action<InventorySlot> onUpdateCurrentWeapon;
     public event Action<string> onUpdateHoverText;
@@ -59,6 +62,14 @@ public class GameEvents : MonoBehaviour
         if (onUpdateModifierGUI != null)
         {
             onUpdateModifierGUI(items, modifierSlotIndices, maxSlots);
+        }
+    }
+
+    public void UpdateWeaponGUI(List<Item> weapons, int maxSlots)
+    {
+        if (onUpdateWeaponGUI != null)
+        {
+            onUpdateWeaponGUI(weapons, maxSlots);
         }
     }
 
@@ -247,6 +258,14 @@ public class GameEvents : MonoBehaviour
         if (onUpdateCurrentWeapon != null)
         {
             onUpdateCurrentWeapon(updatedWeapon);
+        }
+    }
+
+    public void RemoveWeaponFromEquipmentInventory(int index)
+    {
+        if (onRemoveWeaponFromEquipmentInventory != null)
+        {
+            onRemoveWeaponFromEquipmentInventory(index);
         }
     }
 

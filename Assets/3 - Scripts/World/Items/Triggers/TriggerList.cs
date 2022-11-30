@@ -17,7 +17,6 @@ public class TriggerList : MonoBehaviour
 
     public void CalculateTriggerChildren() 
     {
-        camDir = Camera.main.transform.TransformDirection(Vector3.forward);
         if (spawnedFromTrigger)
         {
             spawnedFromTrigger = false;
@@ -39,14 +38,12 @@ public class TriggerList : MonoBehaviour
                     {
                         continue;
                     }
-                    var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab);
+                    var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, transform.position, transform.rotation);
                     var redirect = instantiatedProjectile.GetComponent<RaycastProjectile>();
                     if (redirect != null)
                     {
                         redirect.shouldRedirect = false;
                     }
-                    instantiatedProjectile.transform.position = transform.position;
-                    instantiatedProjectile.transform.rotation = transform.rotation;
                     var triggers = instantiatedProjectile.GetComponent<TriggerList>();
                     if (triggers != null)
                     {
@@ -56,8 +53,7 @@ public class TriggerList : MonoBehaviour
                         //instantiatedProjectile.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 4, ForceMode.Impulse);
                         //break;
                     }
-                    instantiatedProjectile.transform.rotation = Quaternion.LookRotation(camDir);
-                    instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, Vector3.up) * instantiatedProjectile.transform.rotation;
+                    instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, transform.up) * instantiatedProjectile.transform.rotation;
                 }
             }
         }

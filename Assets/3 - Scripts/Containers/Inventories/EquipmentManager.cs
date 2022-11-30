@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -155,12 +156,6 @@ public class EquipmentManager : MonoBehaviour
         return removedItem.item;
     }
 
-    public Item RemoveLastItem()
-    {
-        Item item = RemoveItem(equipmentInventory.items.Count - 1);
-        return item;
-    }
-
     public bool IsEmpty()
     {
         return !equipmentInventory.items.Any();
@@ -169,6 +164,16 @@ public class EquipmentManager : MonoBehaviour
     public int MaxSize()
     {
         return equipmentInventory.maxSize;
+    }
+
+    public List<Item> GetAllEquipment()
+    {
+        List<Item> equipment = new List<Item>();
+        foreach (var item in equipmentInventory.items)
+        {
+            equipment.Add(item.item);
+        }
+        return equipment;
     }
 
     public void ClearInventory()
