@@ -16,6 +16,7 @@ MonoBehaviour:
   Name: TEST_MODIFIER
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 9ffb65e614eea7eb0957c8fb688a4a52, type: 3}
   isStackable: 0
   castDelay: 0
@@ -23,4 +24,5 @@ MonoBehaviour:
   powerConsumption: 0
   spreadX: 0
   spreadY: 0
-  triggerProjectilePrefab: {fileID: 6120488893816796976, guid: 600f8d8b02dc78e12811d40b8c068e7e, type: 3}
+  triggerProjectilePrefab: {fileID: 6034798356384963098, guid: 727972b0cdaab840db4c583c5b3e0411, type: 3}
+  hitPoints: 0
