@@ -29,16 +29,57 @@ public class InventoryUI : MonoBehaviour
 
     private void UpdateUI(List<InventorySlot> items)
     {
-        for (int i = 0; i < slots.Count; i++)
+        // Setup available slots to choose from
+        List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);
+        for (int i = 0; i < availableUiSlots.Count; i++)
         {
-            if (i < items.Count)
+            availableUiSlots[i] = true;
+        }
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].slotUIIndex != -1)
             {
-                slots[i].AddItem(items[i]);
-            }
-            else
-            {
-                slots[i].ClearSlot();
+                availableUiSlots[items[i].slotUIIndex] = false;
             }
         }
+
+        // Clear slots to reinitialize them
+        for (int i = 0; i < slots.Count; i++)
+        {
+            slots[i].ClearSlot();
+        }
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].slotUIIndex != -1)
+            {
+                slots[items[i].slotUIIndex].AddItem(items[i]);
+            }
+            else if (items[i].slotUIIndex == -1)
+            {
+                Debug.Log(items[i].item.name);
+                int nextAvailableSlotIndex = -1;
+                // Grab the next available slot
+                for (int j = 0; j < availableUiSlots.Count; j++)
+                {
+                    if (availableUiSlots[j] == true)
+                    {
+                        nextAvailableSlotIndex = j;
+                        availableUiSlots[j] = false;
+                        break;
+                    }
+                }
+                items[i].slotUIIndex = nextAvailableSlotIndex;
+                slots[items[i].slotUIIndex].AddItem(items[i]);
+            }
+        }
+
+        // for (int i = 0; i < slots.Count; i++)
+        // {
+        //     if (!slots[i].itemInSlot)
+        //     {
+        //         slots[i].ClearSlot();
+        //     }
+        // }
     }
 }

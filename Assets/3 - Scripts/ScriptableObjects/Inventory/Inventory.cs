@@ -25,12 +25,14 @@ public class InventorySlot
     [SerializeField]
     private List<Properties> _properties;
     public Dictionary<string, object> properties;
+    public int slotUIIndex;
 
-    public InventorySlot(int id, Item item, int count, Dictionary<string, object> properties = null)
+    public InventorySlot(int id, Item item, int count, int slotUIIndex = -1, Dictionary<string, object> properties = null)
     {
         this.id = id;
         this.item = item;
         this.count = count;
+        this.slotUIIndex = slotUIIndex;
         this.properties = properties.CopyProperties();
         this._properties = new List<Properties>();
 
@@ -43,6 +45,7 @@ public class InventorySlot
         this.id = item.id;
         this.item = item.item;
         this.count = item.count;
+        this.slotUIIndex = item.slotUIIndex;
         this.properties = item.properties.CopyProperties() ?? new Dictionary<string, object>(); 
         this._properties = new List<Properties>();
 

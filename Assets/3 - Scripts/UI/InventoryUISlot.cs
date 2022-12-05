@@ -9,6 +9,7 @@ public class InventoryUISlot : MonoBehaviour
     private InventorySlot item;
     public Image inventorySlotSprite;
     public Button button;
+    public bool itemInSlot;
 
     public void AddItem(InventorySlot newItem)
     {
@@ -16,6 +17,7 @@ public class InventoryUISlot : MonoBehaviour
         inventorySlotSprite.sprite = item.item.sprite;
         inventorySlotSprite.enabled = true;
         button.interactable = true;
+        itemInSlot = true;
     }
 
     public void ClearSlot()
@@ -24,10 +26,12 @@ public class InventoryUISlot : MonoBehaviour
         inventorySlotSprite.sprite = null;
         inventorySlotSprite.enabled = false;
         button.interactable = false;
+        itemInSlot = false;
     }
 
     public void OnRemoveButton()
     {
+        item.slotUIIndex = -1;
         if (item.item is IModifier)
         {
             InventorySlot curWeapon = GameEvents.current.GetCurrentWeapon();

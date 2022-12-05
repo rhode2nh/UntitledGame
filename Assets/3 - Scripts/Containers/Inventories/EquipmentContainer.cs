@@ -500,7 +500,8 @@ public class EquipmentContainer : MonoBehaviour
         _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES] = new List<int>(modifierSlotIndices);
         equipmentManager.RemoveItem(curEquipmentIndex);
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
-        var inventorySlot = new InventorySlot(modifier.GetInstanceID(), modifier, 1);
+        // TODO: I might want to consider using strings for ids 
+        var inventorySlot = new InventorySlot(System.Guid.NewGuid().GetHashCode(), modifier, 1);
         GameEvents.current.AddItemToPlayerInventory(inventorySlot);
         UpdateEquipmentContainer();
     }
