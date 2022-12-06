@@ -102,31 +102,31 @@ public class EquipmentContainer : MonoBehaviour
 
     public void SwitchEquipment(int index)
     {
-        if (index < equipmentManager.MaxSize())
+        curEquipmentIndex = index;
+        if (isRecharging)
         {
-            curEquipmentIndex = index;
-            if (isRecharging)
-            {
-                curModifierIndex = 0;
-                curGroupIndex = 0;
-                _usedCastXIds.Clear();
-                _usedModifierIds.Clear();
-            }
-            StopAllCoroutines();
-            coroutineStarted = false;
-            UpdateEquipmentContainer();
+            curModifierIndex = 0;
+            curGroupIndex = 0;
+            _usedCastXIds.Clear();
+            _usedModifierIds.Clear();
         }
+        GameEvents.current.StopLoadingBars();
+        StopAllCoroutines();
+        coroutineStarted = false;
+        UpdateEquipmentContainer();
     }
 
+    // TODO: Rework how the current weapon is grabbed from the inventory
     void UpdateEquipmentContainer()
     {
-        if (!equipmentManager.IsEmpty() && curEquipmentIndex < equipmentManager.Count())
+        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), equipmentManager.MaxSize());
+        _currentItem = GameEvents.current.GetCurrentWeaponFromSlot(curEquipmentIndex);
+        if (_currentItem != null)
         {
             if (instantiatedGun != null)
             {
                 Destroy(instantiatedGun);
             }
-            _currentItem = equipmentManager.GetItem(curEquipmentIndex);
             testGun = _currentItem.item.testPrefab;
             instantiatedGun = Instantiate(testGun, equipmentContainer.transform);
             instantiatedGun.transform.parent = equipmentContainer.transform;
@@ -135,6 +135,7 @@ public class EquipmentContainer : MonoBehaviour
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
             modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES]);
             maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
+            GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
             totalXSpread = TotalXSpread();
@@ -148,7 +149,6 @@ public class EquipmentContainer : MonoBehaviour
         else
         {
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
-            _currentItem = null;
             Destroy(instantiatedGun);
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
             modifiers.Clear();
@@ -164,9 +164,8 @@ public class EquipmentContainer : MonoBehaviour
             curGroupIndex = 0;
             maxSlots = 0;
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
+            GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
         }
-        GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
-        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), equipmentManager.MaxSize());
     }
 
     IEnumerator Attack()

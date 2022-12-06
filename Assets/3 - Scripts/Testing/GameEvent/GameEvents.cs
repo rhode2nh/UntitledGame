@@ -9,11 +9,12 @@ public class GameEvents : MonoBehaviour
     public event Action<InventorySlot> onAddItemToPlayerInventory;
     public event Action<List<InventorySlot>> onUpdateInventoryGUI;
     public event Action<List<Modifier>, List<int>, int> onUpdateModifierGUI;
-    //TODO: CREATE A GUN SCRIPTABLE SO!!!!
-    public event Action<List<Item>, int> onUpdateWeaponGUI;
+    //TODO: CREATE A GUN SO!!!!
+    public event Action<List<InventorySlot>, int> onUpdateWeaponGUI;
     public event Action<string[]> onUpdateWeaponStatsGUI;
     public event Action onIsCastDelayBarLoading;
     public event Action onIsRechargeDelayBarLoading;
+    public event Action onStopLoadingBars;
     public event Func<Recipe, bool> onCanCraft;
     public event Func<Recipe, bool> onCraft;
     public event Action<Item> onConsume;
@@ -33,6 +34,7 @@ public class GameEvents : MonoBehaviour
     public event Action<int, int> onRemoveModifierFromWeapon;
     public event Action<int> onRemoveWeaponFromEquipmentInventory;
     public event Func<bool, InventorySlot> onGetCurrentWeapon;
+    public event Func<int, InventorySlot> onGetCurrentWeaponFromSlot;
     public event Action<InventorySlot> onUpdateCurrentWeapon;
     public event Action<string> onUpdateHoverText;
 
@@ -65,7 +67,7 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void UpdateWeaponGUI(List<Item> weapons, int maxSlots)
+    public void UpdateWeaponGUI(List<InventorySlot> weapons, int maxSlots)
     {
         if (onUpdateWeaponGUI != null)
         {
@@ -221,6 +223,16 @@ public class GameEvents : MonoBehaviour
         return null;
     }
 
+    public InventorySlot GetCurrentWeaponFromSlot(int index)
+    {
+        if (onGetCurrentWeaponFromSlot != null)
+        {
+            return onGetCurrentWeaponFromSlot(index);
+        }
+
+        return null;
+    }
+
     public void UpdateEquipmentContainer()
     {
         if (onUpdateEquipmentContainer != null)
@@ -250,6 +262,14 @@ public class GameEvents : MonoBehaviour
         if (onIsRechargeDelayBarLoading != null)
         {
             onIsRechargeDelayBarLoading();
+        }
+    }
+
+    public void StopLoadingBars()
+    {
+        if (onStopLoadingBars != null)
+        {
+            onStopLoadingBars();
         }
     }
 

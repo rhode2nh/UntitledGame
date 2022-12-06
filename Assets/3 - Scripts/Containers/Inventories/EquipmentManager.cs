@@ -166,12 +166,12 @@ public class EquipmentManager : MonoBehaviour
         return equipmentInventory.maxSize;
     }
 
-    public List<Item> GetAllEquipment()
+    public List<InventorySlot> GetAllEquipment()
     {
-        List<Item> equipment = new List<Item>();
+        List<InventorySlot> equipment = new List<InventorySlot>();
         foreach (var item in equipmentInventory.items)
         {
-            equipment.Add(item.item);
+            equipment.Add(item);
         }
         return equipment;
     }

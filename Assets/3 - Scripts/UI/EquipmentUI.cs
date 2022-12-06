@@ -13,61 +13,72 @@ public class EquipmentUI : MonoBehaviour
     void Start()
     {
         GameEvents.current.onUpdateWeaponGUI += UpdateUI;
+        GameEvents.current.onGetCurrentWeaponFromSlot += GetCurrentWeaponFromSlot;
+        // TODO: GET MAX SIZE FROM EQUIPMENT INVENTORY
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject instancedSlot = Instantiate(equipmentUISlot);
+            instancedSlot.transform.SetParent(equipmentParent, false);
+            slots.Add(instancedSlot.GetComponentInChildren<EquipmentUISlot>());
+        }
     }
 
-    void UpdateUI(List<Item> equipment, int maxSlots)
+    InventorySlot GetCurrentWeaponFromSlot(int index)
     {
-        foreach (Transform child in equipmentParent.transform)
+        if (slots[index].itemInSlot == false)
         {
-            GameObject.Destroy(child.gameObject);
+            return null;
+        }
+        else
+        {
+            return slots[index].item;
+        }
+    }
+
+    void UpdateUI(List<InventorySlot> items, int maxSlots)
+    {
+        // Setup available slots to choose from
+        List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);
+        for (int i = 0; i < availableUiSlots.Count; i++)
+        {
+            availableUiSlots[i] = true;
+        }
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].slotUIIndex != -1)
+            {
+                availableUiSlots[items[i].slotUIIndex] = false;
+            }
         }
 
-        for (int i = 0; i < maxSlots; i++)
+        // Clear slots to reinitialize them
+        for (int i = 0; i < slots.Count; i++)
         {
-            GameObject instantiatedSlot = Instantiate(equipmentUISlot);
-            EquipmentUISlot slot = instantiatedSlot.GetComponent<EquipmentUISlot>();
-            instantiatedSlot.transform.SetParent(equipmentParent, false);
-            Image slotImage = instantiatedSlot.GetComponentInChildren<Image>();
-            if (i < equipment.Count)
-            {
-                slotImage.enabled = true;
-                slotImage.sprite = equipment[i].sprite;
-                slot.equipmentIndex = i;
-            }
-            else 
-            {
-                slotImage.enabled = false;
-                slot.slotUIIndex = -1;
-                slot.equipmentIndex = -1;
-            }
+            slots[i].ClearSlot();
         }
 
-        //for (int i = 0; i < maxSlots; i++)
-        //{
-        //    GameObject instantiatedSlot = Instantiate(equipmentUISlot);
-        //    EquipmentUISlot slot = instantiatedSlot.GetComponent<EquipmentUISlot>();
-        //    instantiatedSlot.transform.SetParent(equipmentParent, false);
-        //    Image slotImage = instantiatedSlot.GetComponentInChildren<Image>();
-        //    bool found = false;
-        //    for (int j = 0; j < equipmentSlotIndices.Count; j++)
-        //    {
-        //        if (i == equipmentSlotIndices[j])
-        //        {
-        //            found = true;
-        //            slotImage.enabled = true;
-        //            slotImage.sprite = equipment[j].sprite;
-        //            slot.slotUIIndex = equipmentSlotIndices[j];
-        //            slot.equipmentIndex = j;
-        //            break;
-        //        }
-        //    }
-        //    if (!found)
-        //    {
-        //        slotImage.enabled = false;
-        //        slot.slotUIIndex = -1;
-        //        slot.equipmentIndex = -1;
-        //    }
-        //    slots.Add(instantiatedSlot.GetComponentInChildren<EquipmentUISlot>());
-        //}
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].slotUIIndex != -1)
+            {
+                slots[items[i].slotUIIndex].AddItem(items[i]);
+            }
+            else if (items[i].slotUIIndex == -1)
+            {
+                int nextAvailableSlotIndex = -1;
+                // Grab the next available slot
+                for (int j = 0; j < availableUiSlots.Count; j++)
+                {
+                    if (availableUiSlots[j] == true)
+                    {
+                        nextAvailableSlotIndex = j;
+                        availableUiSlots[j] = false;
+                        break;
+                    }
+                }
+                items[i].slotUIIndex = nextAvailableSlotIndex;
+                slots[items[i].slotUIIndex].AddItem(items[i]);
+            }
+        }
     }
 }

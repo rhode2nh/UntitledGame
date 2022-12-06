@@ -53,7 +53,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6172461275236592555}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6039216}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 0.6039216}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -221,5 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotUIIndex: 0
-  modifierIndex: 0
-  equipmentId: 0
+  equipmentIndex: 0
+  inventorySlotSprite: {fileID: 8902383684812306511}
+  button: {fileID: 6139581178980752576}
+  itemInSlot: 0
