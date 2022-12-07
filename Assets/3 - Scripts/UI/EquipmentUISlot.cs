@@ -6,15 +6,15 @@ public class EquipmentUISlot : MonoBehaviour
     public int slotUIIndex;
     public int equipmentIndex;
 
-    public InventorySlot item;
+    public Slot slot;
     public Image inventorySlotSprite;
     public Button button;
     public bool itemInSlot;
 
-    public void AddItem(InventorySlot newItem)
+    public void AddItem(Slot newSlot)
     {
-        item = newItem;
-        inventorySlotSprite.sprite = item.item.sprite;
+        slot = newSlot;
+        inventorySlotSprite.sprite = slot.item.sprite;
         inventorySlotSprite.enabled = true;
         button.interactable = true;
         itemInSlot = true;
@@ -22,7 +22,7 @@ public class EquipmentUISlot : MonoBehaviour
 
     public void ClearSlot()
     {
-        item = null;
+        slot = null;
         inventorySlotSprite.sprite = null;
         inventorySlotSprite.enabled = false;
         button.interactable = false;
@@ -31,7 +31,7 @@ public class EquipmentUISlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        item.slotUIIndex = -1;
+        slot.slotUIIndex = -1;
         GameEvents.current.RemoveWeaponFromEquipmentInventory(equipmentIndex);
     }
 }

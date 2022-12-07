@@ -24,7 +24,7 @@ public class WorldItem : MonoBehaviour
         switch(item)
         {
             case IWeapon w:
-                properties.Add(Constants.P_W_MODIFIERS_LIST, new List<Modifier>());
+                properties.Add(Constants.P_W_MODIFIERS_LIST, new List<Slot>());
                 properties.Add(Constants.P_W_MODIFIER_SLOT_INDICES, new List<int>());
                 properties.Add(Constants.P_W_MAX_SLOTS, 10);
                 goto default;

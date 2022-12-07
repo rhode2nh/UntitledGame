@@ -15,7 +15,7 @@ public class ModifierUI : MonoBehaviour
         GameEvents.current.onUpdateModifierGUI += UpdateUI;
     }
 
-    void UpdateUI(List<Modifier> modifiers, List<int> modifierSlotIndices, int maxSlots)
+    void UpdateUI(List<Slot> modifiers, List<int> modifierSlotIndices, int maxSlots)
     {
         foreach (Transform child in modifiersParent.transform)
         {
@@ -35,7 +35,7 @@ public class ModifierUI : MonoBehaviour
                 {
                     found = true;
                     slotImage.enabled = true;
-                    slotImage.sprite = modifiers[j].sprite;
+                    slotImage.sprite = modifiers[j].item.sprite;
                     slot.slotUIIndex = modifierSlotIndices[j];
                     slot.modifierIndex = j;
                     break;

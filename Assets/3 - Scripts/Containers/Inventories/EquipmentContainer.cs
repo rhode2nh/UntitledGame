@@ -5,10 +5,10 @@ using System.Linq;
 
 public struct Output
 {
-    public Modifier projectile;
+    public Slot projectile;
     public List<Output> postModifiers;
 
-    public Output(Modifier projectile)
+    public Output(Slot projectile)
     {
         this.projectile = projectile;
         postModifiers = new List<Output>();
@@ -18,7 +18,6 @@ public struct Output
 public class EquipmentContainer : MonoBehaviour
 {
     public int curEquipmentIndex;
-    public GameObject testGun;
     public GameObject instantiatedGun;
     public EquipmentManager equipmentManager;
     public GameObject equipmentContainer;
@@ -28,7 +27,7 @@ public class EquipmentContainer : MonoBehaviour
     public bool inGas;
     public GasProps curGasProps;
 
-    public List<Modifier> modifiers;
+    public List<Slot> modifierSlots;
     public List<int> modifierSlotIndices;
     public List<Output> lastOutput;
     public bool isAttacking;
@@ -49,7 +48,7 @@ public class EquipmentContainer : MonoBehaviour
     public AudioSource gunShotAudio;
 
     private Vector3[] _meshVertices;
-    private InventorySlot _currentItem;
+    private Slot _currentItem;
     private List<int> _usedCastXIds;
     private List<int> _usedModifierIds;
     private List<Output> _curOutput;
@@ -65,7 +64,7 @@ public class EquipmentContainer : MonoBehaviour
         GameEvents.current.onUpdateCurrentWeapon += UpdateCurrentWeapon;
         GameEvents.current.onRemoveWeaponFromEquipmentInventory += RemoveWeaponFromEquipmentInventory;
         
-        modifiers = new List<Modifier>();
+        modifierSlots = new List<Slot>();
         equipmentContainerAnimator = equipmentContainer.GetComponent<Animator>();
         modifierSlotIndices = new List<int>();
         _curOutput = new List<Output>();
@@ -116,7 +115,6 @@ public class EquipmentContainer : MonoBehaviour
         UpdateEquipmentContainer();
     }
 
-    // TODO: Rework how the current weapon is grabbed from the inventory
     void UpdateEquipmentContainer()
     {
         GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), equipmentManager.MaxSize());
@@ -127,15 +125,14 @@ public class EquipmentContainer : MonoBehaviour
             {
                 Destroy(instantiatedGun);
             }
-            testGun = _currentItem.item.testPrefab;
-            instantiatedGun = Instantiate(testGun, equipmentContainer.transform);
+            instantiatedGun = Instantiate(_currentItem.item.testPrefab, equipmentContainer.transform);
             instantiatedGun.transform.parent = equipmentContainer.transform;
             instantiatedGun.transform.localPosition = instantiatedGun.GetComponent<Gun>().gunPos;
             projectileSpawner.localPosition = instantiatedGun.GetComponent<Gun>().bulletSpawnPos.localPosition + instantiatedGun.GetComponent<Gun>().gunPos;
-            modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
+            modifierSlots = new List<Slot>((List<Slot>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
             modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES]);
             maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
-            GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
+            GameEvents.current.UpdateModifierGUI(modifierSlots, modifierSlotIndices, maxSlots);
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
             totalXSpread = TotalXSpread();
@@ -151,7 +148,7 @@ public class EquipmentContainer : MonoBehaviour
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
             Destroy(instantiatedGun);
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
-            modifiers.Clear();
+            modifierSlots.Clear();
             modifierSlotIndices.Clear();
             gunCastDelay = 0.0f;
             gunRechargeTime = 0.0f;
@@ -164,7 +161,7 @@ public class EquipmentContainer : MonoBehaviour
             curGroupIndex = 0;
             maxSlots = 0;
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
-            GameEvents.current.UpdateModifierGUI(modifiers, modifierSlotIndices, maxSlots);
+            GameEvents.current.UpdateModifierGUI(modifierSlots, modifierSlotIndices, maxSlots);
         }
     }
 
@@ -215,27 +212,29 @@ public class EquipmentContainer : MonoBehaviour
         bool hasWrapped = false;
         int projectilesToGroup = 1;
 
-        for (int i = 0; i < modifiers.Count; i++)
+        for (int i = 0; i < modifierSlots.Count; i++)
         {
-            if (modifiers[i] is IProjectile)
+            var curSlot = modifierSlots[i];
+            var curModifier = modifierSlots[i].item as Modifier;
+            if (curModifier is IProjectile)
             {
-                if (modifiers[i] is ITrigger)
+                if (curModifier is ITrigger)
                 {
-                    currentGroup.Add(new Output(modifiers[i]));
+                    currentGroup.Add(new Output(curSlot));
                     potentialWrapModifiers.Add(i);
                 }
                 else
                 {
-                    currentGroup.Add(new Output(modifiers[i]));
+                    currentGroup.Add(new Output(curSlot));
                     projectilesToGroup--;
                 }
             }
 
-            else if (modifiers[i] is ICastX)
+            else if (curModifier is ICastX)
             {
-                var castX = modifiers[i] as ICastX;
+                var castX = curModifier as ICastX;
                 projectilesToGroup += castX.ModifiersPerCast;
-                currentGroup.Add(new Output(modifiers[i]));
+                currentGroup.Add(new Output(curSlot));
                 potentialWrapModifiers.Add(i);
                 projectilesToGroup--;
             }
@@ -247,7 +246,7 @@ public class EquipmentContainer : MonoBehaviour
             }
 
             // We've reached the end of the list, check if we need to wrap
-            if (i == modifiers.Count - 1 && projectilesToGroup > 0)
+            if (i == modifierSlots.Count - 1 && projectilesToGroup > 0)
             {
                 firstPass.Add(new List<Output>(currentGroup));
                 hasWrapped = true;
@@ -274,7 +273,7 @@ public class EquipmentContainer : MonoBehaviour
                 }
                 else
                 {
-                    firstPass[firstPass.Count - 1].Add(new Output(modifiers[i]));
+                    firstPass[firstPass.Count - 1].Add(new Output(modifierSlots[i]));
                 }
             }
         }
@@ -294,7 +293,7 @@ public class EquipmentContainer : MonoBehaviour
             bool foundTrigger = false;
             for (int j = 0; j < firstPass[i].Count; j++)
             {
-                var curProjectile = firstPass[i][j].projectile;
+                var curProjectile = firstPass[i][j].projectile.item;
                 // First occurence of a trigger
                 if (curProjectile is ITrigger)
                 {
@@ -358,7 +357,7 @@ public class EquipmentContainer : MonoBehaviour
             finalPass.Add(new List<Output>());
             for (int j = 0; j < nonEmpty[i].Count; j++)
             {
-                if (nonEmpty[i][j].projectile is IProjectile)
+                if (nonEmpty[i][j].projectile.item is IProjectile)
                 {
                     finalPass[i].Add(nonEmpty[i][j]);
                 }
@@ -372,7 +371,7 @@ public class EquipmentContainer : MonoBehaviour
     {
         foreach (var modifier in output)
         {
-            var projectile = modifier.projectile as IProjectile;
+            var projectile = modifier.projectile.item as IProjectile;
             Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
@@ -425,8 +424,9 @@ public class EquipmentContainer : MonoBehaviour
         {
             var weapon = _currentItem.item as IWeapon;
             totalXSpread = weapon.XSpread;
-            foreach (var modifier in modifiers)
+            foreach (var slot in modifierSlots)
             {
+                var modifier = (Modifier)slot.item;
                 totalXSpread += modifier.XSpread;
             }
         }
@@ -440,8 +440,9 @@ public class EquipmentContainer : MonoBehaviour
         {
             var weapon = _currentItem.item as IWeapon;
             totalYSpread = weapon.YSpread;
-            foreach (var modifier in modifiers)
+            foreach (var slot in modifierSlots)
             {
+                var modifier = (Modifier)slot.item;
                 totalYSpread += modifier.YSpread;
             }
         }
@@ -456,8 +457,9 @@ public class EquipmentContainer : MonoBehaviour
             var weapon = _currentItem.item as IWeapon;
             gunCastDelay = weapon.CastDelay;
             totalCastDelay = weapon.CastDelay;
-            foreach (var modifier in modifiers)
+            foreach (var slot in modifierSlots)
             {
+                var modifier = (Modifier)slot.item;
                 totalCastDelay += modifier.castDelay;
             }
         }
@@ -472,8 +474,9 @@ public class EquipmentContainer : MonoBehaviour
             var weapon = _currentItem.item as IWeapon;
             gunRechargeTime = weapon.RechargeTime;
             totalRechargeTime = weapon.RechargeTime;
-            foreach (var modifier in modifiers)
+            foreach (var slot in modifierSlots)
             {
+                var modifier = (Modifier)slot.item;
                 totalRechargeTime += modifier.rechargeDelay;
             }
         }
@@ -492,15 +495,15 @@ public class EquipmentContainer : MonoBehaviour
         {
             return;
         }
-        Modifier modifier = modifiers[modifierIndex];
-        modifiers.RemoveAt(modifierIndex);
+        Slot slot = modifierSlots[modifierIndex];
+        modifierSlots.RemoveAt(modifierIndex);
         modifierSlotIndices.RemoveAt(modifierIndex);
-        _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Modifier>(modifiers);
+        _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Slot>(modifierSlots);
         _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES] = new List<int>(modifierSlotIndices);
         equipmentManager.RemoveItem(curEquipmentIndex);
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
         // TODO: I might want to consider using strings for ids 
-        var inventorySlot = new InventorySlot(System.Guid.NewGuid().GetHashCode(), modifier, 1);
+        var inventorySlot = new Slot(slot);
         GameEvents.current.AddItemToPlayerInventory(inventorySlot);
         UpdateEquipmentContainer();
     }
@@ -511,12 +514,12 @@ public class EquipmentContainer : MonoBehaviour
         {
             return;
         }
-        InventorySlot equipment = equipmentManager.Unequip(equipmentManager.equipmentInventory.items[equipmentIndex].id);
+        Slot equipment = equipmentManager.Unequip(equipmentManager.equipmentInventory.items[equipmentIndex].id);
         GameEvents.current.AddItemToPlayerInventory(equipment); 
         UpdateEquipmentContainer();
     }
 
-    public InventorySlot GetCurrentWeapon(bool test)
+    public Slot GetCurrentWeapon(bool test)
     {
         if (equipmentManager.equipmentInventory.items.Count == 0)
         {
@@ -525,9 +528,9 @@ public class EquipmentContainer : MonoBehaviour
         return equipmentManager.GetItem(curEquipmentIndex);;
     }
 
-    public void UpdateCurrentWeapon(InventorySlot updatedWeapon)
+    public void UpdateCurrentWeapon(Slot updatedWeapon)
     {
-        equipmentManager.equipmentInventory.items[curEquipmentIndex] = new InventorySlot(updatedWeapon);
+        equipmentManager.equipmentInventory.items[curEquipmentIndex] = new Slot(updatedWeapon);
         UpdateEquipmentContainer();
     }
 
@@ -539,13 +542,13 @@ public class EquipmentContainer : MonoBehaviour
             debugString += "Group " + i + ":\n";
             for (int j = 0; j < outputList[i].Count; j++)
             {
-                debugString += "   - " + outputList[i][j].projectile.name + "\n";
+                debugString += "   - " + outputList[i][j].projectile.item.name + "\n";
                 if (outputList[i][j].projectile is ITrigger)
                 {
                     var postProjectiles = outputList[i][j].postModifiers;
                     for (int k = 0; k < postProjectiles.Count; k++)
                     {
-                        debugString += "      * " + postProjectiles[k].projectile.name + "\n";
+                        debugString += "      * " + postProjectiles[k].projectile.item.name + "\n";
                     }
                 }
             }

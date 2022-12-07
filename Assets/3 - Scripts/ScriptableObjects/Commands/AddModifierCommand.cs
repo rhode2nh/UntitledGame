@@ -22,7 +22,7 @@ public class AddModifierCommand : ConsoleCommand
                 return false;
             }
 
-            InventorySlot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
+            Slot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
             List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
             for (int i = 1; i < args.Length; i++)
             {
@@ -33,7 +33,7 @@ public class AddModifierCommand : ConsoleCommand
                         Debug.Log("Item must be a modifier.");
                         return false;
                     }
-                    InventorySlot modifier = GameEvents.current.RemoveItemFromPlayerInventory(modifierId);
+                    Slot modifier = GameEvents.current.RemoveItemFromPlayerInventory(modifierId);
                     modifierList.Add((Modifier)modifier.item);
                 }
                 else

@@ -22,7 +22,7 @@ namespace ExtensionMethods
                 switch (key)
                 {
                     case Constants.P_W_MODIFIERS_LIST:
-                        propertiesToReturn.Add(key, new List<Modifier>((List<Modifier>)properties[key]));
+                        propertiesToReturn.Add(key, new List<Slot>((List<Slot>)properties[key]));
                         break;
                     case Constants.P_W_MODIFIER_SLOT_INDICES:
                         propertiesToReturn.Add(key, new List<int>((List<int>)properties[key]));

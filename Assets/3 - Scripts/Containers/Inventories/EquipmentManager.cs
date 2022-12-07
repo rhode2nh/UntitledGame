@@ -30,7 +30,7 @@ public class EquipmentManager : MonoBehaviour
             return;
         }
 
-        InventorySlot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
+        Slot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
         if (!hasItem)
         {
             equipmentInventory.items.Add(itemToEquip);
@@ -59,21 +59,16 @@ public class EquipmentManager : MonoBehaviour
         if (equipmentInventory.items.Count >= equipmentInventory.maxSize)
             return;
 
-        InventorySlot itemToEquip = GameEvents.current.RemoveItemByType(typeof(IEquippable));
+        Slot itemToEquip = GameEvents.current.RemoveItemByType(typeof(IEquippable));
         equipmentInventory.items.Add(itemToEquip);
-        //InventorySlot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
-        //if (!hasItem)
-        //{
-        //    equipmentInventory.items.Add(itemToEquip);
-        //}
     }
 
     /// <summary>
     /// Removes an item from the equipment inventory.
     /// </summary>
-    public InventorySlot Unequip(int id)
+    public Slot Unequip(int id)
     {
-        InventorySlot itemToUnequip = equipmentInventory.items.FirstOrDefault(x => x.id == id);
+        Slot itemToUnequip = equipmentInventory.items.FirstOrDefault(x => x.id == id);
         equipmentInventory.items.Remove(itemToUnequip);
         return itemToUnequip;
     }
@@ -110,7 +105,7 @@ public class EquipmentManager : MonoBehaviour
 
     public Item RemoveItem(string name, int count = 1)
     {
-        InventorySlot removedItem = equipmentInventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
+        Slot removedItem = equipmentInventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
         if (removedItem.count - count <= 0)
         {
             equipmentInventory.items.Remove(removedItem);
@@ -126,13 +121,13 @@ public class EquipmentManager : MonoBehaviour
 
     public Item GetItem(string name)
     {
-        InventorySlot removedItem = equipmentInventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
+        Slot removedItem = equipmentInventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
         return removedItem.item;
     }
 
-    public InventorySlot GetItem(int index)
+    public Slot GetItem(int index)
     {
-        return new InventorySlot(equipmentInventory.items[index]);
+        return new Slot(equipmentInventory.items[index]);
     }
 
     /// <summary>
@@ -142,7 +137,7 @@ public class EquipmentManager : MonoBehaviour
     /// <returns>The item removed.</returns>
     public Item RemoveItem(Item item, int count = 1)
     {
-        InventorySlot removedItem = equipmentInventory.items.FirstOrDefault(x => x.item == item);
+        Slot removedItem = equipmentInventory.items.FirstOrDefault(x => x.item == item);
         if (removedItem.count - count <= 0)
         {
             equipmentInventory.items.Remove(removedItem);
@@ -166,9 +161,9 @@ public class EquipmentManager : MonoBehaviour
         return equipmentInventory.maxSize;
     }
 
-    public List<InventorySlot> GetAllEquipment()
+    public List<Slot> GetAllEquipment()
     {
-        List<InventorySlot> equipment = new List<InventorySlot>();
+        List<Slot> equipment = new List<Slot>();
         foreach (var item in equipmentInventory.items)
         {
             equipment.Add(item);

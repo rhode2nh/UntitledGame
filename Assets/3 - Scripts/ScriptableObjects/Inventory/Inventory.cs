@@ -6,7 +6,7 @@ using UnityEngine;
 public class Inventory : ScriptableObject
 {
     public int maxSize = 0;
-    public List<InventorySlot> items = new List<InventorySlot>();
+    public List<Slot> items = new List<Slot>();
 }
 
 [System.Serializable]
@@ -17,7 +17,7 @@ public struct Properties
 }
 
 [System.Serializable]
-public class InventorySlot
+public class Slot
 {
     public int id;
     public Item item;
@@ -27,7 +27,7 @@ public class InventorySlot
     public Dictionary<string, object> properties;
     public int slotUIIndex;
 
-    public InventorySlot(int id, Item item, int count, int slotUIIndex = -1, Dictionary<string, object> properties = null)
+    public Slot(int id, Item item, int count, int slotUIIndex = -1, Dictionary<string, object> properties = null)
     {
         this.id = id;
         this.item = item;
@@ -40,13 +40,13 @@ public class InventorySlot
         SerializeProperties();
     }
 
-    public InventorySlot(InventorySlot item)
+    public Slot(Slot slot)
     {
-        this.id = item.id;
-        this.item = item.item;
-        this.count = item.count;
-        this.slotUIIndex = item.slotUIIndex;
-        this.properties = item.properties.CopyProperties() ?? new Dictionary<string, object>(); 
+        this.id = slot.id;
+        this.item = slot.item;
+        this.count = slot.count;
+        this.slotUIIndex = slot.slotUIIndex;
+        this.properties = slot.properties.CopyProperties() ?? new Dictionary<string, object>(); 
         this._properties = new List<Properties>();
 
         // Show key value pairs in the inspector.

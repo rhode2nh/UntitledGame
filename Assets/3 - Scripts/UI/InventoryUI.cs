@@ -27,7 +27,7 @@ public class InventoryUI : MonoBehaviour
         //UpdateUI();
     }
 
-    private void UpdateUI(List<InventorySlot> items)
+    private void UpdateUI(List<Slot> items)
     {
         // Setup available slots to choose from
         List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);

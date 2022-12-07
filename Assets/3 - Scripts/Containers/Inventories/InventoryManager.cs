@@ -28,7 +28,7 @@ public class InventoryManager : MonoBehaviour
     /// Adds and item with the specified amount to the inventory.
     /// </summary>
     /// <param name="item">The item to add.</param>
-    public void AddItem(InventorySlot item)
+    public void AddItem(Slot item)
     {
         if (item.item.isStackable)
         {
@@ -45,7 +45,7 @@ public class InventoryManager : MonoBehaviour
 
         if (!hasItem)
         {
-            inventory.items.Add(new InventorySlot(item));
+            inventory.items.Add(new Slot(item));
         }
         hasItem = false;
         GameEvents.current.UpdateInventoryGUI(inventory.items);
@@ -70,9 +70,9 @@ public class InventoryManager : MonoBehaviour
         return inventory.items.Count;
     }
 
-    public InventorySlot RemoveItem(int id)
+    public Slot RemoveItem(int id)
     {
-        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
+        Slot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
         if (removedItem.count == 1)
         {
             inventory.items.Remove(removedItem);
@@ -88,7 +88,7 @@ public class InventoryManager : MonoBehaviour
 
     public Item RemoveItem(string name, int count = 1)
     {
-        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
+        Slot removedItem = inventory.items.FirstOrDefault(x => x.item.Name == name.ToUpper());
         if (removedItem.count - count <= 0)
         {
             inventory.items.Remove(removedItem);
@@ -102,9 +102,9 @@ public class InventoryManager : MonoBehaviour
         return removedItem.item;
     }
 
-    public InventorySlot GetItem(int id)
+    public Slot GetItem(int id)
     {
-        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
+        Slot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
         return removedItem;
     }
 
@@ -115,7 +115,7 @@ public class InventoryManager : MonoBehaviour
     /// <returns>The item removed.</returns>
     public Item RemoveItem(Item item, int count = 1)
     {
-        InventorySlot removedItem = inventory.items.FirstOrDefault(x => x.item == item);
+        Slot removedItem = inventory.items.FirstOrDefault(x => x.item == item);
         if (removedItem.count - count <= 0)
         {
             inventory.items.Remove(removedItem);
@@ -134,7 +134,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     /// <params name="type">The type of item.</param>
     /// <returns>The item removed.</returns>
-    public InventorySlot RemoveItemByType(System.Type type)
+    public Slot RemoveItemByType(System.Type type)
     {
         foreach (var item in inventory.items)
         {
@@ -194,9 +194,9 @@ public class InventoryManager : MonoBehaviour
         return types.All(type => type.IsAssignableFrom(item.item.GetType()));
     }
 
-    public List<InventorySlot> GetAllModifiers()
+    public List<Slot> GetAllModifiers()
     {
-        List<InventorySlot> modifierList = new List<InventorySlot>();
+        List<Slot> modifierList = new List<Slot>();
 
         foreach (var inventoryItem in inventory.items)
         {

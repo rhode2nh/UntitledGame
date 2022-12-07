@@ -5,16 +5,15 @@ using UnityEngine.UI;
 
 public class InventoryUISlot : MonoBehaviour
 {
-    public Inventory inventory;
-    private InventorySlot item;
+    private Slot slot;
     public Image inventorySlotSprite;
     public Button button;
     public bool itemInSlot;
 
-    public void AddItem(InventorySlot newItem)
+    public void AddItem(Slot newSlot)
     {
-        item = newItem;
-        inventorySlotSprite.sprite = item.item.sprite;
+        slot = newSlot;
+        inventorySlotSprite.sprite = slot.item.sprite;
         inventorySlotSprite.enabled = true;
         button.interactable = true;
         itemInSlot = true;
@@ -22,7 +21,7 @@ public class InventoryUISlot : MonoBehaviour
 
     public void ClearSlot()
     {
-        item = null;
+        slot = null;
         inventorySlotSprite.sprite = null;
         inventorySlotSprite.enabled = false;
         button.interactable = false;
@@ -31,18 +30,18 @@ public class InventoryUISlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        item.slotUIIndex = -1;
-        if (item.item is IModifier)
+        slot.slotUIIndex = -1;
+        if (slot.item is IModifier)
         {
-            InventorySlot curWeapon = GameEvents.current.GetCurrentWeapon();
+            Slot curWeapon = GameEvents.current.GetCurrentWeapon();
             if (curWeapon == null)
             {
                 return;
             }
-            List<Modifier> modifierList = (List<Modifier>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
+            List<Slot> modifierSlotList = (List<Slot>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
             List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES];
             int maxSlots = (int)curWeapon.properties[Constants.P_W_MAX_SLOTS];
-            if (modifierList.Count == maxSlots)
+            if (modifierSlotList.Count == maxSlots)
             {
                 return;
             }
@@ -53,13 +52,13 @@ public class InventoryUISlot : MonoBehaviour
             }
             availableIndices = availableIndices.Except(modifierSlotIndices).ToList();
             modifierSlotIndices.Insert(availableIndices.First(), availableIndices.First());
-            modifierList.Insert(availableIndices.First(), (Modifier)item.item);
-            GameEvents.current.RemoveItemFromPlayerInventory(item.id);
+            modifierSlotList.Insert(availableIndices.First(), slot);
+            GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
             GameEvents.current.UpdateCurrentWeapon(curWeapon);
         }
-        else if (item.item is IWeapon)
+        else if (slot.item is IWeapon)
         {
-            GameEvents.current.Equip(item.id);
+            GameEvents.current.Equip(slot.id);
             GameEvents.current.UpdateEquipmentContainer();
         }
     }

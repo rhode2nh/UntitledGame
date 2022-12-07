@@ -33,7 +33,7 @@ public class TriggerList : MonoBehaviour
                 {
                     float x = Random.Range(-xSpread * 0.5f, xSpread * 0.5f);
                     float y = Random.Range(-ySpread * 0.5f, ySpread * 0.5f);
-                    var projectile = secondPass[0][i].projectile as IProjectile;
+                    var projectile = secondPass[0][i].projectile.item as IProjectile;
                     if (projectile == null)
                     {
                         continue;
@@ -68,17 +68,18 @@ public class TriggerList : MonoBehaviour
 
         for (int i = 0; i < triggerList.Count; i++)
         {
-            var curModifier = triggerList[i].projectile;
+            var curSlot = triggerList[i].projectile;
+            var curModifier = curSlot.item as Modifier;
             if (curModifier is IProjectile)
             {
                 if (curModifier is ITrigger)
                 {
-                    currentGroup.Add(new Output(curModifier));
+                    currentGroup.Add(new Output(triggerList[i].projectile));
                     potentialWrapModifiers.Add(i);
                 }
                 else
                 {
-                    currentGroup.Add(new Output(curModifier));
+                    currentGroup.Add(new Output(curSlot));
                     projectilesToGroup--;
                 }
             }
@@ -87,7 +88,7 @@ public class TriggerList : MonoBehaviour
             {
                 var castX = curModifier as ICastX;
                 projectilesToGroup += castX.ModifiersPerCast;
-                currentGroup.Add(new Output(curModifier));
+                currentGroup.Add(new Output(curSlot));
                 potentialWrapModifiers.Add(i);
                 projectilesToGroup--;
             }
@@ -128,7 +129,8 @@ public class TriggerList : MonoBehaviour
             bool foundTrigger = false;
             for (int j = 0; j < firstPass[i].Count; j++)
             {
-                var curProjectile = firstPass[i][j].projectile;
+                var curSlot = firstPass[i][j].projectile;
+                var curProjectile = curSlot.item as Modifier;
                 // First occurence of a trigger
                 if (curProjectile is ITrigger)
                 {
@@ -190,13 +192,13 @@ public class TriggerList : MonoBehaviour
             debugString += "Group " + i + ":\n";
             for (int j = 0; j < outputList[i].Count; j++)
             {
-                debugString += "   - " + outputList[i][j].projectile.name + "\n";
+                debugString += "   - " + outputList[i][j].projectile.item.name + "\n";
                 if (outputList[i][j].projectile is ITrigger)
                 {
                     var postProjectiles = outputList[i][j].postModifiers;
                     for (int k = 0; k < postProjectiles.Count; k++)
                     {
-                        debugString += "      * " + postProjectiles[k].projectile.name + "\n";
+                        debugString += "      * " + postProjectiles[k].projectile.item.name + "\n";
                     }
                 }
             }

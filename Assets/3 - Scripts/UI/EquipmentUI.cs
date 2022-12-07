@@ -23,7 +23,7 @@ public class EquipmentUI : MonoBehaviour
         }
     }
 
-    InventorySlot GetCurrentWeaponFromSlot(int index)
+    Slot GetCurrentWeaponFromSlot(int index)
     {
         if (slots[index].itemInSlot == false)
         {
@@ -31,11 +31,11 @@ public class EquipmentUI : MonoBehaviour
         }
         else
         {
-            return slots[index].item;
+            return slots[index].slot;
         }
     }
 
-    void UpdateUI(List<InventorySlot> items, int maxSlots)
+    void UpdateUI(List<Slot> items, int maxSlots)
     {
         // Setup available slots to choose from
         List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);
