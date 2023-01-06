@@ -133,8 +133,8 @@ public class EquipmentContainer : MonoBehaviour
             instantiatedGun.transform.localPosition = instantiatedGun.GetComponent<Gun>().gunPos;
             projectileSpawner.localPosition = instantiatedGun.GetComponent<Gun>().bulletSpawnPos.localPosition + instantiatedGun.GetComponent<Gun>().gunPos;
             modifiers = new List<Modifier>((List<Modifier>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
-            modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES]);
-            maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
+            modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST]);
+            maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS_INT];
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
             totalXSpread = TotalXSpread();
@@ -497,7 +497,7 @@ public class EquipmentContainer : MonoBehaviour
         modifiers.RemoveAt(modifierIndex);
         modifierSlotIndices.RemoveAt(modifierIndex);
         _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Modifier>(modifiers);
-        _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES] = new List<int>(modifierSlotIndices);
+        _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST] = new List<int>(modifierSlotIndices);
         equipmentManager.RemoveItem(curEquipmentIndex);
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
         var inventorySlot = new InventorySlot(modifier.GetInstanceID(), modifier, 1);

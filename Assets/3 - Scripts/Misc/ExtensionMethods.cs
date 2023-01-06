@@ -24,10 +24,10 @@ namespace ExtensionMethods
                     case Constants.P_W_MODIFIERS_LIST:
                         propertiesToReturn.Add(key, new List<Modifier>((List<Modifier>)properties[key]));
                         break;
-                    case Constants.P_W_MODIFIER_SLOT_INDICES:
+                    case Constants.P_W_MODIFIER_SLOT_INDICES_LIST:
                         propertiesToReturn.Add(key, new List<int>((List<int>)properties[key]));
                         break;
-                    case Constants.P_W_MAX_SLOTS:
+                    case Constants.P_W_MAX_SLOTS_INT:
                         propertiesToReturn.Add(key, properties[key]);
                         break;
                     default:

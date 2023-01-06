@@ -24,8 +24,8 @@ public class AddAllModifiersCommand : ConsoleCommand
 
             InventorySlot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
             List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
-            List<int> modifierSlotIndices = (List<int>)equipment.properties[Constants.P_W_MODIFIER_SLOT_INDICES];
-            int maxSlots = (int)equipment.properties[Constants.P_W_MAX_SLOTS];
+            List<int> modifierSlotIndices = (List<int>)equipment.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
+            int maxSlots = (int)equipment.properties[Constants.P_W_MAX_SLOTS_INT];
             var modifiersToAdd = GameEvents.current.GetAllModifiers();
             for (int i = 0; i < modifiersToAdd.Count; i++)
             {
