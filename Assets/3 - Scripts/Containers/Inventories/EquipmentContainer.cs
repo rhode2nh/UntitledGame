@@ -130,8 +130,8 @@ public class EquipmentContainer : MonoBehaviour
             instantiatedGun.transform.localPosition = instantiatedGun.GetComponent<Gun>().gunPos;
             projectileSpawner.localPosition = instantiatedGun.GetComponent<Gun>().bulletSpawnPos.localPosition + instantiatedGun.GetComponent<Gun>().gunPos;
             modifierSlots = new List<Slot>((List<Slot>)_currentItem.properties[Constants.P_W_MODIFIERS_LIST]);
-            modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES]);
-            maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS];
+            modifierSlotIndices = new List<int>((List<int>)_currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST]);
+            maxSlots = (int)_currentItem.properties[Constants.P_W_MAX_SLOTS_INT];
             GameEvents.current.UpdateModifierGUI(modifierSlots, modifierSlotIndices, maxSlots);
             totalCastDelay = TotalCastDelay();
             totalRechargeTime = TotalRechargeTime();
@@ -499,7 +499,7 @@ public class EquipmentContainer : MonoBehaviour
         modifierSlots.RemoveAt(modifierIndex);
         modifierSlotIndices.RemoveAt(modifierIndex);
         _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Slot>(modifierSlots);
-        _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES] = new List<int>(modifierSlotIndices);
+        _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST] = new List<int>(modifierSlotIndices);
         equipmentManager.RemoveItem(curEquipmentIndex);
         equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
         // TODO: I might want to consider using strings for ids 

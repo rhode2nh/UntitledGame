@@ -39,8 +39,8 @@ public class InventoryUISlot : MonoBehaviour
                 return;
             }
             List<Slot> modifierSlotList = (List<Slot>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
-            List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES];
-            int maxSlots = (int)curWeapon.properties[Constants.P_W_MAX_SLOTS];
+            List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
+            int maxSlots = (int)curWeapon.properties[Constants.P_W_MAX_SLOTS_INT];
             if (modifierSlotList.Count == maxSlots)
             {
                 return;

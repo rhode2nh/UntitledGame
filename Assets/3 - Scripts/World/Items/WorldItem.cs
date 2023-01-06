@@ -25,9 +25,15 @@ public class WorldItem : MonoBehaviour
         {
             case IWeapon w:
                 properties.Add(Constants.P_W_MODIFIERS_LIST, new List<Slot>());
-                properties.Add(Constants.P_W_MODIFIER_SLOT_INDICES, new List<int>());
-                properties.Add(Constants.P_W_MAX_SLOTS, 10);
+                properties.Add(Constants.P_W_MODIFIERS_LIST, new List<Modifier>());
+                properties.Add(Constants.P_W_MODIFIER_SLOT_INDICES_LIST, new List<int>());
+                properties.Add(Constants.P_W_MAX_SLOTS_INT, 10);
                 goto default;
+            case IImplant i:
+                properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);
+                properties.Add(Constants.P_IMP_BODY_PART_IMPLANTTYPE, i.BodyPart);
+                goto default;
+
             default:
                 break;
         }
