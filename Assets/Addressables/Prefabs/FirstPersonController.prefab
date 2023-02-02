@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4879986930253255115}
   - component: {fileID: 1166681867}
   - component: {fileID: 1166681868}
+  - component: {fileID: 1446356342}
   m_Layer: 7
   m_Name: EquipmentContainer
   m_TagString: Untagged
@@ -115,6 +116,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735607150621769378}
   m_Mesh: {fileID: 0}
+--- !u!95 &1446356342
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735607150621769378}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 91b2cc389a09851d898f4adc6639c883, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1035694137204606967
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,10 +478,10 @@ GameObject:
   - component: {fileID: 4849985807314206416}
   - component: {fileID: 1369283477803567196}
   - component: {fileID: 3435951012020343852}
-  - component: {fileID: 3019484515026087320}
   - component: {fileID: 278515033}
   - component: {fileID: 899284470}
   - component: {fileID: 899284479}
+  - component: {fileID: 990531854}
   m_Layer: 7
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -515,8 +536,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 6
-  SprintSpeed: 8
+  health: 0
+  hitPointText: {fileID: 0}
+  isInvincible: 0
+  MoveSpeed: 8
+  SprintSpeed: 12
   RotationSpeed: 0.7
   SpeedChangeRate: 10
   JumpHeight: 1.2
@@ -676,19 +700,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3019484515026087320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3435951012020343840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 745c8f415b8f5294ca82cb924d0decd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryUI: {fileID: 0}
 --- !u!114 &278515033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -729,19 +740,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curEquipmentIndex: 0
-  equipmentMesh: {fileID: 0}
+  instantiatedGun: {fileID: 0}
   equipmentManager: {fileID: 899284470}
   equipmentContainer: {fileID: 735607150621769378}
   projectileSpawner: {fileID: 613585573}
   mainCamera: {fileID: 7981024157124996384}
   layerMask:
     serializedVersion: 2
-    m_Bits: 191
-  modifiers: []
+    m_Bits: 187
+  inGas: 0
+  curGasProps:
+    accelerationFactor: 0
+    maxSpeed: 0
+    minSpeed: 0
+  modifierSlots: []
   modifierSlotIndices: 
   isAttacking: 0
   isRecharging: 0
   coroutineStarted: 0
+  shooting: 0
   curModifierIndex: 0
   curGroupIndex: 0
   maxSlots: 0
@@ -754,6 +771,19 @@ MonoBehaviour:
   totalCastDelay: 0
   totalRechargeTime: 0
   gunShotAudio: {fileID: 0}
+--- !u!114 &990531854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3435951012020343840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b34146ad9b505713281e1f3fc2df620f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 0}
 --- !u!1 &5445187745215308248
 GameObject:
   m_ObjectHideFlags: 0
