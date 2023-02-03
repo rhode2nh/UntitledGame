@@ -61,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsParent: {fileID: 8573872353584400422}
   slotPrefab: {fileID: 2408364458965521862, guid: d7bb67938924af7469f6bed92bcaa1b9, type: 3}
-  numSlots: 20
+  inventoryType: 0
 --- !u!1 &8573872353584400421
 GameObject:
   m_ObjectHideFlags: 0

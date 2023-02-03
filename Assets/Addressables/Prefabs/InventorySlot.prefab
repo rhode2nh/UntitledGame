@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2408364458965521858}
   - component: {fileID: 2408364458965521859}
   - component: {fileID: 2408364458965521856}
-  - component: {fileID: 8795979525310133849}
+  - component: {fileID: 5803933446197606404}
   - component: {fileID: -972266430527486383}
   m_Layer: 5
   m_Name: InventorySlot
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8795979525310133849}
+      - m_Target: {fileID: 5803933446197606404}
         m_TargetAssemblyTypeName: InventoryUISlot, Assembly-CSharp
         m_MethodName: OnRemoveButton
         m_Mode: 1
@@ -212,7 +212,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8795979525310133849
+--- !u!114 &5803933446197606404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,12 +221,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2408364458965521862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 383ebb35a0e2bda40af67c7f294d4e24, type: 3}
+  m_Script: {fileID: 11500000, guid: 09fa063b1b63513f8909a3cc894942e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
   inventorySlotSprite: {fileID: 2610967905371146495}
   button: {fileID: 2408364458965521856}
+  itemInSlot: 0
 --- !u!114 &-972266430527486383
 MonoBehaviour:
   m_ObjectHideFlags: 0

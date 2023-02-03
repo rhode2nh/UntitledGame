@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class EquipmentUISlot : MonoBehaviour
 {
-    public int slotUIIndex;
     public int equipmentIndex;
 
     public Slot slot;
@@ -31,7 +30,6 @@ public class EquipmentUISlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        slot.slotUIIndex = -1;
-        GameEvents.current.RemoveWeaponFromEquipmentInventory(equipmentIndex);
+        GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
     }
 }

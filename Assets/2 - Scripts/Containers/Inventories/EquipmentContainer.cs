@@ -508,13 +508,13 @@ public class EquipmentContainer : MonoBehaviour
         UpdateEquipmentContainer();
     }
 
-    public void RemoveWeaponFromEquipmentInventory(int equipmentIndex)
+    public void RemoveWeaponFromEquipmentInventory(int id)
     {
-        if (equipmentIndex == -1)
+        if (id == -1)
         {
             return;
         }
-        Slot equipment = equipmentManager.Unequip(equipmentManager.equipmentInventory.items[equipmentIndex].id);
+        Slot equipment = equipmentManager.Unequip(id);
         GameEvents.current.AddItemToPlayerInventory(equipment); 
         UpdateEquipmentContainer();
     }

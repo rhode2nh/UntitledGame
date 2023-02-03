@@ -30,7 +30,6 @@ public class InventoryUISlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        slot.slotUIIndex = -1;
         if (slot.item is IModifier)
         {
             Slot curWeapon = GameEvents.current.GetCurrentWeapon();

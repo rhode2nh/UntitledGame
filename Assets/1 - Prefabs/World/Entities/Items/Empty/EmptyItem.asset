@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6aa726592b9bfa4db52c7267dd8017e, type: 3}
-  m_Name: EquipmentInventory
+  m_Script: {fileID: 11500000, guid: 3237739118388096a98c4f5650329a82, type: 3}
+  m_Name: EmptyItem
   m_EditorClassIdentifier: 
-  maxSize: 4
-  emptyItem: {fileID: 11400000, guid: 2cfc056872abfa1ed94a0919c55f093e, type: 2}
-  allowedItems: 02000000
-  items: []
+  Id: -1
+  Name: EMPTY
+  worldItemPrefab: {fileID: 0}
+  equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
+  sprite: {fileID: 0}
+  isStackable: 0

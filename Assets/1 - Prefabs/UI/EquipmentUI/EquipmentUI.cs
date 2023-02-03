@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EquipmentUI : MonoBehaviour
 {
@@ -35,50 +34,67 @@ public class EquipmentUI : MonoBehaviour
         }
     }
 
-    void UpdateUI(List<Slot> items, int maxSlots)
+    private void UpdateUI(List<Slot> items, int maxSlots)
     {
-        // Setup available slots to choose from
-        List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);
-        for (int i = 0; i < availableUiSlots.Count; i++)
-        {
-            availableUiSlots[i] = true;
-        }
+        // if the id is -1, then it's the empty item
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].slotUIIndex != -1)
+            if (items[i].item.Id != -1)
             {
-                availableUiSlots[items[i].slotUIIndex] = false;
+                slots[i].AddItem(items[i]);
             }
-        }
+            else
+            {
+                slots[i].ClearSlot();
+            }
 
-        // Clear slots to reinitialize them
-        for (int i = 0; i < slots.Count; i++)
-        {
-            slots[i].ClearSlot();
-        }
-
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items[i].slotUIIndex != -1)
-            {
-                slots[items[i].slotUIIndex].AddItem(items[i]);
-            }
-            else if (items[i].slotUIIndex == -1)
-            {
-                int nextAvailableSlotIndex = -1;
-                // Grab the next available slot
-                for (int j = 0; j < availableUiSlots.Count; j++)
-                {
-                    if (availableUiSlots[j] == true)
-                    {
-                        nextAvailableSlotIndex = j;
-                        availableUiSlots[j] = false;
-                        break;
-                    }
-                }
-                items[i].slotUIIndex = nextAvailableSlotIndex;
-                slots[items[i].slotUIIndex].AddItem(items[i]);
-            }
         }
     }
+
+    //void UpdateUI(List<Slot> items, int maxSlots)
+    //{
+    //    // Setup available slots to choose from
+    //    List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);
+    //    for (int i = 0; i < availableUiSlots.Count; i++)
+    //    {
+    //        availableUiSlots[i] = true;
+    //    }
+    //    for (int i = 0; i < items.Count; i++)
+    //    {
+    //        if (items[i].slotUIIndex != -1)
+    //        {
+    //            availableUiSlots[items[i].slotUIIndex] = false;
+    //        }
+    //    }
+
+    //    // Clear slots to reinitialize them
+    //    for (int i = 0; i < slots.Count; i++)
+    //    {
+    //        slots[i].ClearSlot();
+    //    }
+
+    //    for (int i = 0; i < items.Count; i++)
+    //    {
+    //        if (items[i].slotUIIndex != -1)
+    //        {
+    //            slots[items[i].slotUIIndex].AddItem(items[i]);
+    //        }
+    //        else if (items[i].slotUIIndex == -1)
+    //        {
+    //            int nextAvailableSlotIndex = -1;
+    //            // Grab the next available slot
+    //            for (int j = 0; j < availableUiSlots.Count; j++)
+    //            {
+    //                if (availableUiSlots[j] == true)
+    //                {
+    //                    nextAvailableSlotIndex = j;
+    //                    availableUiSlots[j] = false;
+    //                    break;
+    //                }
+    //            }
+    //            items[i].slotUIIndex = nextAvailableSlotIndex;
+    //            slots[items[i].slotUIIndex].AddItem(items[i]);
+    //        }
+    //    }
+    //}
 }

@@ -22,6 +22,8 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.onRemoveItemByType += RemoveItemByType;
         GameEvents.current.onGetAllModifiers += GetAllModifiers;
         hasItem = false;
+
+        inventory.InitializeInventory();
     }
 
     /// <summary>
@@ -45,7 +47,14 @@ public class InventoryManager : MonoBehaviour
 
         if (!hasItem)
         {
-            inventory.items.Add(new Slot(item));
+            for (int i = 0; i < inventory.maxSize; i++)
+            {
+                if (inventory.items[i].item == inventory.emptyItem)
+                {
+                    inventory.items[i] = new Slot(item);
+                    break;
+                }
+            }
         }
         hasItem = false;
         GameEvents.current.UpdateInventoryGUI(inventory.items);
@@ -75,7 +84,8 @@ public class InventoryManager : MonoBehaviour
         Slot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
         if (removedItem.count == 1)
         {
-            inventory.items.Remove(removedItem);
+            int index = inventory.items.IndexOf(removedItem);
+            inventory.items[index] = new Slot(-1, inventory.emptyItem, 1);
         }
         else
         {
