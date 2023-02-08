@@ -6,6 +6,8 @@ public class GameEvents : MonoBehaviour
 {
     public static GameEvents current;
 
+    public Item emptyItem;
+
     public event Action<Slot> onAddItemToPlayerInventory;
     public event Action<List<Slot>> onUpdateInventoryGUI;
     public event Action<List<Slot>, List<int>, int> onUpdateModifierGUI;
@@ -37,6 +39,7 @@ public class GameEvents : MonoBehaviour
     public event Func<int, Slot> onGetCurrentWeaponFromSlot;
     public event Action<Slot> onUpdateCurrentWeapon;
     public event Action<string> onUpdateHoverText;
+    public event Action<int, int> onSwitchActiveEquipmentUISlot;
 
     public void Awake()
     {
@@ -302,6 +305,24 @@ public class GameEvents : MonoBehaviour
         if (onUpdateHoverText != null)
         {
             onUpdateHoverText(text);
+        }
+    }
+    
+    public Item GetEmptyItem()
+    {
+        return current.emptyItem;
+    }
+
+    public Slot GetEmptySlot()
+    {
+        return new Slot(-1, emptyItem, 1);
+    }
+
+    public void SwitchActiveEquipmentUISlot(int prevEquipmentUISlot, int curEquipmentUISlot)
+    {
+        if (onSwitchActiveEquipmentUISlot != null)
+        {
+            onSwitchActiveEquipmentUISlot(prevEquipmentUISlot, curEquipmentUISlot);
         }
     }
 }

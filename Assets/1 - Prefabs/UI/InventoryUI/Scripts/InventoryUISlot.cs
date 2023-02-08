@@ -1,34 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class InventoryUISlot : MonoBehaviour
+public class InventoryUISlot : UISlot
 {
-    private Slot slot;
-    public Image inventorySlotSprite;
-    public Button button;
-    public bool itemInSlot;
-
-    public void AddItem(Slot newSlot)
-    {
-        slot = newSlot;
-        inventorySlotSprite.sprite = slot.item.sprite;
-        inventorySlotSprite.enabled = true;
-        button.interactable = true;
-        itemInSlot = true;
-    }
-
-    public void ClearSlot()
-    {
-        slot = null;
-        inventorySlotSprite.sprite = null;
-        inventorySlotSprite.enabled = false;
-        button.interactable = false;
-        itemInSlot = false;
-    }
-
-    public void OnRemoveButton()
+    public override void OnRemoveButton()
     {
         if (slot.item is IModifier)
         {
@@ -40,19 +15,20 @@ public class InventoryUISlot : MonoBehaviour
             List<Slot> modifierSlotList = (List<Slot>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
             List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
             int maxSlots = (int)curWeapon.properties[Constants.P_W_MAX_SLOTS_INT];
-            if (modifierSlotList.Count == maxSlots)
+            bool emptySlotFound = false;
+            for (int i = 0; i < maxSlots; i++)
             {
-                return;
+                if (modifierSlotList[i].id == -1)
+                {
+                    modifierSlotList[i] = slot;
+                    emptySlotFound = true;
+                    break;
+                }
             }
-            var availableIndices = new List<int>();
-            for (int j = 0; j < maxSlots; j++)
+            if (emptySlotFound)
             {
-                availableIndices.Add(j);
+                GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
             }
-            availableIndices = availableIndices.Except(modifierSlotIndices).ToList();
-            modifierSlotIndices.Insert(availableIndices.First(), availableIndices.First());
-            modifierSlotList.Insert(availableIndices.First(), slot);
-            GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
             GameEvents.current.UpdateCurrentWeapon(curWeapon);
         }
         else if (slot.item is IWeapon)

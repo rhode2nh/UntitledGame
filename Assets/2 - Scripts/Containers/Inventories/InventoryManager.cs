@@ -49,7 +49,7 @@ public class InventoryManager : MonoBehaviour
         {
             for (int i = 0; i < inventory.maxSize; i++)
             {
-                if (inventory.items[i].item == inventory.emptyItem)
+                if (inventory.items[i].item == GameEvents.current.GetEmptyItem())
                 {
                     inventory.items[i] = new Slot(item);
                     break;
@@ -85,7 +85,7 @@ public class InventoryManager : MonoBehaviour
         if (removedItem.count == 1)
         {
             int index = inventory.items.IndexOf(removedItem);
-            inventory.items[index] = new Slot(-1, inventory.emptyItem, 1);
+            inventory.items[index] = GameEvents.current.GetEmptySlot();
         }
         else
         {

@@ -1,38 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InventoryType {
-    Player,
-    Equipment,
-    Gun,
-}
-
 public class InventoryUI : MonoBehaviour
 {
     public Transform itemsParent;
     public GameObject slotPrefab;
-    public InventoryType inventoryType;
-    private int numSlots;
+    private int numSlots = 10;
 
-    private List<InventoryUISlot> slots = new List<InventoryUISlot>();
+    private List<IUISlot> slots = new List<IUISlot>();
 
-    void Awake()
+    void Start()
     {
-        InitializeNumSlots();
         for (int i = 0; i < numSlots; i++)
         {
             GameObject instancedSlot = Instantiate(slotPrefab);
-            instancedSlot.GetComponentInChildren<InventoryUISlot>().ClearSlot();
+            instancedSlot.GetComponentInChildren<IUISlot>().ClearSlot();
             instancedSlot.transform.SetParent(itemsParent, false);
-            slots.Add(instancedSlot.GetComponentInChildren<InventoryUISlot>());
+            slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
-    }
-
-    private void Start()
-    {
-        // TODO
-        // This needs to be implemented when a save state system is created.
-        //UpdateUI();
         GameEvents.current.onUpdateInventoryGUI += UpdateUI;
     }
 
@@ -50,23 +35,6 @@ public class InventoryUI : MonoBehaviour
                 slots[i].ClearSlot();
             }
 
-        }
-    }
-
-    private void InitializeNumSlots()
-    {
-        // TODO: expand
-        switch (inventoryType)
-        {
-            case InventoryType.Player:
-                numSlots = 10;
-                break;
-            case InventoryType.Equipment:
-                numSlots = 4;
-                break;
-            case InventoryType.Gun:
-                numSlots = 10;
-                break;
         }
     }
 }

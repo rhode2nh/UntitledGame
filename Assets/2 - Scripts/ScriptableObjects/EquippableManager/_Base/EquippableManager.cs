@@ -19,10 +19,8 @@ public enum BodyPart
     RightHand,
     LeftHand,
     Waist,
-    RightLeg,
-    LeftLeg,
-    RightFoot,
-    LeftFoot
+    Legs,
+    Feet
 }
 
 public enum EquipType

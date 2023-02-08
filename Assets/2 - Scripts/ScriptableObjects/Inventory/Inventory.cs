@@ -12,7 +12,6 @@ public enum ItemType {
 public class Inventory : ScriptableObject
 {
     public int maxSize = 0;
-    public Item emptyItem;
     public List<ItemType> allowedItems = new List<ItemType>();
     public List<Slot> items = new List<Slot>();
 
@@ -20,7 +19,7 @@ public class Inventory : ScriptableObject
     {
         for (int i = 0; i < maxSize; i++)
         {
-            items.Add(new Slot(-1, emptyItem, 1));
+            items.Add(new Slot(-1, GameEvents.current.GetEmptyItem(), 1));
         }
     }
 
@@ -55,7 +54,7 @@ public class Slot
     private List<Properties> _properties;
     public Dictionary<string, object> properties;
 
-    public Slot(int id, Item item, int count, Dictionary<string, object> properties = null)
+    public Slot(int id = -1, Item item = null, int count = 1, Dictionary<string, object> properties = null)
     {
         this.id = id;
         this.item = item;

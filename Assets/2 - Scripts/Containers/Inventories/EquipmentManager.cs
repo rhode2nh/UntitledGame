@@ -78,9 +78,9 @@ public class EquipmentManager : MonoBehaviour
     /// </summary>
     public Slot Unequip(int id)
     {
-        Slot itemToUnequip = equipmentInventory.items.FirstOrDefault(x => x.id == id);
+        Slot itemToUnequip = new Slot(equipmentInventory.items.FirstOrDefault(x => x.id == id));
         int index = equipmentInventory.items.FindIndex(x => x.id == id);
-        equipmentInventory.items[index] = new Slot(-1, equipmentInventory.emptyItem, 1);
+        equipmentInventory.items[index] = new Slot(-1, GameEvents.current.GetEmptyItem(), 1);
         return itemToUnequip;
     }
 

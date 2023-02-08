@@ -10,7 +10,7 @@ public class WorldItem : MonoBehaviour
     //ItemStats itemStats;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         tag = Constants.WORLD_ITEM;
         count = 1;
@@ -24,9 +24,14 @@ public class WorldItem : MonoBehaviour
         switch(item)
         {
             case IWeapon w:
-                properties.Add(Constants.P_W_MODIFIERS_LIST, new List<Slot>());
+                var slots = new List<Slot>();
                 properties.Add(Constants.P_W_MODIFIER_SLOT_INDICES_LIST, new List<int>());
                 properties.Add(Constants.P_W_MAX_SLOTS_INT, 10);
+                for (int i = 0; i < 10; i++)
+                {
+                    slots.Add(new Slot(GameEvents.current.GetEmptySlot()));
+                }
+                properties.Add(Constants.P_W_MODIFIERS_LIST, slots);
                 goto default;
             case IImplant i:
                 properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);
