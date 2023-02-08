@@ -5,73 +5,36 @@ public class InventoryUI : MonoBehaviour
 {
     public Transform itemsParent;
     public GameObject slotPrefab;
-    public int numSlots;
+    private int numSlots = 10;
 
-    private List<InventoryUISlot> slots = new List<InventoryUISlot>();
+    private List<IUISlot> slots = new List<IUISlot>();
 
-    void Awake()
+    void Start()
     {
-        GameEvents.current.onUpdateInventoryGUI += UpdateUI;
         for (int i = 0; i < numSlots; i++)
         {
             GameObject instancedSlot = Instantiate(slotPrefab);
+            instancedSlot.GetComponentInChildren<IUISlot>().ClearSlot();
             instancedSlot.transform.SetParent(itemsParent, false);
-            slots.Add(instancedSlot.GetComponentInChildren<InventoryUISlot>());
+            slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
-    }
-
-    private void Start()
-    {
-        // TODO
-        // This needs to be implemented when a save state system is created.
-        //UpdateUI();
+        GameEvents.current.onUpdateInventoryGUI += UpdateUI;
     }
 
     private void UpdateUI(List<Slot> items)
     {
-        // Setup available slots to choose from
-        List<bool> availableUiSlots = new List<bool>(new bool[slots.Count]);
-        for (int i = 0; i < availableUiSlots.Count; i++)
-        {
-            availableUiSlots[i] = true;
-        }
+        // if the id is -1, then it's the empty item
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].slotUIIndex != -1)
+            if (items[i].item.Id != -1)
             {
-                availableUiSlots[items[i].slotUIIndex] = false;
+                slots[i].AddItem(items[i]);
             }
-        }
+            else
+            {
+                slots[i].ClearSlot();
+            }
 
-        // Clear slots to reinitialize them
-        for (int i = 0; i < slots.Count; i++)
-        {
-            slots[i].ClearSlot();
-        }
-
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items[i].slotUIIndex != -1)
-            {
-                slots[items[i].slotUIIndex].AddItem(items[i]);
-            }
-            else if (items[i].slotUIIndex == -1)
-            {
-                Debug.Log(items[i].item.name);
-                int nextAvailableSlotIndex = -1;
-                // Grab the next available slot
-                for (int j = 0; j < availableUiSlots.Count; j++)
-                {
-                    if (availableUiSlots[j] == true)
-                    {
-                        nextAvailableSlotIndex = j;
-                        availableUiSlots[j] = false;
-                        break;
-                    }
-                }
-                items[i].slotUIIndex = nextAvailableSlotIndex;
-                slots[items[i].slotUIIndex].AddItem(items[i]);
-            }
         }
     }
 }

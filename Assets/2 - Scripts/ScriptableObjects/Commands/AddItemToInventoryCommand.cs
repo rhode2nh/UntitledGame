@@ -35,7 +35,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
         {
             var instantiatedObject = Instantiate(operation.Result);
             WorldItem worldItem = instantiatedObject.GetComponent<WorldItem>();
-            GameEvents.current.AddItemToPlayerInventory(new Slot(worldItem.id, worldItem.item, 1, -1, worldItem.properties));
+            GameEvents.current.AddItemToPlayerInventory(new Slot(worldItem.id, worldItem.item, 1, worldItem.properties));
             Debug.Log("Item added: " + worldItem.id);
             Destroy(instantiatedObject);
         }
@@ -48,7 +48,7 @@ public class AddItemToInventoryCommand : ConsoleCommand
                 {
                     var instantiatedObject = Instantiate(operation.Result);
                     WorldItem worldItem = instantiatedObject.GetComponent<WorldItem>();
-                    GameEvents.current.AddItemToPlayerInventory(new Slot(worldItem.id, worldItem.item, 1, -1, worldItem.properties));
+                    GameEvents.current.AddItemToPlayerInventory(new Slot(worldItem.id, worldItem.item, 1, worldItem.properties));
                     Debug.Log("Item added: " + worldItem.id);
                     Destroy(instantiatedObject);
                 }

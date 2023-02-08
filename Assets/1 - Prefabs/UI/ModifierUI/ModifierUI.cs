@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ModifierUI : MonoBehaviour
 {
     public GameObject modifierUISlot;
     public Transform modifiersParent; 
+    public int activeSlots;
+    public int totalSlots;
 
     private List<ModifierUISlot> slots = new List<ModifierUISlot>();
 
@@ -13,41 +14,70 @@ public class ModifierUI : MonoBehaviour
     void Start()
     {
         GameEvents.current.onUpdateModifierGUI += UpdateUI;
+        activeSlots = 0;
+        totalSlots = 0;
     }
 
     void UpdateUI(List<Slot> modifiers, List<int> modifierSlotIndices, int maxSlots)
     {
-        foreach (Transform child in modifiersParent.transform)
+        if (activeSlots != maxSlots)
         {
-            GameObject.Destroy(child.gameObject);
+            if (activeSlots < maxSlots)
+            {
+                IncreaseActiveSlots(maxSlots);
+            }
+            else 
+            {
+                DecreaseActiveSlots(maxSlots);
+            }
         }
 
-        for (int i = 0; i < maxSlots; i++)
+        for (int i = 0; i < totalSlots; i++)
         {
-            GameObject instantiatedSlot = Instantiate(modifierUISlot);
-            ModifierUISlot slot = instantiatedSlot.GetComponent<ModifierUISlot>();
-            instantiatedSlot.transform.SetParent(modifiersParent, false);
-            Image slotImage = instantiatedSlot.GetComponentInChildren<Image>();
-            bool found = false;
-            for (int j = 0; j < modifierSlotIndices.Count; j++)
+            if (modifiers[i].item != GameEvents.current.GetEmptyItem())
             {
-                if (i == modifierSlotIndices[j])
-                {
-                    found = true;
-                    slotImage.enabled = true;
-                    slotImage.sprite = modifiers[j].item.sprite;
-                    slot.slotUIIndex = modifierSlotIndices[j];
-                    slot.modifierIndex = j;
-                    break;
-                }
+                slots[i].AddItem(modifiers[i]);
+                slots[i].modifierIndex = i;
             }
-            if (!found)
+            else
             {
-                slotImage.enabled = false;
-                slot.slotUIIndex = -1;
-                slot.modifierIndex = -1;
+                slots[i].ClearSlot();
+                slots[i].modifierIndex = -1;
             }
-            slots.Add(instantiatedSlot.GetComponentInChildren<ModifierUISlot>());
         }
+    }
+
+    public void IncreaseActiveSlots(int maxSlots)
+    {
+        if (modifiersParent.childCount != 0)
+        {
+            for (int i = activeSlots - 1; i < maxSlots; i++)
+            {
+                slots[i].gameObject.SetActive(true);
+            }
+        }
+        
+        if (totalSlots < maxSlots)
+        {
+            totalSlots = maxSlots;
+            for (int i = 0; i < totalSlots - activeSlots; i++)
+            {
+                GameObject instantiatedUISlot = Instantiate(modifierUISlot);
+                instantiatedUISlot.transform.SetParent(modifiersParent, false);
+                instantiatedUISlot.GetComponent<ModifierUISlot>().slot = GameEvents.current.GetEmptySlot();
+                slots.Add(instantiatedUISlot.GetComponentInChildren<ModifierUISlot>());
+            }
+            activeSlots = maxSlots;
+
+        }
+    }
+
+    public void DecreaseActiveSlots(int maxSlots)
+    {
+        for (int i = maxSlots; i >= totalSlots - maxSlots - 1; i--)
+        {
+            modifiersParent.GetChild(i).gameObject.SetActive(false);
+        }
+        activeSlots = maxSlots == 0 ? 1 : maxSlots;
     }
 }

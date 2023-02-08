@@ -14,6 +14,8 @@ public class EquipmentManager : MonoBehaviour
         GameEvents.current.onUnEquipFirstOccurence += UnEquipFirstOccurence;
         GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onUnequip += Unequip;
+
+        equipmentInventory.InitializeInventory();
     }
 
     /// <summary>
@@ -22,7 +24,7 @@ public class EquipmentManager : MonoBehaviour
     /// <param name="id">The item id.</param>
     public void Equip(int id)
     {
-        if (equipmentInventory.items.Count >= equipmentInventory.maxSize)
+        if (equipmentInventory.AvailableSlots() == 0)
             return;
         if (!GameEvents.current.CheckType(id, typeof(IEquippable)))
         {
@@ -33,7 +35,15 @@ public class EquipmentManager : MonoBehaviour
         Slot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
         if (!hasItem)
         {
-            equipmentInventory.items.Add(itemToEquip);
+            //equipmentInventory.items.Add(itemToEquip);
+            for (int i = 0; i < equipmentInventory.maxSize; i++)
+            {
+                if (equipmentInventory.items[i].item.Id == -1)
+                {
+                    equipmentInventory.items[i] = itemToEquip;
+                    break;
+                }
+            }
         }
         hasItem = false;
     }
@@ -68,8 +78,9 @@ public class EquipmentManager : MonoBehaviour
     /// </summary>
     public Slot Unequip(int id)
     {
-        Slot itemToUnequip = equipmentInventory.items.FirstOrDefault(x => x.id == id);
-        equipmentInventory.items.Remove(itemToUnequip);
+        Slot itemToUnequip = new Slot(equipmentInventory.items.FirstOrDefault(x => x.id == id));
+        int index = equipmentInventory.items.FindIndex(x => x.id == id);
+        equipmentInventory.items[index] = new Slot(-1, GameEvents.current.GetEmptyItem(), 1);
         return itemToUnequip;
     }
 

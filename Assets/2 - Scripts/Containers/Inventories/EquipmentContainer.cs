@@ -101,6 +101,7 @@ public class EquipmentContainer : MonoBehaviour
 
     public void SwitchEquipment(int index)
     {
+        GameEvents.current.SwitchActiveEquipmentUISlot(curEquipmentIndex, index);
         curEquipmentIndex = index;
         if (isRecharging)
         {
@@ -148,7 +149,10 @@ public class EquipmentContainer : MonoBehaviour
             projectileSpawner.localPosition = new Vector3(0, 0, 0);
             Destroy(instantiatedGun);
             equipmentContainer.GetComponent<MeshFilter>().mesh = null;
-            modifierSlots.Clear();
+            for (int i = 0; i < modifierSlots.Count; i++)
+            {
+                modifierSlots[i] = GameEvents.current.GetEmptySlot();
+            }
             modifierSlotIndices.Clear();
             gunCastDelay = 0.0f;
             gunRechargeTime = 0.0f;
@@ -165,6 +169,7 @@ public class EquipmentContainer : MonoBehaviour
         }
     }
 
+    //TODO: Refactor this code so the output is only recalculated when the modifiers are changed
     IEnumerator Attack()
     {
         List<List<Output>> firstPass = CalculateFirstPass();
@@ -211,11 +216,16 @@ public class EquipmentContainer : MonoBehaviour
         List<int> potentialWrapModifiers = new List<int>();
         bool hasWrapped = false;
         int projectilesToGroup = 1;
+        List<Slot> filteredModifierSlots = modifierSlots.Where(x => x.item != GameEvents.current.GetEmptyItem()).ToList();
 
-        for (int i = 0; i < modifierSlots.Count; i++)
+        for (int i = 0; i < filteredModifierSlots.Count; i++)
         {
-            var curSlot = modifierSlots[i];
-            var curModifier = modifierSlots[i].item as Modifier;
+            var curSlot = filteredModifierSlots[i];
+            if (curSlot.id == -1)
+            {
+                continue;
+            }
+            var curModifier = filteredModifierSlots[i].item as Modifier;
             if (curModifier is IProjectile)
             {
                 if (curModifier is ITrigger)
@@ -245,8 +255,9 @@ public class EquipmentContainer : MonoBehaviour
                 firstPass.Add(new List<Output>());
             }
 
+
             // We've reached the end of the list, check if we need to wrap
-            if (i == modifierSlots.Count - 1 && projectilesToGroup > 0)
+            if (i == filteredModifierSlots.Count - 1 && projectilesToGroup > 0)
             {
                 firstPass.Add(new List<Output>(currentGroup));
                 hasWrapped = true;
@@ -426,6 +437,10 @@ public class EquipmentContainer : MonoBehaviour
             totalXSpread = weapon.XSpread;
             foreach (var slot in modifierSlots)
             {
+                if (slot.id == -1)
+                {
+                    continue;
+                }
                 var modifier = (Modifier)slot.item;
                 totalXSpread += modifier.XSpread;
             }
@@ -442,6 +457,10 @@ public class EquipmentContainer : MonoBehaviour
             totalYSpread = weapon.YSpread;
             foreach (var slot in modifierSlots)
             {
+                if (slot.id == -1)
+                {
+                    continue;
+                }
                 var modifier = (Modifier)slot.item;
                 totalYSpread += modifier.YSpread;
             }
@@ -459,6 +478,10 @@ public class EquipmentContainer : MonoBehaviour
             totalCastDelay = weapon.CastDelay;
             foreach (var slot in modifierSlots)
             {
+                if (slot.id == -1)
+                {
+                    continue;
+                }
                 var modifier = (Modifier)slot.item;
                 totalCastDelay += modifier.castDelay;
             }
@@ -476,6 +499,10 @@ public class EquipmentContainer : MonoBehaviour
             totalRechargeTime = weapon.RechargeTime;
             foreach (var slot in modifierSlots)
             {
+                if (slot.id == -1)
+                {
+                    continue;
+                }
                 var modifier = (Modifier)slot.item;
                 totalRechargeTime += modifier.rechargeDelay;
             }
@@ -495,26 +522,22 @@ public class EquipmentContainer : MonoBehaviour
         {
             return;
         }
-        Slot slot = modifierSlots[modifierIndex];
-        modifierSlots.RemoveAt(modifierIndex);
-        modifierSlotIndices.RemoveAt(modifierIndex);
+        Slot slot = new Slot(modifierSlots[modifierIndex]);
+        modifierSlots[modifierIndex] = GameEvents.current.GetEmptySlot();
         _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Slot>(modifierSlots);
         _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST] = new List<int>(modifierSlotIndices);
-        equipmentManager.RemoveItem(curEquipmentIndex);
-        equipmentManager.equipmentInventory.items.Insert(curEquipmentIndex, _currentItem);
-        // TODO: I might want to consider using strings for ids 
         var inventorySlot = new Slot(slot);
         GameEvents.current.AddItemToPlayerInventory(inventorySlot);
         UpdateEquipmentContainer();
     }
 
-    public void RemoveWeaponFromEquipmentInventory(int equipmentIndex)
+    public void RemoveWeaponFromEquipmentInventory(int id)
     {
-        if (equipmentIndex == -1)
+        if (id == -1)
         {
             return;
         }
-        Slot equipment = equipmentManager.Unequip(equipmentManager.equipmentInventory.items[equipmentIndex].id);
+        Slot equipment = equipmentManager.Unequip(id);
         GameEvents.current.AddItemToPlayerInventory(equipment); 
         UpdateEquipmentContainer();
     }

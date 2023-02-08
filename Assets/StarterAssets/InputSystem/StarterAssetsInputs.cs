@@ -19,6 +19,7 @@ namespace StarterAssets
 
 		private PlayerInput playerInput;
 		private InventoryUIController inventoryUIController;
+        private ImplantUIController implantUIController;
 		private FirstPersonController firstPersonController;
 		public DeveloperConsoleBehavior developerConsole;
         public PauseMenuUI pauseMenu;
@@ -35,6 +36,7 @@ namespace StarterAssets
         {
             playerInput = GetComponent<PlayerInput>();
             inventoryUIController = GetComponent<InventoryUIController>();
+            implantUIController = GetComponent<ImplantUIController>();
 			firstPersonController = GetComponent<FirstPersonController>();
             equipmentContainer = GetComponent<EquipmentContainer>();
             previousActionMap = playerInput.currentActionMap;
@@ -196,6 +198,7 @@ namespace StarterAssets
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Inventory");
                 previousActionMap = playerInput.currentActionMap;
 				inventoryUIController.OpenInventory();
+                implantUIController.OpenImplantUI();
             }
         }
 
@@ -216,6 +219,7 @@ namespace StarterAssets
 				playerInput.currentActionMap = playerInput.actions.FindActionMap("Player");
                 previousActionMap = playerInput.currentActionMap;
 				inventoryUIController.CloseInventory();
+				implantUIController.CloseImplantUI();
             }
         }
 
