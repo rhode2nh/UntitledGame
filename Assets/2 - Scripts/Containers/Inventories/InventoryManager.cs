@@ -176,22 +176,22 @@ public class InventoryManager : MonoBehaviour
 
     public void Consume(Item item)
     {
-        if (HasItem(item) && item is IConsumable)
-        {
-            var consumable = item as IConsumable;
-            ApplyConsumable(consumable.ItemStats);
-            RemoveItem(item);
-        }
+        //if (HasItem(item) && item is IConsumable)
+        //{
+        //    var consumable = item as IConsumable;
+        //    ApplyConsumable(consumable.ItemStats);
+        //    RemoveItem(item);
+        //}
     }
 
-    public void ApplyConsumable(ItemStats stats)
-    {
-        foreach (var attribute in stats.attributes)
-        {
-            playerStats.attributes[attribute.Key].RawValue += attribute.Value.RawValue;
-            playerStats.attributes[attribute.Key].BuffPercentage += attribute.Value.BuffPercentage;
-        }
-    }
+    //public void ApplyConsumable(ItemStats stats)
+    //{
+    //    //foreach (var attribute in stats.attributes)
+    //    //{
+    //    //    playerStats.attributes[attribute.Key].RawValue += attribute.Value.RawValue;
+    //    //    playerStats.attributes[attribute.Key].BuffPercentage += attribute.Value.BuffPercentage;
+    //    //}
+    //}
 
     public void ClearInventory()
     {

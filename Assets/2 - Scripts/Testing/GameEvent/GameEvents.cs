@@ -9,7 +9,9 @@ public class GameEvents : MonoBehaviour
     public Item emptyItem;
 
     public event Action<Slot> onAddItemToPlayerInventory;
+    public event Action<Slot> onAddItemToImplantInventory;
     public event Action<List<Slot>> onUpdateInventoryGUI;
+    public event Action<List<Slot>> onUpdateImplantGUI;
     public event Action<List<Slot>, List<int>, int> onUpdateModifierGUI;
     //TODO: CREATE A GUN SO!!!!
     public event Action<List<Slot>, int> onUpdateWeaponGUI;
@@ -27,6 +29,7 @@ public class GameEvents : MonoBehaviour
     public event Action onUnEquipFirstOccurence;
     public event Func<int, Slot> onUnequip;
     public event Func<int, Slot> onRemoveItemFromPlayerInventory;
+    public event Func<int, Slot> onRemoveImplant;
     public event Action onClearInventory;
     public event Func<int, System.Type[], bool> onCheckType;
     public event Func<System.Type, Slot> onRemoveItemByType;
@@ -54,11 +57,27 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public void AddItemToImplantInventory(Slot item)
+    {
+        if (onAddItemToImplantInventory != null)
+        {
+            onAddItemToImplantInventory(item);
+        }
+    }
+
     public void UpdateInventoryGUI(List<Slot> items)
     {
         if (onUpdateInventoryGUI != null)
         {
             onUpdateInventoryGUI(items);
+        }
+    }
+
+    public void UpdateImplantGUI(List<Slot> items)
+    {
+        if (onUpdateImplantGUI != null)
+        {
+            onUpdateImplantGUI(items);
         }
     }
 
@@ -163,6 +182,16 @@ public class GameEvents : MonoBehaviour
         if (onRemoveItemFromPlayerInventory != null)
         {
             return onRemoveItemFromPlayerInventory(id);
+        }
+
+        return null;
+    }
+
+    public Slot RemoveImplant(int id)
+    {
+        if (onRemoveImplant != null)
+        {
+            return onRemoveImplant(id);
         }
 
         return null;

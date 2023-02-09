@@ -10,6 +10,7 @@ public class ImplantUI : MonoBehaviour
     void Start()
     {
         slots = implantsParent.GetComponentsInChildren<ImplantUISlot>();
+        GameEvents.current.onUpdateImplantGUI += UpdateUI;
         for (int i = 0; i < slots.Length; i++)
         {
             slots[i].ClearSlot();
