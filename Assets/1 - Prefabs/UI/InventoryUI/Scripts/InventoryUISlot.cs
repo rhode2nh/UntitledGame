@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 public class InventoryUISlot : UISlot
 {
@@ -8,7 +8,7 @@ public class InventoryUISlot : UISlot
         if (slot.item is IModifier)
         {
             Slot curWeapon = GameEvents.current.GetCurrentWeapon();
-            if (curWeapon == null)
+            if (curWeapon.item == GameEvents.current.GetEmptyItem())
             {
                 return;
             }
@@ -35,6 +35,10 @@ public class InventoryUISlot : UISlot
         {
             GameEvents.current.Equip(slot.id);
             GameEvents.current.UpdateEquipmentContainer();
+        }
+        else if (slot.item is IImplant)
+        {
+            GameEvents.current.AddItemToImplantInventory(slot);
         }
     }
 }

@@ -7,9 +7,12 @@ public class Implant : Item, IImplant
     private int qualityLevel = 1;
     [SerializeField]
     private BodyPart bodyPart;
+    [SerializeField]
+    private TestStats testStats = new TestStats(1, 1);
 
     public int QualityLevel { get => qualityLevel; set => qualityLevel = value;  }
     public BodyPart BodyPart { get => bodyPart; set => bodyPart = value;  }
+    public TestStats TestStats { get => testStats; set => testStats = value; }
 
     private void Awake()
     {

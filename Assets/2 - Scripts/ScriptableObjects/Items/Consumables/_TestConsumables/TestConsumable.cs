@@ -4,8 +4,6 @@ using UnityEngine;
 public class TestConsumable : Item, ICraftable, IConsumable 
 {
     [SerializeField]
-    private ItemStats itemStats;
-    [SerializeField]
     private Recipe recipe;
 
     private void Awake()
@@ -14,6 +12,5 @@ public class TestConsumable : Item, ICraftable, IConsumable
         this.Id = Constants.TEST_CONSUMABLE_ID;
         this.isStackable = true;
     }
-    public ItemStats ItemStats { get => itemStats; }
     public Recipe Recipe { get => recipe; }
 }

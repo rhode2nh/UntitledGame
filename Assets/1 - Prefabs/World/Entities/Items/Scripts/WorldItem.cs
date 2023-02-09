@@ -36,6 +36,7 @@ public class WorldItem : MonoBehaviour
             case IImplant i:
                 properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);
                 properties.Add(Constants.P_IMP_BODY_PART_IMPLANTTYPE, i.BodyPart);
+                properties.Add(Constants.P_IMP_STATS_DICT, new TestStats(1, 1));
                 goto default;
 
             default:
