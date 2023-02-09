@@ -489,7 +489,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 116912111280103682, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: allowedImplant
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2408364458965521857, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: m_Pivot.x
@@ -782,7 +782,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 116912111280103682, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: allowedImplant
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2408364458965521857, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: m_Pivot.x
@@ -1590,7 +1590,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 116912111280103682, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: allowedImplant
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2408364458965521857, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: m_Pivot.x
@@ -3173,7 +3173,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 116912111280103682, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: allowedImplant
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2408364458965521857, guid: cfb23d26dee0c28338805b169a9ec705, type: 3}
       propertyPath: m_Pivot.x
