@@ -27,7 +27,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds and item with the specified amount to the inventory.
+    /// Adds an item with the specified amount to the inventory.
     /// </summary>
     /// <param name="item">The item to add.</param>
     public void AddItem(Slot item)

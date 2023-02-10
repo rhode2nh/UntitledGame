@@ -18,8 +18,8 @@ public enum BodyPart
     Waist = 5,
     RightWrist = 6,
     LeftHand = 7,
-    RightHand = 8,
-    Legs = 9,
+    Legs = 8,
+    RightHand = 9,
     Feet = 10
 }
 
