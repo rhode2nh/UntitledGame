@@ -17,10 +17,10 @@ MonoBehaviour:
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
   testPrefab: {fileID: 0}
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: e543edd9bb1d18b20901f7d4e329c9bd, type: 3}
   isStackable: 0
   qualityLevel: 1
-  bodyPart: 0
+  bodyPart: 7
   testStats:
     agility: 1
     strength: 1

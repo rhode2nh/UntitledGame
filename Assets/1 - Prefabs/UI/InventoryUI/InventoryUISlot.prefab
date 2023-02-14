@@ -231,6 +231,8 @@ MonoBehaviour:
     _properties: []
   slotSprite: {fileID: 2610967905371146495}
   button: {fileID: 2408364458965521856}
+  isItemInSlot: 0
+  infoPanel: {fileID: 586229111493608627, guid: 048bee7db49b71961ba4d50109a8ffa6, type: 3}
 --- !u!114 &-972266430527486383
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,30 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57117e85a5ce2e14fbb0a6abcadf2e59, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  _attributes:
-  - key: 0
-    val:
-      rawValue: 31
-      buffPercentage: 3.0000005
-  - key: 1
-    val:
-      rawValue: 1
-      buffPercentage: 0
-  - key: 2
-    val:
-      rawValue: 1
-      buffPercentage: 0
-  - key: 3
-    val:
-      rawValue: 1
-      buffPercentage: 0
-  - key: 4
-    val:
-      rawValue: 1
-      buffPercentage: 0
-  - key: 5
-    val:
-      rawValue: 1
-      buffPercentage: 0
+  testStats:
+    agility: 1
+    strength: 1
   health: 0
-  distanceTraveled: 8.897707
+  distanceTraveled: 19.501816
+  buffedStats:
+    agility: 1
+    strength: 1

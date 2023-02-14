@@ -13,5 +13,6 @@ public class ImplantUISlot : UISlot
 
         Slot implant = GameEvents.current.RemoveImplant(slot.id);
         GameEvents.current.AddItemToPlayerInventory(implant);
+        GameEvents.current.CalculateBuffedStats();
     }
 }

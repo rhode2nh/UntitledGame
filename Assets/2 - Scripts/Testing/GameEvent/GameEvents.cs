@@ -43,6 +43,8 @@ public class GameEvents : MonoBehaviour
     public event Action<Slot> onUpdateCurrentWeapon;
     public event Action<string> onUpdateHoverText;
     public event Action<int, int> onSwitchActiveEquipmentUISlot;
+    public event Func <List<TestStats>> onGetImplantStats;
+    public event Action onCalculateBuffedStats;
 
     public void Awake()
     {
@@ -352,6 +354,24 @@ public class GameEvents : MonoBehaviour
         if (onSwitchActiveEquipmentUISlot != null)
         {
             onSwitchActiveEquipmentUISlot(prevEquipmentUISlot, curEquipmentUISlot);
+        }
+    }
+
+    public List<TestStats> GetImplantStats()
+    {
+        if (onGetImplantStats != null)
+        {
+            return onGetImplantStats();
+        }
+
+        return new List<TestStats>();
+    }
+
+    public void CalculateBuffedStats()
+    {
+        if (onCalculateBuffedStats != null)
+        {
+            onCalculateBuffedStats();
         }
     }
 }

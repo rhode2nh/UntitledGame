@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class ImplantManager : MonoBehaviour
         GameEvents.current.onAddItemToImplantInventory += AddItem;
         GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onRemoveImplant += RemoveImplant;
+        GameEvents.current.onGetImplantStats += GetImplantStats;
     }
 
     public void AddItem(Slot slot)
@@ -22,6 +24,7 @@ public class ImplantManager : MonoBehaviour
             implantInventory.items[impIndex] = new Slot(slot);       
             GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
             GameEvents.current.UpdateImplantGUI(implantInventory.items);
+            GameEvents.current.CalculateBuffedStats();
         }
     }
 
@@ -37,6 +40,11 @@ public class ImplantManager : MonoBehaviour
     public void ClearInventory()
     {
         implantInventory.items.Clear();
+    }
+
+    public List<TestStats> GetImplantStats()
+    {
+        return implantInventory.items.Where(x => x.item != GameEvents.current.GetEmptyItem()).Select(x => (TestStats)x.properties[Constants.P_IMP_STATS_DICT]).ToList();
     }
 
 }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class InventoryUISlot : UISlot
+public class InventoryUISlot : UISlot, IPointerEnterHandler, IPointerExitHandler
 {
+    public GameObject infoPanel;
     public override void OnRemoveButton()
     {
         if (slot.item is IModifier)
@@ -40,5 +42,20 @@ public class InventoryUISlot : UISlot
         {
             GameEvents.current.AddItemToImplantInventory(slot);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (slot.item != GameEvents.current.GetEmptyItem())
+        {
+            Debug.Log(slot.item.name);
+            infoPanel.SetActive(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("Leaving inventory slot");
+        infoPanel.SetActive(false);
     }
 }
