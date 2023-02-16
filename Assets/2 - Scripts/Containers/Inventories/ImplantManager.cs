@@ -19,12 +19,23 @@ public class ImplantManager : MonoBehaviour
     {
         var imp = slot.item as IImplant;
         int impIndex = (int)imp.BodyPart;
+        var buffedStats = GameEvents.current.GetBuffedStats();
+        var requiredStats = (TestStats)slot.properties[Constants.P_IMP_REQUIRED_STATS_DICT]; 
+        if (buffedStats < requiredStats)
+        {
+            Debug.Log("Can't equip implant. Requirements not met.");
+            Debug.Log("Current Stats:\nagility: " + buffedStats.agility + "\nstrength: " + buffedStats.strength);
+            Debug.Log("Required Stats:\nagility: " + requiredStats.agility + "\nstrength: " + requiredStats.strength);
+            return;
+        }
         if (implantInventory.items[impIndex].item == GameEvents.current.GetEmptyItem())
         {
             implantInventory.items[impIndex] = new Slot(slot);       
             GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
             GameEvents.current.UpdateImplantGUI(implantInventory.items);
             GameEvents.current.CalculateBuffedStats();
+            var newBuffedStats = GameEvents.current.GetBuffedStats();
+            GameEvents.current.UpdateStatsPanel(newBuffedStats.agility, newBuffedStats.strength);
         }
     }
 
@@ -33,7 +44,10 @@ public class ImplantManager : MonoBehaviour
         Slot implantToRemove = new Slot(implantInventory.items.FirstOrDefault(x => x.id == id));
         int index = implantInventory.items.FindIndex(x => x.id == id);
         implantInventory.items[index] = new Slot(-1, GameEvents.current.GetEmptyItem(), 1);
+        GameEvents.current.CalculateBuffedStats();
         GameEvents.current.UpdateImplantGUI(implantInventory.items);
+        var newBuffedStats = GameEvents.current.GetBuffedStats();
+        GameEvents.current.UpdateStatsPanel(newBuffedStats.agility, newBuffedStats.strength);
         return implantToRemove;
     }
 

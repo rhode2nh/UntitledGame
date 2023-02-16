@@ -53,6 +53,7 @@ public class ModifierUI : MonoBehaviour
         {
             for (int i = activeSlots - 1; i < maxSlots; i++)
             {
+                Debug.Log("max slots: " + maxSlots + " active slots: " + activeSlots);
                 slots[i].gameObject.SetActive(true);
             }
         }

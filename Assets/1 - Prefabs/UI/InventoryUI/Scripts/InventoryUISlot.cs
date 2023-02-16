@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
+using System.Text;
 using UnityEngine.EventSystems;
 
-public class InventoryUISlot : UISlot, IPointerEnterHandler, IPointerExitHandler
+public class InventoryUISlot : UISlot
 {
-    public GameObject infoPanel;
     public override void OnRemoveButton()
     {
         if (slot.item is IModifier)
@@ -42,20 +41,60 @@ public class InventoryUISlot : UISlot, IPointerEnterHandler, IPointerExitHandler
         {
             GameEvents.current.AddItemToImplantInventory(slot);
         }
+        GameEvents.current.DeactivateInfoPanel();
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public override void OnPointerEnter(PointerEventData eventData)
     {
         if (slot.item != GameEvents.current.GetEmptyItem())
         {
-            Debug.Log(slot.item.name);
-            infoPanel.SetActive(true);
+            GameEvents.current.ActivateInfoPanel();
+            if (slot.item is IModifier)
+            {
+                var modifier = slot.item as IModifier;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append($"Name:\t\t{slot.item.name}\n");
+                stringBuilder.Append($"Cast Delay:\t\t{modifier.CastDelay.ToString("0.0")}\n");
+                stringBuilder.Append($"Recharge Time:\t{modifier.RechargeDelay.ToString("0.0")}\n");
+                stringBuilder.Append($"X Spread:\t\t{modifier.XSpread.ToString("0.0")}\n");
+                stringBuilder.Append($"Y Spread:\t\t{modifier.YSpread.ToString("0.0")}\n");
+                GameEvents.current.SetInfoText(stringBuilder.ToString());
+            }
+            else if (slot.item is IWeapon)
+            {
+                var equippable = slot.item as IWeapon;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append($"Name:\t\t{slot.item.name}\n");
+                stringBuilder.Append($"Max Slots:\t\t{equippable.MaxSlots.ToString()}\n");
+                stringBuilder.Append($"Cast Delay:\t\t{equippable.CastDelay.ToString("0.0")}\n");
+                stringBuilder.Append($"Recharge Time:\t{equippable.RechargeTime.ToString("0.0")}\n");
+                stringBuilder.Append($"X Spread:\t\t{equippable.XSpread.ToString("0.0")}\n");
+                stringBuilder.Append($"Y Spread:\t\t{equippable.YSpread.ToString("0.0")}\n");
+                GameEvents.current.SetInfoText(stringBuilder.ToString());
+            }
+            else if (slot.item is IImplant)
+            {
+                var requiredStats = (TestStats)slot.properties[Constants.P_IMP_REQUIRED_STATS_DICT];
+                var implant = slot.item as IImplant;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append($"Name:\t\t{slot.item.name}\n");
+                stringBuilder.Append($"Body Part:\t\t{implant.BodyPart.ToString()}\n");
+                stringBuilder.Append($"Agility:\t\t{implant.TestStats.agility.ToString()}\n");
+                stringBuilder.Append($"Strength:\t\t{implant.TestStats.strength.ToString()}\n");
+                stringBuilder.Append($"\nRequired Stats\n");
+                stringBuilder.Append($"Agility:\t\t{requiredStats.agility.ToString()}\n");
+                stringBuilder.Append($"Strength:\t\t{requiredStats.strength.ToString()}\n");
+                GameEvents.current.SetInfoText(stringBuilder.ToString());
+            }
+            else
+            {
+                GameEvents.current.SetInfoText("This hasn't be setup yet.");
+            }
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public override void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("Leaving inventory slot");
-        infoPanel.SetActive(false);
+        GameEvents.current.DeactivateInfoPanel();
     }
 }

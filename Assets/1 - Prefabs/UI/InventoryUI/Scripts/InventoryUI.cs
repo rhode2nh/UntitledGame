@@ -5,7 +5,6 @@ public class InventoryUI : MonoBehaviour
 {
     public Transform itemsParent;
     public GameObject slotPrefab;
-    public GameObject infoPanel;
     private int numSlots = 10;
 
     private List<IUISlot> slots = new List<IUISlot>();
@@ -16,12 +15,11 @@ public class InventoryUI : MonoBehaviour
         {
             GameObject instancedSlot = Instantiate(slotPrefab);
             instancedSlot.GetComponentInChildren<IUISlot>().ClearSlot();
-            instancedSlot.GetComponent<InventoryUISlot>().infoPanel = infoPanel;
             instancedSlot.transform.SetParent(itemsParent, false);
             slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
         GameEvents.current.onUpdateInventoryGUI += UpdateUI;
-        infoPanel.SetActive(false);
+        GameEvents.current.DeactivateInfoPanel();
     }
 
     private void UpdateUI(List<Slot> items)

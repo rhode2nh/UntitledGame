@@ -26,7 +26,7 @@ public class WorldItem : MonoBehaviour
             case IWeapon w:
                 var slots = new List<Slot>();
                 properties.Add(Constants.P_W_MODIFIER_SLOT_INDICES_LIST, new List<int>());
-                properties.Add(Constants.P_W_MAX_SLOTS_INT, 10);
+                properties.Add(Constants.P_W_MAX_SLOTS_INT, Random.Range(1, 10));
                 for (int i = 0; i < 10; i++)
                 {
                     slots.Add(new Slot(GameEvents.current.GetEmptySlot()));
@@ -37,6 +37,7 @@ public class WorldItem : MonoBehaviour
                 properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);
                 properties.Add(Constants.P_IMP_BODY_PART_IMPLANTTYPE, i.BodyPart);
                 properties.Add(Constants.P_IMP_STATS_DICT, new TestStats(1, 1));
+                properties.Add(Constants.P_IMP_REQUIRED_STATS_DICT, new TestStats(Random.Range(1, 4), Random.Range(1, 4)));
                 goto default;
 
             default:

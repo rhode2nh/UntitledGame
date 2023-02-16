@@ -9,6 +9,7 @@ public class StatsManager : MonoBehaviour
     void Start()
     {
         GameEvents.current.onCalculateBuffedStats += CalculateBuffedStats;
+        GameEvents.current.onGetBuffedStats += GetBuffedStats;
         playerStats.InitializeStats();
     }
 
@@ -20,5 +21,10 @@ public class StatsManager : MonoBehaviour
         {
             playerStats.buffedStats = playerStats.buffedStats + implantStat;
         }
+    }
+
+    public TestStats GetBuffedStats()
+    {
+        return playerStats.buffedStats;
     }
 }

@@ -45,7 +45,12 @@ public class GameEvents : MonoBehaviour
     public event Action<int, int> onSwitchActiveEquipmentUISlot;
     public event Func <List<TestStats>> onGetImplantStats;
     public event Action onCalculateBuffedStats;
-
+    public event Func<TestStats> onGetBuffedStats;
+    public event Action onDeactivateInfoPanel;
+    public event Action onActivateInfoPanel;
+    public event Action<string> onSetInfoText;
+    public event Action<int, int> onUpdateStatsPanel;
+    
     public void Awake()
     {
         current = this;
@@ -372,6 +377,50 @@ public class GameEvents : MonoBehaviour
         if (onCalculateBuffedStats != null)
         {
             onCalculateBuffedStats();
+        }
+    }
+
+    public void DeactivateInfoPanel()
+    {
+        if (onDeactivateInfoPanel != null)
+        {
+            onDeactivateInfoPanel();
+        }
+    }
+
+    public void ActivateInfoPanel()
+    {
+        if (onActivateInfoPanel != null)
+        {
+            onActivateInfoPanel();
+        }
+    }
+
+    public void SetInfoText(string newText)
+    {
+        if (onSetInfoText != null)
+        {
+            onSetInfoText(newText);
+        }
+    }
+
+    public TestStats GetBuffedStats()
+    {
+        if (onGetBuffedStats != null)
+        {
+            return onGetBuffedStats();
+        }
+        else
+        {
+            return new TestStats();
+        }
+    }
+
+    public void UpdateStatsPanel(int agility, int strength)
+    {
+        if (onUpdateStatsPanel != null)
+        {
+            onUpdateStatsPanel(agility, strength);
         }
     }
 }

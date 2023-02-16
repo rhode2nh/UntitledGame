@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class UISlot : MonoBehaviour, IUISlot
+public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPointerExitHandler
 {
     public Slot slot;
     public Image slotSprite;
@@ -37,4 +38,8 @@ public abstract class UISlot : MonoBehaviour, IUISlot
     }
 
     public abstract void OnRemoveButton();
+
+    public abstract void OnPointerEnter(PointerEventData eventData);
+
+    public abstract void OnPointerExit(PointerEventData eventData);
 }

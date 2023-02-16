@@ -220,6 +220,7 @@ namespace StarterAssets
                 previousActionMap = playerInput.currentActionMap;
 				inventoryUIController.CloseInventory();
 				implantUIController.CloseImplantUI();
+                GameEvents.current.DeactivateInfoPanel();
             }
         }
 

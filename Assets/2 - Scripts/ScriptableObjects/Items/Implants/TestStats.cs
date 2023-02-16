@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 [System.Serializable]
 public struct TestStats
 {
@@ -21,5 +17,53 @@ public struct TestStats
     public static TestStats operator+ (TestStats a, TestStats b)
     {
         return new TestStats(a.agility + b.agility, a.strength + b.strength);
+    }
+
+    public static bool operator>= (TestStats a, TestStats b)
+    {
+        if (a.agility >= b.agility && a.strength >= b.strength)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool operator<= (TestStats a, TestStats b)
+    {
+        if (a.agility <= b.agility || a.strength <= b.strength)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public static bool operator> (TestStats a, TestStats b)
+    {
+        if (a.agility > b.agility && a.strength > b.strength)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool operator< (TestStats a, TestStats b)
+    {
+        if (a.agility < b.agility || a.strength < b.strength)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
