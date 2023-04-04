@@ -28,7 +28,7 @@ namespace ExtensionMethods
                         propertiesToReturn.Add(key, new List<int>((List<int>)properties[key]));
                         break;
                     case Constants.P_W_MAX_SLOTS_INT:
-                        propertiesToReturn.Add(key, properties[key]);
+                        propertiesToReturn.Add(key, (int)properties[key]);
                         break;
                     case Constants.P_IMP_STATS_DICT:
                         propertiesToReturn.Add(key, new TestStats((TestStats)properties[key]));

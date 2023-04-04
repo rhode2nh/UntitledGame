@@ -17,7 +17,6 @@ public class TestGun : Item, IGun
     private void Awake()
     {
         this.Name = Constants.TEST_GUN;
-        this.Id = Constants.TEST_GUN_ID;
         this.isStackable = false;
     }
 

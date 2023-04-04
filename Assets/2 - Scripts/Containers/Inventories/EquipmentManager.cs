@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class EquipmentManager : MonoBehaviour
+public class EquipmentManager : MonoBehaviour, IDataPersistence
 {
     public Inventory equipmentInventory;
     private bool hasItem = false;
@@ -12,17 +13,14 @@ public class EquipmentManager : MonoBehaviour
         GameEvents.current.onEquip += Equip;
         GameEvents.current.onEquipFirstOccurence += Equip;
         GameEvents.current.onUnEquipFirstOccurence += UnEquipFirstOccurence;
-        GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onUnequip += Unequip;
-
-        equipmentInventory.InitializeInventory();
     }
 
     /// <summary>
     /// Adds by id to the equipment inventory.
     /// </summary>
     /// <param name="id">The item id.</param>
-    public void Equip(int id)
+    public void Equip(string id)
     {
         if (equipmentInventory.AvailableSlots() == 0)
             return;
@@ -35,10 +33,9 @@ public class EquipmentManager : MonoBehaviour
         Slot itemToEquip = GameEvents.current.RemoveItemFromPlayerInventory(id);
         if (!hasItem)
         {
-            //equipmentInventory.items.Add(itemToEquip);
             for (int i = 0; i < equipmentInventory.maxSize; i++)
             {
-                if (equipmentInventory.items[i].item.Id == -1)
+                if (equipmentInventory.items[i].item == GameEvents.current.GetEmptyItem())
                 {
                     equipmentInventory.items[i] = itemToEquip;
                     break;
@@ -76,11 +73,15 @@ public class EquipmentManager : MonoBehaviour
     /// <summary>
     /// Removes an item from the equipment inventory.
     /// </summary>
-    public Slot Unequip(int id)
+    public Slot Unequip(string id)
     {
         Slot itemToUnequip = new Slot(equipmentInventory.items.FirstOrDefault(x => x.id == id));
+        if (itemToUnequip.item == GameEvents.current.GetEmptyItem())
+        {
+            return itemToUnequip;
+        }
         int index = equipmentInventory.items.FindIndex(x => x.id == id);
-        equipmentInventory.items[index] = new Slot(-1, GameEvents.current.GetEmptyItem(), 1);
+        equipmentInventory.items[index] = new Slot(GameEvents.current.GetEmptyItem(), 1);
         return itemToUnequip;
     }
 
@@ -185,5 +186,38 @@ public class EquipmentManager : MonoBehaviour
     public void ClearInventory()
     {
         equipmentInventory.items.Clear();
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        try {
+            data.equippedItemsData.Clear();
+            foreach (var slot in equipmentInventory.items)
+            {
+                data.equippedItemsData.Add(StateManager.SaveItemData(slot));
+            }
+            equipmentInventory.items.Clear();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            equipmentInventory.items.Clear();
+        }
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (data.equippedItemsData.Count == 0 || data.equippedItemsData.All(x => x.itemId == "-1"))
+        {
+            equipmentInventory.InitializeInventory();
+        }
+        else
+        {
+            foreach (var itemData in data.equippedItemsData)
+            {
+                equipmentInventory.items.Add(StateManager.LoadItemData(itemData));
+            }
+        }
+        GameEvents.current.UpdateEquipmentContainer();
     }
 }

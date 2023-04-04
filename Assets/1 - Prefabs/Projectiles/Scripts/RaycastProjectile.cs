@@ -34,7 +34,7 @@ public class RaycastProjectile : MonoBehaviour
     void Update()
     {
         nextPos += gameObject.transform.forward * Time.deltaTime * _curSpeed;
-
+        Debug.Log(nextPos);
         RaycastHit hitInfo;
         if (Physics.Linecast(curPos, nextPos, out hitInfo, layerMask))
         {
@@ -65,6 +65,9 @@ public class RaycastProjectile : MonoBehaviour
                 }
 
                 transform.forward = Vector3.Reflect(transform.forward, hitInfo.normal);
+                transform.position += gameObject.transform.forward * Time.deltaTime * _curSpeed;
+                nextPos += gameObject.transform.forward * Time.deltaTime * _curSpeed;
+                curPos = transform.position;
             }
             else
             {
@@ -87,6 +90,11 @@ public class RaycastProjectile : MonoBehaviour
         {
             ApplyGasProperties();
         }
+    }
+
+    void LateUpdate()
+    {
+
     }
 
     void RedirectProjectile()

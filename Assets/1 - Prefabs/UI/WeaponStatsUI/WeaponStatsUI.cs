@@ -18,7 +18,7 @@ public class WeaponStatsUI : MonoBehaviour
     private float rechargeDelayTime;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GameEvents.current.onUpdateWeaponStatsGUI += UpdateWeaponStatsGUI;
         GameEvents.current.onIsCastDelayBarLoading += CastDelayBarIsLoading;

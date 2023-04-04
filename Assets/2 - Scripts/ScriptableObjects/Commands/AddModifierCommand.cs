@@ -15,25 +15,25 @@ public class AddModifierCommand : ConsoleCommand
         
         if (Int32.TryParse(args[0], out int equipmentId))
         {
-            if (!GameEvents.current.CheckType(equipmentId, typeof(IEquippable)))
+            if (!GameEvents.current.CheckType(equipmentId.ToString(), typeof(IEquippable)))
             {
                 Debug.Log("Item must be equippable.");
                 Debug.Log("Usage: [equipment id] [modifier ids]");
                 return false;
             }
 
-            Slot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
+            Slot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId.ToString());
             List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
             for (int i = 1; i < args.Length; i++)
             {
                 if (Int32.TryParse(args[i], out int modifierId))
                 {
-                    if (!GameEvents.current.CheckType(modifierId, typeof(IModifier)))
+                    if (!GameEvents.current.CheckType(modifierId.ToString(), typeof(IModifier)))
                     {
                         Debug.Log("Item must be a modifier.");
                         return false;
                     }
-                    Slot modifier = GameEvents.current.RemoveItemFromPlayerInventory(modifierId);
+                    Slot modifier = GameEvents.current.RemoveItemFromPlayerInventory(modifierId.ToString());
                     modifierList.Add((Modifier)modifier.item);
                 }
                 else

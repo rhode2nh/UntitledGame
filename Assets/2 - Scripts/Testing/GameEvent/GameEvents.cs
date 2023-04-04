@@ -13,7 +13,6 @@ public class GameEvents : MonoBehaviour
     public event Action<List<Slot>> onUpdateInventoryGUI;
     public event Action<List<Slot>> onUpdateImplantGUI;
     public event Action<List<Slot>, List<int>, int> onUpdateModifierGUI;
-    //TODO: CREATE A GUN SO!!!!
     public event Action<List<Slot>, int> onUpdateWeaponGUI;
     public event Action<string[]> onUpdateWeaponStatsGUI;
     public event Action onIsCastDelayBarLoading;
@@ -22,22 +21,22 @@ public class GameEvents : MonoBehaviour
     public event Func<Recipe, bool> onCanCraft;
     public event Func<Recipe, bool> onCraft;
     public event Action<Item> onConsume;
-    public event Func<int, Slot> onGetItem;
-    public event Func<int, bool> onHasItem;
-    public event Action<int> onEquip;
+    public event Func<string, Slot> onGetItem;
+    public event Func<string, bool> onHasItem;
+    public event Action<string> onEquip;
     public event Action onEquipFirstOccurence;
     public event Action onUnEquipFirstOccurence;
-    public event Func<int, Slot> onUnequip;
-    public event Func<int, Slot> onRemoveItemFromPlayerInventory;
-    public event Func<int, Slot> onRemoveImplant;
+    public event Func<string, Slot> onUnequip;
+    public event Func<string, Slot> onRemoveItemFromPlayerInventory;
+    public event Func<string, Slot> onRemoveImplant;
     public event Action onClearInventory;
-    public event Func<int, System.Type[], bool> onCheckType;
+    public event Func<string, System.Type[], bool> onCheckType;
     public event Func<System.Type, Slot> onRemoveItemByType;
     public event Func<List<Slot>> onGetAllModifiers;
     public event Action onUpdateEquipmentContainer;
     public event Action<int> onSpawnObject;
     public event Action<int, int> onRemoveModifierFromWeapon;
-    public event Action<int> onRemoveWeaponFromEquipmentInventory;
+    public event Action<string> onRemoveWeaponFromEquipmentInventory;
     public event Func<bool, Slot> onGetCurrentWeapon;
     public event Func<int, Slot> onGetCurrentWeaponFromSlot;
     public event Action<Slot> onUpdateCurrentWeapon;
@@ -50,6 +49,7 @@ public class GameEvents : MonoBehaviour
     public event Action onActivateInfoPanel;
     public event Action<string> onSetInfoText;
     public event Action<int, int> onUpdateStatsPanel;
+    public event Func<int> onGetCurEquipmentIndex;
     
     public void Awake()
     {
@@ -140,7 +140,7 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public Slot GetItem(int id)
+    public Slot GetItem(string id)
     {
         if (onGetItem != null)
         {
@@ -150,7 +150,7 @@ public class GameEvents : MonoBehaviour
         return null;
     }
 
-    public bool HasItem(int id)
+    public bool HasItem(string id)
     {
         if (onHasItem != null)
         {
@@ -160,7 +160,7 @@ public class GameEvents : MonoBehaviour
         return false;
     }
 
-    public void Equip(int id)
+    public void Equip(string id)
     {
         if (onEquip != null)
         {
@@ -184,7 +184,7 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public Slot RemoveItemFromPlayerInventory(int id)
+    public Slot RemoveItemFromPlayerInventory(string id)
     {
         if (onRemoveItemFromPlayerInventory != null)
         {
@@ -194,7 +194,7 @@ public class GameEvents : MonoBehaviour
         return null;
     }
 
-    public Slot RemoveImplant(int id)
+    public Slot RemoveImplant(string id)
     {
         if (onRemoveImplant != null)
         {
@@ -212,7 +212,7 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public bool CheckType(int id, params Type[] types)
+    public bool CheckType(string id, params Type[] types)
     {
         if (onCheckType != null)
         {
@@ -242,7 +242,7 @@ public class GameEvents : MonoBehaviour
         return new List<Slot>();
     }
 
-    public Slot Unequip(int id)
+    public Slot Unequip(string id)
     {
         if (onUnequip != null)
         {
@@ -320,11 +320,11 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void RemoveWeaponFromEquipmentInventory(int index)
+    public void RemoveWeaponFromEquipmentInventory(string id)
     {
         if (onRemoveWeaponFromEquipmentInventory != null)
         {
-            onRemoveWeaponFromEquipmentInventory(index);
+            onRemoveWeaponFromEquipmentInventory(id);
         }
     }
 
@@ -351,7 +351,7 @@ public class GameEvents : MonoBehaviour
 
     public Slot GetEmptySlot()
     {
-        return new Slot(-1, emptyItem, 1);
+        return new Slot(emptyItem, 1);
     }
 
     public void SwitchActiveEquipmentUISlot(int prevEquipmentUISlot, int curEquipmentUISlot)
@@ -421,6 +421,18 @@ public class GameEvents : MonoBehaviour
         if (onUpdateStatsPanel != null)
         {
             onUpdateStatsPanel(agility, strength);
+        }
+    }
+
+    public int GetCurEquipmentIndex()
+    {
+        if (onGetCurEquipmentIndex != null)
+        {
+            return onGetCurEquipmentIndex();
+        }
+        else
+        {
+            return 0;
         }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4180aab8b3ec8569da6d31e6e165296d, type: 3}
   m_Name: ChestImplant
   m_EditorClassIdentifier: 
-  Id: 10
+  Id: f6ca2200-826f-42a7-a89d-39e51b739acd
   Name: IMPLANT
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
@@ -21,3 +21,6 @@ MonoBehaviour:
   isStackable: 0
   qualityLevel: 1
   bodyPart: 2
+  testStats:
+    agility: 1
+    strength: 1

@@ -20,7 +20,7 @@ public class EquipmentUISlot : UISlot
             var equippable = slot.item as IWeapon;
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append($"Name:\t\t{slot.item.name}\n");
-            stringBuilder.Append($"Max Slots:\t\t{equippable.MaxSlots.ToString()}\n");
+            stringBuilder.Append($"Max Slots:\t\t{slot.properties[Constants.P_W_MAX_SLOTS_INT].ToString()}\n");
             stringBuilder.Append($"Cast Delay:\t\t{equippable.CastDelay.ToString("0.0")}\n");
             stringBuilder.Append($"Recharge Time:\t{equippable.RechargeTime.ToString("0.0")}\n");
             stringBuilder.Append($"X Spread:\t\t{equippable.XSpread.ToString("0.0")}\n");

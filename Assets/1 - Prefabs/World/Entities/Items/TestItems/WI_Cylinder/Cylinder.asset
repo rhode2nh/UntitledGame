@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8076e448932209543b20af53ce49bd90, type: 3}
   m_Name: Cylinder
   m_EditorClassIdentifier: 
-  Id: 4
+  Id: b9ca1d5a-e758-45d3-81d2-3e672df531c5
   Name: CYLINDER
-  type: 3
-  prefab: {fileID: 8861989744117030282, guid: 921265ea42e68674096fa9671dc51119, type: 3}
+  worldItemPrefab: {fileID: 0}
+  equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 91f923e8a844c484598e921eb1e58b99, type: 3}
+  isStackable: 1
   recipe: {fileID: 11400000, guid: 8d618ac41b5907146819a23c61498f1b, type: 2}

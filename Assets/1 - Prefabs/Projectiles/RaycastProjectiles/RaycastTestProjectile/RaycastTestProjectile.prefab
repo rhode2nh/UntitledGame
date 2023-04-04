@@ -48,12 +48,17 @@ MonoBehaviour:
   speed: 20
   curPos: {x: 0, y: 0, z: 0}
   nextPos: {x: 0, y: 0, z: 0}
-  maxNumBouces: 3
+  maxNumBouces: 2
   layerMask:
     serializedVersion: 2
     m_Bits: 191
   projectileSO: {fileID: 11400000, guid: 9a073574f5ad45bb7b00033830082a92, type: 2}
   shouldRedirect: 0
+  inGas: 0
+  gasProps:
+    accelerationFactor: 0
+    maxSpeed: 0
+    minSpeed: 0
 --- !u!1 &7427640225806010628
 GameObject:
   m_ObjectHideFlags: 0

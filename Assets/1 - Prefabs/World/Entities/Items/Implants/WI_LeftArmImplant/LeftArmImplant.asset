@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4180aab8b3ec8569da6d31e6e165296d, type: 3}
   m_Name: LeftArmImplant
   m_EditorClassIdentifier: 
-  Id: 10
+  Id: 70f4aeff-1abe-46ef-be52-592113bb8ef3
   Name: IMPLANT
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}

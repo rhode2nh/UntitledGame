@@ -11,7 +11,6 @@ public class Projectile : Modifier, IProjectile
     public new void Awake() 
     {
         this.Name = Constants.MOD_PROJECTILE;
-        this.Id = Constants.MOD_PROJECTILE_ID;
         this.isStackable = false;
         this.timeAlive = 2.0f;
         this.hitPoints = 20.0f;

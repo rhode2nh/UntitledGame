@@ -20,7 +20,8 @@ public class Spawner : MonoBehaviour, IExecutable
     {
         if (id == this.id)
         {
-            Instantiate(objectToSpawn, spawnPos.position, spawnPos.rotation);
+            var worldItem = Instantiate(objectToSpawn, spawnPos.position, spawnPos.rotation);
+            worldItem.GetComponent<WorldItem>().isInstance = true;
         }
     }
 

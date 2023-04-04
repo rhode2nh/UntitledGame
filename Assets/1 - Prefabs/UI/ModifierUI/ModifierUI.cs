@@ -5,34 +5,43 @@ public class ModifierUI : MonoBehaviour
 {
     public GameObject modifierUISlot;
     public Transform modifiersParent; 
-    public int activeSlots;
     public int totalSlots;
 
     private List<ModifierUISlot> slots = new List<ModifierUISlot>();
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GameEvents.current.onUpdateModifierGUI += UpdateUI;
-        activeSlots = 0;
         totalSlots = 0;
     }
 
     void UpdateUI(List<Slot> modifiers, List<int> modifierSlotIndices, int maxSlots)
     {
-        if (activeSlots != maxSlots)
+        if (maxSlots > totalSlots)
         {
-            if (activeSlots < maxSlots)
+            for (int i = 0; i < maxSlots - totalSlots; i++)
             {
-                IncreaseActiveSlots(maxSlots);
+                var newSlot = Instantiate(modifierUISlot);
+                newSlot.transform.SetParent(modifiersParent, false);
+                newSlot.GetComponent<ModifierUISlot>().slot = GameEvents.current.GetEmptySlot();
+                slots.Add(newSlot.GetComponent<ModifierUISlot>());
             }
-            else 
+            totalSlots = maxSlots;
+        }
+        else if(maxSlots < totalSlots)
+        {
+            for (int i = slots.Count - 1; i > maxSlots - 1; i--)
             {
-                DecreaseActiveSlots(maxSlots);
+                slots[i].GetComponent<ModifierUISlot>().slot = GameEvents.current.GetEmptySlot();
+                slots[i].gameObject.SetActive(false);
             }
         }
-
-        for (int i = 0; i < totalSlots; i++)
+        for (int i = 0; i < maxSlots; i++)
+        {
+            slots[i].gameObject.SetActive(true);
+        }
+        for (int i = 0; i < maxSlots; i++)
         {
             if (modifiers[i].item != GameEvents.current.GetEmptyItem())
             {
@@ -47,38 +56,4 @@ public class ModifierUI : MonoBehaviour
         }
     }
 
-    public void IncreaseActiveSlots(int maxSlots)
-    {
-        if (modifiersParent.childCount != 0)
-        {
-            for (int i = activeSlots - 1; i < maxSlots; i++)
-            {
-                Debug.Log("max slots: " + maxSlots + " active slots: " + activeSlots);
-                slots[i].gameObject.SetActive(true);
-            }
-        }
-        
-        if (totalSlots < maxSlots)
-        {
-            totalSlots = maxSlots;
-            for (int i = 0; i < totalSlots - activeSlots; i++)
-            {
-                GameObject instantiatedUISlot = Instantiate(modifierUISlot);
-                instantiatedUISlot.transform.SetParent(modifiersParent, false);
-                instantiatedUISlot.GetComponent<ModifierUISlot>().slot = GameEvents.current.GetEmptySlot();
-                slots.Add(instantiatedUISlot.GetComponentInChildren<ModifierUISlot>());
-            }
-            activeSlots = maxSlots;
-
-        }
-    }
-
-    public void DecreaseActiveSlots(int maxSlots)
-    {
-        for (int i = maxSlots; i >= totalSlots - maxSlots - 1; i--)
-        {
-            modifiersParent.GetChild(i).gameObject.SetActive(false);
-        }
-        activeSlots = maxSlots == 0 ? 1 : maxSlots;
-    }
 }

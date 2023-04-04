@@ -16,13 +16,13 @@ public class AddAllModifiersCommand : ConsoleCommand
         
         if (Int32.TryParse(args[0], out int equipmentId))
         {
-            if (!GameEvents.current.CheckType(equipmentId, typeof(IEquippable)))
+            if (!GameEvents.current.CheckType(equipmentId.ToString(), typeof(IEquippable)))
             {
                 Debug.Log("Item must be equippable.");
                 return false;
             }
 
-            Slot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId);
+            Slot equipment = GameEvents.current.RemoveItemFromPlayerInventory(equipmentId.ToString());
             List<Modifier> modifierList = (List<Modifier>)equipment.properties[Constants.P_W_MODIFIERS_LIST];
             List<int> modifierSlotIndices = (List<int>)equipment.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
             int maxSlots = (int)equipment.properties[Constants.P_W_MAX_SLOTS_INT];

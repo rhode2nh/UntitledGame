@@ -6,7 +6,6 @@ public class Sphere : Item
     private void Awake()
     {
         this.Name = Constants.SPHERE;
-        this.Id = Constants.SPHERE_ID;
         this.isStackable = false;
     }
 }

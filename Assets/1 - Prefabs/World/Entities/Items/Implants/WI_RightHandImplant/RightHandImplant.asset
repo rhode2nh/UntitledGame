@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4180aab8b3ec8569da6d31e6e165296d, type: 3}
   m_Name: RightHandImplant
   m_EditorClassIdentifier: 
-  Id: 10
+  Id: 8a150248-524f-421f-a7c5-9a48a396e64f
   Name: IMPLANT
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}

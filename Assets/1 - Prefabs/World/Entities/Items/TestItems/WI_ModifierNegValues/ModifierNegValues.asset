@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b3583d5444c982999584e5c4a18c1f, type: 3}
   m_Name: ModifierNegValues
   m_EditorClassIdentifier: 
-  Id: 6
+  Id: 6480aa66-14c6-4134-8282-6f37075e5b46
   Name: TEST_MODIFIER
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 3c86c7d6af88e8fa1b399a6635259ea6, type: 3}
   isStackable: 0
   castDelay: -0.5

@@ -18,7 +18,7 @@ public class UnequipToPlayerInventory : ConsoleCommand
 
         if (Int32.TryParse(args[0], out int id))
         {
-            Slot itemToMove = GameEvents.current.Unequip(id);
+            Slot itemToMove = GameEvents.current.Unequip(id.ToString());
             GameEvents.current.AddItemToPlayerInventory(new Slot(itemToMove));
             GameEvents.current.UpdateEquipmentContainer();
             Debug.Log("Item was moved!");

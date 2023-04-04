@@ -39,11 +39,11 @@ public class ImplantManager : MonoBehaviour
         }
     }
 
-    public Slot RemoveImplant(int id)
+    public Slot RemoveImplant(string id)
     {
         Slot implantToRemove = new Slot(implantInventory.items.FirstOrDefault(x => x.id == id));
         int index = implantInventory.items.FindIndex(x => x.id == id);
-        implantInventory.items[index] = new Slot(-1, GameEvents.current.GetEmptyItem(), 1);
+        implantInventory.items[index] = new Slot(GameEvents.current.GetEmptyItem(), 1);
         GameEvents.current.CalculateBuffedStats();
         GameEvents.current.UpdateImplantGUI(implantInventory.items);
         var newBuffedStats = GameEvents.current.GetBuffedStats();

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ExtensionMethods;
 using UnityEngine;
+using System;
 
 public enum ItemType {
     Modifier,
@@ -19,7 +20,7 @@ public class Inventory : ScriptableObject
     {
         for (int i = 0; i < maxSize; i++)
         {
-            items.Add(new Slot(-1, GameEvents.current.GetEmptyItem(), 1));
+            items.Add(new Slot(GameEvents.current.GetEmptyItem(), 1));
         }
     }
 
@@ -28,7 +29,7 @@ public class Inventory : ScriptableObject
         int availableSlots = 0;
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].item.Id == -1)
+            if (items[i].item == GameEvents.current.GetEmptyItem())
             {
                 availableSlots++;
             }
@@ -47,14 +48,26 @@ public struct Properties
 [System.Serializable]
 public class Slot
 {
-    public int id;
+    public string id;
     public Item item;
     public int count;
     [SerializeField]
     private List<Properties> _properties;
     public Dictionary<string, object> properties;
 
-    public Slot(int id = -1, Item item = null, int count = 1, Dictionary<string, object> properties = null)
+    public Slot(Item item = null, int count = 1, Dictionary<string, object> properties = null)
+    {
+        this.id = Guid.NewGuid().ToString();
+        this.item = item;
+        this.count = count;
+        this.properties = properties.CopyProperties();
+        this._properties = new List<Properties>();
+
+        // Show key value pairs in the inspector.
+        SerializeProperties();
+    }
+
+    public Slot(string id, Item item = null, int count = 1, Dictionary<string, object> properties = null)
     {
         this.id = id;
         this.item = item;

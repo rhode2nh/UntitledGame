@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public struct Output
 {
@@ -15,7 +16,7 @@ public struct Output
     }
 }
 
-public class EquipmentContainer : MonoBehaviour
+public class EquipmentContainer : MonoBehaviour, IDataPersistence
 {
     public int curEquipmentIndex;
     public GameObject instantiatedGun;
@@ -55,15 +56,19 @@ public class EquipmentContainer : MonoBehaviour
 
     private Animator equipmentContainerAnimator;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GameEvents.current.onUpdateEquipmentContainer += UpdateEquipmentContainer;
         GameEvents.current.onRemoveModifierFromWeapon += RemoveModifierFromWeapon;
         GameEvents.current.onGetCurrentWeapon += GetCurrentWeapon;
         GameEvents.current.onUpdateCurrentWeapon += UpdateCurrentWeapon;
         GameEvents.current.onRemoveWeaponFromEquipmentInventory += RemoveWeaponFromEquipmentInventory;
-        
+        GameEvents.current.onGetCurEquipmentIndex += GetCurEquipmentIndex;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         modifierSlots = new List<Slot>();
         equipmentContainerAnimator = equipmentContainer.GetComponent<Animator>();
         modifierSlotIndices = new List<int>();
@@ -81,7 +86,6 @@ public class EquipmentContainer : MonoBehaviour
         curGroupIndex = 0;
         coroutineStarted = false;
         _currentItem = null;
-        UpdateEquipmentContainer();
     }
 
     void Update()
@@ -118,9 +122,8 @@ public class EquipmentContainer : MonoBehaviour
 
     void UpdateEquipmentContainer()
     {
-        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), equipmentManager.MaxSize());
-        _currentItem = GameEvents.current.GetCurrentWeaponFromSlot(curEquipmentIndex);
-        if (_currentItem != null)
+        _currentItem = equipmentManager.equipmentInventory.items[curEquipmentIndex];
+        if (_currentItem.item != GameEvents.current.GetEmptyItem())
         {
             if (instantiatedGun != null)
             {
@@ -167,6 +170,7 @@ public class EquipmentContainer : MonoBehaviour
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
             GameEvents.current.UpdateModifierGUI(modifierSlots, modifierSlotIndices, maxSlots);
         }
+        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), 4);
     }
 
     //TODO: Refactor this code so the output is only recalculated when the modifiers are changed
@@ -221,7 +225,7 @@ public class EquipmentContainer : MonoBehaviour
         for (int i = 0; i < filteredModifierSlots.Count; i++)
         {
             var curSlot = filteredModifierSlots[i];
-            if (curSlot.id == -1)
+            if (curSlot.item == GameEvents.current.GetEmptyItem())
             {
                 continue;
             }
@@ -267,7 +271,6 @@ public class EquipmentContainer : MonoBehaviour
             if (projectilesToGroup == 0)
             {
                 firstPass.Add(new List<Output>(currentGroup));
-                potentialWrapModifiers.Clear();
                 currentGroup = new List<Output>();
                 projectilesToGroup = 1;
             }
@@ -278,6 +281,11 @@ public class EquipmentContainer : MonoBehaviour
             // Add modifiers until we reach the modifier that caused a wrap
             for (int i = 0; i < projectilesToGroup; i++)
             {
+                if (modifierSlots[i].item is ICastX)
+                {
+                    var castX = modifierSlots[i].item as ICastX;
+                    projectilesToGroup += castX.ModifiersPerCast;
+                }
                 if (potentialWrapModifiers.Contains(i))
                 {
                     break;
@@ -398,8 +406,8 @@ public class EquipmentContainer : MonoBehaviour
 
             Vector3 directionWithoutSpread = targetPoint - projectileSpawner.position;
 
-            float x = Random.Range(-totalXSpread * 0.5f, totalXSpread * 0.5f);
-            float y = Random.Range(-totalYSpread * 0.5f, totalYSpread * 0.5f);
+            float x = UnityEngine.Random.Range(-totalXSpread * 0.5f, totalXSpread * 0.5f);
+            float y = UnityEngine.Random.Range(-totalYSpread * 0.5f, totalYSpread * 0.5f);
             
             Vector3 directionWithSpread = Quaternion.AngleAxis(x, projectileSpawner.up) * Quaternion.AngleAxis(y, projectileSpawner.forward) * directionWithoutSpread;
 
@@ -437,7 +445,7 @@ public class EquipmentContainer : MonoBehaviour
             totalXSpread = weapon.XSpread;
             foreach (var slot in modifierSlots)
             {
-                if (slot.id == -1)
+                if (slot.item == GameEvents.current.GetEmptyItem())
                 {
                     continue;
                 }
@@ -457,7 +465,7 @@ public class EquipmentContainer : MonoBehaviour
             totalYSpread = weapon.YSpread;
             foreach (var slot in modifierSlots)
             {
-                if (slot.id == -1)
+                if (slot.item == GameEvents.current.GetEmptyItem())
                 {
                     continue;
                 }
@@ -478,7 +486,7 @@ public class EquipmentContainer : MonoBehaviour
             totalCastDelay = weapon.CastDelay;
             foreach (var slot in modifierSlots)
             {
-                if (slot.id == -1)
+                if (slot.item == GameEvents.current.GetEmptyItem())
                 {
                     continue;
                 }
@@ -499,7 +507,7 @@ public class EquipmentContainer : MonoBehaviour
             totalRechargeTime = weapon.RechargeTime;
             foreach (var slot in modifierSlots)
             {
-                if (slot.id == -1)
+                if (slot.item == GameEvents.current.GetEmptyItem())
                 {
                     continue;
                 }
@@ -531,13 +539,13 @@ public class EquipmentContainer : MonoBehaviour
         UpdateEquipmentContainer();
     }
 
-    public void RemoveWeaponFromEquipmentInventory(int id)
+    public void RemoveWeaponFromEquipmentInventory(string id)
     {
-        if (id == -1)
+        Slot equipment = equipmentManager.Unequip(id);
+        if (equipment.item == GameEvents.current.GetEmptyItem())
         {
             return;
         }
-        Slot equipment = equipmentManager.Unequip(id);
         GameEvents.current.AddItemToPlayerInventory(equipment); 
         UpdateEquipmentContainer();
     }
@@ -577,5 +585,20 @@ public class EquipmentContainer : MonoBehaviour
             }
         }
         Debug.Log(debugString);
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.curEquipmentIndex = curEquipmentIndex;
+    }
+
+    public void LoadData(GameData data)
+    {
+        curEquipmentIndex = data.curEquipmentIndex;
+    }
+
+    public int GetCurEquipmentIndex()
+    {
+        return curEquipmentIndex;
     }
 }

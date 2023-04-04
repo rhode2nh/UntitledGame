@@ -17,44 +17,35 @@ public class TriggerList : MonoBehaviour
 
     public void CalculateTriggerChildren() 
     {
-        if (spawnedFromTrigger)
+        List<List<Output>> firstPass = CalculateFirstPass();
+        //PrintOutput(firstPass);
+        List<List<Output>> secondPass = CalculateSecondPass(firstPass);
+        //PrintOutput(secondPass);
+        // TODO: Evaluate the trigger list, then instantiate projectiles...I should reuse the algorithm I already created.
+        if (secondPass.Count != 0)
         {
-            spawnedFromTrigger = false;
-        }
-        else
-        {
-            List<List<Output>> firstPass = CalculateFirstPass();
-            List<List<Output>> secondPass = CalculateSecondPass(firstPass);
-            //PrintOutput(secondPass);
-            // TODO: Evaluate the trigger list, then instantiate projectiles...I should reuse the algorithm I already created.
-            if (secondPass.Count != 0)
+            for (int i = 0; i < secondPass[0].Count; i++)
             {
-                for (int i = 0; i < secondPass[0].Count; i++)
+                float x = Random.Range(-xSpread * 0.5f, xSpread * 0.5f);
+                float y = Random.Range(-ySpread * 0.5f, ySpread * 0.5f);
+                var projectile = secondPass[0][i].projectile.item as IProjectile;
+                if (projectile == null)
                 {
-                    float x = Random.Range(-xSpread * 0.5f, xSpread * 0.5f);
-                    float y = Random.Range(-ySpread * 0.5f, ySpread * 0.5f);
-                    var projectile = secondPass[0][i].projectile.item as IProjectile;
-                    if (projectile == null)
-                    {
-                        continue;
-                    }
-                    var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, transform.position, transform.rotation);
-                    var redirect = instantiatedProjectile.GetComponent<RaycastProjectile>();
-                    if (redirect != null)
-                    {
-                        redirect.shouldRedirect = false;
-                    }
-                    var triggers = instantiatedProjectile.GetComponent<TriggerList>();
-                    if (triggers != null)
-                    {
-                        triggers.spawnedFromTrigger = true;
-                        triggers.triggerList = secondPass[0][i].postModifiers;;
-                        //triggers.triggerList.RemoveAt(0);
-                        //instantiatedProjectile.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 4, ForceMode.Impulse);
-                        //break;
-                    }
-                    instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, transform.up) * instantiatedProjectile.transform.rotation;
+                    continue;
                 }
+                var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, transform.position, transform.rotation);
+                var redirect = instantiatedProjectile.GetComponent<RaycastProjectile>();
+                if (redirect != null)
+                {
+                    redirect.shouldRedirect = false;
+                }
+                var triggers = instantiatedProjectile.GetComponent<TriggerList>();
+                if (triggers != null)
+                {
+                    triggers.spawnedFromTrigger = true;
+                    triggers.triggerList = secondPass[0][i].postModifiers;
+                }
+                instantiatedProjectile.transform.rotation = Quaternion.AngleAxis(x, transform.up) * instantiatedProjectile.transform.rotation;
             }
         }
     }
@@ -108,7 +99,6 @@ public class TriggerList : MonoBehaviour
             if (projectilesToGroup == 0)
             {
                 firstPass.Add(new List<Output>(currentGroup));
-                potentialWrapModifiers.Clear();
                 currentGroup = new List<Output>();
                 projectilesToGroup = 1;
             }

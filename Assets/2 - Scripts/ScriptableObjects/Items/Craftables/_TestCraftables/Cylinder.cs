@@ -9,7 +9,6 @@ public class Cylinder : Item, ICraftable
     private void Awake()
     {
         this.Name = Constants.CYLINDER;
-        this.Id = Constants.CYLINDER_ID;
         this.isStackable = true;
     }
     public Recipe Recipe { get => recipe; }

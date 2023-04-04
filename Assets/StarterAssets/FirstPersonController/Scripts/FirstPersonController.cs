@@ -288,7 +288,7 @@ namespace StarterAssets
 
         public void PickUpItem(WorldItem item)
         {
-            Slot invItem = new Slot(item.id, item.item, item.count, item.properties);
+            Slot invItem = new Slot(item.item, item.count, item.properties);
             GameEvents.current.AddItemToPlayerInventory(invItem);
             if (isDebug)
             {

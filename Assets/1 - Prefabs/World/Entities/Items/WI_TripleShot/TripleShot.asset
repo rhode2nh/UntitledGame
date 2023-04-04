@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea70fa8f261da6fd99e5c6464e8dd41a, type: 3}
   m_Name: TripleShot
   m_EditorClassIdentifier: 
-  Id: 9
+  Id: 8680d46b-e9b8-49e6-a084-afffd3a1e5ea
   Name: MOD_CASTX
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}

@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: PlayerInventory
   m_EditorClassIdentifier: 
   maxSize: 10
-  emptyItem: {fileID: 11400000, guid: 2cfc056872abfa1ed94a0919c55f093e, type: 2}
   allowedItems: 000000000100000002000000
   items: []

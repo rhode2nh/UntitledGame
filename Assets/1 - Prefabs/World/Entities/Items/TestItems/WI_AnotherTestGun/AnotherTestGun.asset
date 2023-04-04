@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cec6ebe0272499ba9df2d8efa0e265a, type: 3}
   m_Name: AnotherTestGun
   m_EditorClassIdentifier: 
-  Id: 7
+  Id: 29ca1019-1725-4808-8240-a414cb6a6102
   Name: TEST_GUN
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: -3875825284500928847, guid: b82c1746a7847abc887b5d5059d75f40, type: 3}

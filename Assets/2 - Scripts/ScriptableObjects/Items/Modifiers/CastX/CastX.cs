@@ -9,7 +9,6 @@ public class CastX : Modifier, ICastX
     public new void Awake()
     {
         this.Name = Constants.MOD_CASTX;
-        this.Id = Constants.MOD_CASTX_ID;
         this.isStackable = false;
     }
 

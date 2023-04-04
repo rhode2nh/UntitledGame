@@ -22,7 +22,7 @@ public class ImplantUI : MonoBehaviour
         // if the id is -1, then it's the empty item
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].item.Id != -1)
+            if (items[i].item != GameEvents.current.GetEmptyItem())
             {
                 slots[i].AddItem(items[i]);
             }

@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b3583d5444c982999584e5c4a18c1f, type: 3}
   m_Name: TestModifier
   m_EditorClassIdentifier: 
-  Id: 6
+  Id: 61ccb488-9f77-4114-90b2-933eec3928fd
   Name: TEST_MODIFIER
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 0}
   isStackable: 0
   castDelay: 0.5
   rechargeDelay: 0.3
   powerConsumption: 0
+  spreadX: 0
+  spreadY: 0

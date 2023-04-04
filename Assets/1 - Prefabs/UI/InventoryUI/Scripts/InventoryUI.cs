@@ -9,7 +9,7 @@ public class InventoryUI : MonoBehaviour
 
     private List<IUISlot> slots = new List<IUISlot>();
 
-    void Start()
+    void Awake()
     {
         for (int i = 0; i < numSlots; i++)
         {
@@ -18,16 +18,16 @@ public class InventoryUI : MonoBehaviour
             instancedSlot.transform.SetParent(itemsParent, false);
             slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
+
         GameEvents.current.onUpdateInventoryGUI += UpdateUI;
         GameEvents.current.DeactivateInfoPanel();
     }
 
     private void UpdateUI(List<Slot> items)
     {
-        // if the id is -1, then it's the empty item
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].item.Id != -1)
+            if (items[i].item != GameEvents.current.GetEmptyItem())
             {
                 slots[i].AddItem(items[i]);
             }
@@ -35,7 +35,6 @@ public class InventoryUI : MonoBehaviour
             {
                 slots[i].ClearSlot();
             }
-
         }
     }
 }

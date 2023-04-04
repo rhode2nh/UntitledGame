@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class WorldItem : MonoBehaviour
+public class WorldItem : MonoBehaviour, IDataPersistence
 {
     public Item item;
     public int count;
     public int id;
     public Dictionary<string, object> properties;
+    public bool isInstance;
     //ItemStats itemStats;
 
     // Start is called before the first frame update
@@ -19,6 +21,46 @@ public class WorldItem : MonoBehaviour
         InitializeProperties();
     }
 
+    public void LoadData(GameData data)
+    {
+        var item = data.itemsData.Find(x => x.name == this.name);
+        if (item == null)
+        {
+            //Destroy(gameObject);
+            return;
+        }
+        transform.position = item.pos;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        if (this == null)
+        {
+            return;
+        }
+
+        if (data.itemsData.Any(x => x.name == this.name))
+        {
+            data.itemsData.Where(x => x.name == this.name)
+                .Select(x => x.pos = this.transform.position);
+        }
+        else
+        {
+            WorldItemData worldItemData = new WorldItemData();
+            worldItemData.name = this.name;
+            worldItemData.pos = this.transform.position;
+            worldItemData.itemId = this.item.Id;
+            if (isInstance)
+            {
+                data.instancedItemsData.Add(worldItemData);
+            }
+            else
+            {
+                data.itemsData.Add(worldItemData);
+            }
+        }
+    }
+
     void InitializeProperties()
     {
         switch(item)
@@ -27,7 +69,7 @@ public class WorldItem : MonoBehaviour
                 var slots = new List<Slot>();
                 properties.Add(Constants.P_W_MODIFIER_SLOT_INDICES_LIST, new List<int>());
                 properties.Add(Constants.P_W_MAX_SLOTS_INT, Random.Range(1, 10));
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < (int)properties[Constants.P_W_MAX_SLOTS_INT]; i++)
                 {
                     slots.Add(new Slot(GameEvents.current.GetEmptySlot()));
                 }

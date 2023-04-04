@@ -17,7 +17,6 @@ public class Implant : Item, IImplant
     private void Awake()
     {
         this.Name = Constants.IMPLANT;
-        this.Id = Constants.IMPLANT_ID;
         this.isStackable = false;
     }
 }

@@ -9,7 +9,6 @@ public class TestConsumable : Item, ICraftable, IConsumable
     private void Awake()
     {
         this.Name = Constants.TEST_CONSUMABLE;
-        this.Id = Constants.TEST_CONSUMABLE_ID;
         this.isStackable = true;
     }
     public Recipe Recipe { get => recipe; }

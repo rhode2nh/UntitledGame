@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour, IDataPersistence
 {
     public Inventory inventory;
     public PlayerStats playerStats;
@@ -17,13 +18,10 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.onGetItem += GetItem;
         GameEvents.current.onHasItem += HasItem;
         GameEvents.current.onRemoveItemFromPlayerInventory += RemoveItem;
-        GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onCheckType += CheckType;
         GameEvents.current.onRemoveItemByType += RemoveItemByType;
         GameEvents.current.onGetAllModifiers += GetAllModifiers;
         hasItem = false;
-
-        inventory.InitializeInventory();
     }
 
     /// <summary>
@@ -60,7 +58,7 @@ public class InventoryManager : MonoBehaviour
         GameEvents.current.UpdateInventoryGUI(inventory.items);
     }
 
-    public bool HasItem(int id)
+    public bool HasItem(string id)
     {
         return inventory.items.Any(x => x.id == id);
     }
@@ -79,7 +77,7 @@ public class InventoryManager : MonoBehaviour
         return inventory.items.Count;
     }
 
-    public Slot RemoveItem(int id)
+    public Slot RemoveItem(string id)
     {
         Slot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
         if (removedItem.count == 1)
@@ -112,7 +110,7 @@ public class InventoryManager : MonoBehaviour
         return removedItem.item;
     }
 
-    public Slot GetItem(int id)
+    public Slot GetItem(string id)
     {
         Slot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
         return removedItem;
@@ -198,7 +196,7 @@ public class InventoryManager : MonoBehaviour
         inventory.items.Clear();
     }
 
-    public bool CheckType(int id, params System.Type[] types)
+    public bool CheckType(string id, params System.Type[] types)
     {
         var item = inventory.items.FirstOrDefault(x => x.id == id);
         return types.All(type => type.IsAssignableFrom(item.item.GetType()));
@@ -217,5 +215,38 @@ public class InventoryManager : MonoBehaviour
         }
 
         return modifierList;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        try {
+            data.inventoryItemsData.Clear();
+            foreach (var slot in inventory.items)
+            {
+                data.inventoryItemsData.Add(StateManager.SaveItemData(slot));
+            }
+            inventory.items.Clear();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            inventory.items.Clear();
+        }
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (data.inventoryItemsData.Count == 0 || data.inventoryItemsData.All(x => x.itemId == "-1"))
+        {
+            inventory.InitializeInventory();
+        }
+        else
+        {
+            foreach (var itemData in data.inventoryItemsData)
+            {
+                inventory.items.Add(StateManager.LoadItemData(itemData));
+            }
+        }
+        GameEvents.current.UpdateInventoryGUI(inventory.items);
     }
 }

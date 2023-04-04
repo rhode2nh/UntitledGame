@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea70fa8f261da6fd99e5c6464e8dd41a, type: 3}
   m_Name: TestCastX
   m_EditorClassIdentifier: 
-  Id: 9
+  Id: 541a66f0-040b-4ac3-b2e3-6ce311d88cdd
   Name: MOD_CASTX
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 0}
   isStackable: 0
   castDelay: 0
   rechargeDelay: 0
   powerConsumption: 0
+  spreadX: 0
+  spreadY: 0
   modifiersPerCast: 2

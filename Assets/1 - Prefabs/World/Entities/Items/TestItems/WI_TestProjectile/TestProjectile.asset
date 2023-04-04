@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdc67703850370ccc83c2b4f2cc5edd6, type: 3}
   m_Name: TestProjectile
   m_EditorClassIdentifier: 
-  Id: 8
+  Id: 1f5e39af-1dc6-40c2-9ec5-d3f2d9a89ced
   Name: MOD_PROJECTILE
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}

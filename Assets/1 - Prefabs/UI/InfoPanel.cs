@@ -12,6 +12,7 @@ public class InfoPanel : MonoBehaviour
         GameEvents.current.onDeactivateInfoPanel += DeactivateInfoPanel;
         GameEvents.current.onActivateInfoPanel += ActivateInfoPanel;
         GameEvents.current.onSetInfoText += SetInfoText;
+        DeactivateInfoPanel();
     }
 
     void OnEnable()

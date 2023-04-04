@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f79727069d2a9794ba16fa328d2cae17, type: 3}
   m_Name: TestConsumable
   m_EditorClassIdentifier: 
-  Id: 5
+  Id: be9b12fd-66ab-4f77-87eb-8405ed13e681
   Name: TEST_CONSUMABLE
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 0}
   isStackable: 1
-  itemStats: {fileID: 11400000, guid: 83f4d530bd1638645b19505de042adc8, type: 2}
   recipe: {fileID: 11400000, guid: 8d618ac41b5907146819a23c61498f1b, type: 2}

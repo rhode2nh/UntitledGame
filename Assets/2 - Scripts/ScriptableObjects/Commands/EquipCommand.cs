@@ -18,7 +18,7 @@ public class EquipCommand : ConsoleCommand
 
         if (Int32.TryParse(args[0], out int id))
         {
-            GameEvents.current.Equip(id);
+            GameEvents.current.Equip(id.ToString());
             GameEvents.current.UpdateEquipmentContainer();
         }
         else

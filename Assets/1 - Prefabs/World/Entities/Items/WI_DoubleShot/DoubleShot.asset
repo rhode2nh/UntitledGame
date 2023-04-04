@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea70fa8f261da6fd99e5c6464e8dd41a, type: 3}
   m_Name: DoubleShot
   m_EditorClassIdentifier: 
-  Id: 9
+  Id: 18a80fe0-7dce-4418-9e96-942ed559c426
   Name: MOD_CASTX
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
+  testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: e7e4b5ac6ea515a679624c85830ad98e, type: 3}
   isStackable: 0
   castDelay: 0
