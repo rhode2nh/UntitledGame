@@ -34,7 +34,6 @@ public class RaycastProjectile : MonoBehaviour
     void Update()
     {
         nextPos += gameObject.transform.forward * Time.deltaTime * _curSpeed;
-        Debug.Log(nextPos);
         RaycastHit hitInfo;
         if (Physics.Linecast(curPos, nextPos, out hitInfo, layerMask))
         {

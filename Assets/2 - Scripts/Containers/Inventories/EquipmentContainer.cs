@@ -271,6 +271,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             if (projectilesToGroup == 0)
             {
                 firstPass.Add(new List<Output>(currentGroup));
+                potentialWrapModifiers.Clear();
                 currentGroup = new List<Output>();
                 projectilesToGroup = 1;
             }
@@ -285,6 +286,10 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
                 {
                     var castX = modifierSlots[i].item as ICastX;
                     projectilesToGroup += castX.ModifiersPerCast;
+                }
+                else if (modifierSlots[i].item is ITrigger)
+                {
+                    projectilesToGroup += 1;
                 }
                 if (potentialWrapModifiers.Contains(i))
                 {
