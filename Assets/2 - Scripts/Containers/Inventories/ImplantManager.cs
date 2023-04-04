@@ -1,16 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ImplantManager : MonoBehaviour
+public class ImplantManager : MonoBehaviour, IDataPersistence
 {
     public Inventory implantInventory;
     // Start is called before the first frame update
     void Start()
     {
-        implantInventory.InitializeInventory();
         GameEvents.current.onAddItemToImplantInventory += AddItem;
-        GameEvents.current.onClearInventory += ClearInventory;
+        //GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onRemoveImplant += RemoveImplant;
         GameEvents.current.onGetImplantStats += GetImplantStats;
     }
@@ -59,6 +59,39 @@ public class ImplantManager : MonoBehaviour
     public List<TestStats> GetImplantStats()
     {
         return implantInventory.items.Where(x => x.item != GameEvents.current.GetEmptyItem()).Select(x => (TestStats)x.properties[Constants.P_IMP_STATS_DICT]).ToList();
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        try {
+            data.implantItemsData.Clear();
+            foreach (var slot in implantInventory.items)
+            {
+                data.implantItemsData.Add(StateManager.SaveItemData(slot));
+            }
+            implantInventory.items.Clear();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            implantInventory.items.Clear();
+        }
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (data.implantItemsData.Count == 0 || data.implantItemsData.All(x => x.itemId == "-1"))
+        {
+            implantInventory.InitializeInventory();
+        }
+        else
+        {
+            foreach (var itemData in data.implantItemsData)
+            {
+                implantInventory.items.Add(StateManager.LoadItemData(itemData));
+            }
+        }
+        GameEvents.current.UpdateImplantGUI(implantInventory.items);
     }
 
 }
