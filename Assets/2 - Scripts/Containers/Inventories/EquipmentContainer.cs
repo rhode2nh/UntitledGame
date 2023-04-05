@@ -257,6 +257,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             else
             {
                 firstPass.Add(new List<Output>());
+                projectilesToGroup--;
             }
 
 
