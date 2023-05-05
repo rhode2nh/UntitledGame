@@ -91,11 +91,6 @@ public class RaycastProjectile : MonoBehaviour
         }
     }
 
-    void LateUpdate()
-    {
-
-    }
-
     void RedirectProjectile()
     {
         shouldRedirect = false;

@@ -94,7 +94,8 @@ namespace StarterAssets
 
 		private void Start()
 		{
-            health = 100.0f;
+            GameEvents.current.onIsPlayerDead += IsPlayerDead;
+            GameEvents.current.onHurtPlayer += HurtPlayer;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 
@@ -310,6 +311,16 @@ namespace StarterAssets
         {
             // TODO Rework when save/load system is implemented
             GameEvents.current.ClearInventory();
+        }
+
+        public bool IsPlayerDead()
+        {
+            return health <= 0 ? true: false;
+        }
+
+        public void HurtPlayer(int damage)
+        {
+            health -= damage;
         }
 	}
 }

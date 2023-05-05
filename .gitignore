@@ -72,3 +72,6 @@ crashlytics-build.properties
 
 # Build directory
 /[Aa]ssets/build
+
+# Plan Debugger
+/PlanDebugger/

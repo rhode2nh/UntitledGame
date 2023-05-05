@@ -6,7 +6,6 @@ public class TestDestructable : LifeEntity, IDestructable, IHittable
     void Start()
     {
         health = 100.0f;
-        isInvincible = true;
     }
 
     public void ModifyHealth(float hitPoints)

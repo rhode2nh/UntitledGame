@@ -50,6 +50,8 @@ public class GameEvents : MonoBehaviour
     public event Action<string> onSetInfoText;
     public event Action<int, int> onUpdateStatsPanel;
     public event Func<int> onGetCurEquipmentIndex;
+    public event Func<bool> onIsPlayerDead;
+    public event Action<int> onHurtPlayer;
     
     public void Awake()
     {
@@ -433,6 +435,26 @@ public class GameEvents : MonoBehaviour
         else
         {
             return 0;
+        }
+    }
+
+    public bool IsPlayerDead()
+    {
+        if (onIsPlayerDead != null)
+        {
+            return onIsPlayerDead();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void HurtPlayer(int damage)
+    {
+        if (onHurtPlayer != null)
+        {
+            onHurtPlayer(damage);
         }
     }
 }
