@@ -30,8 +30,8 @@ public class ShootEnemyAction : ActionBase<ShootEnemyAction.Data>
             return ActionRunState.Stop;
         }
 
-        data.RotateTowardsBehaviour.RotateTowardsEnemy(data.Threat.lastEnemyPos);
-        if (data.Threat.isLookingAtEnemy || data.Threat.enemyIsInThreatArea)
+        data.RotateTowardsBehaviour.RotateTowardsEnemy(data.Threat.GetLastEnemyPos());
+        if (data.Threat.IsLookingAtEnemy())
         {
             data.ShootBehaviour.Shoot();
         }

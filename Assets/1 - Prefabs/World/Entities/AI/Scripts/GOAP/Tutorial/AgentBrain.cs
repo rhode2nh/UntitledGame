@@ -20,7 +20,7 @@ public class AgentBrain : MonoBehaviour
 
     private void Update()
     {
-        if (this.threatBehaviour.enemyIsInThreatArea)
+        if (this.threatBehaviour.IsEnemyInThreatArea() || this.threatBehaviour.IsLookingAtEnemy())
         {
             this.agent.SetGoal<DestroyEnemyGoal>(true);
         }

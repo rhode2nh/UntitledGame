@@ -26,4 +26,4 @@ MonoBehaviour:
   spreadY: 0
   projectilePrefab: {fileID: 6034798356384963098, guid: e454178a126ea1dde8ea9241e740e1bb, type: 3}
   timeAlive: 2
-  hitPoints: 20
+  hitPoints: 3

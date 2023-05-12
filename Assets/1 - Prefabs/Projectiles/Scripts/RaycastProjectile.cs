@@ -48,7 +48,6 @@ public class RaycastProjectile : MonoBehaviour
 
                 if (_triggerList != null)
                 {
-                    transform.forward = Vector3.Reflect(transform.forward, hitInfo.normal);
                    _triggerList.CalculateTriggerChildren(); 
                 }
 
@@ -56,6 +55,7 @@ public class RaycastProjectile : MonoBehaviour
                 if (hittable != null)
                 {
                     hittable.ModifyHealth(projectileSO.HitPoints);
+                    Destroy(gameObject);
                 }
 
                 if (_numBounces == maxNumBouces)

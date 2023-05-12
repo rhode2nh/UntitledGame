@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class ShootBehaviour : MonoBehaviour
 {
-    private TestAIShoot testAIShoot;
+    public Transform shootPos;
+    public GameObject projectile;
     public float fireRate;
     private float timeSinceLastShot;
 
     // Start is called before the first frame update
     void Start()
     {
-        testAIShoot = GetComponent<TestAIShoot>();
         timeSinceLastShot = Time.time;
     }
 
@@ -20,7 +20,7 @@ public class ShootBehaviour : MonoBehaviour
         if (Time.time - timeSinceLastShot > fireRate)
         {
             timeSinceLastShot = Time.time;
-            testAIShoot.Shoot();
+            Instantiate(projectile, shootPos.position, shootPos.rotation);
         }
     }
 }

@@ -1,26 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RotateTowardsBehaviour : MonoBehaviour
 {
+    public GameObject barrel;
+    public GameObject shell;
     public float rotateSpeed;
+    private float maxAngle = 45.0f;
 
     public void RotateTowardsEnemy(Vector3 enemyPos)
     {
-        // Determine which direction to rotate towards
-        Vector3 targetDirection = enemyPos - transform.position;
-
-        // The step size is equal to speed times frame time.
-        float singleStep = rotateSpeed * Time.deltaTime;
-
-        // Rotate the forward vector towards the target direction by one step
-        Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-
-        // Draw a ray pointing at our target in
-        Debug.DrawRay(transform.position, newDirection, Color.red);
-
-        // Calculate a rotation a step closer to the target and applies rotation to this object
-        transform.rotation = Quaternion.LookRotation(newDirection);
+        var targetDirection = enemyPos - barrel.transform.position;
+        var targetRotation = Quaternion.LookRotation(transform.up, -targetDirection) * Quaternion.AngleAxis(90f, Vector3.right);
+        Quaternion targetBarrelRotation;
+        if (shell.transform.rotation == targetRotation && Vector3.Angle(transform.up, barrel.transform.forward) <= 90)
+        {
+            targetBarrelRotation = Quaternion.LookRotation(targetDirection, transform.up);
+            barrel.transform.rotation = Quaternion.RotateTowards(barrel.transform.rotation, targetBarrelRotation, rotateSpeed * Time.deltaTime);
+        }
+        shell.transform.rotation = Quaternion.RotateTowards(shell.transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
 }

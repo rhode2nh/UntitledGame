@@ -24,12 +24,12 @@ public class LookTowardsEnemyAction : ActionBase<LookTowardsEnemyAction.Data>
         {
             return ActionRunState.Stop;
         }
-        if (data.ThreatBehaviour.threat > data.ThreatBehaviour.threshold)
+        if (data.ThreatBehaviour.threat > data.ThreatBehaviour.threshold || data.ThreatBehaviour.IsLookingAtEnemy())
         {
             return ActionRunState.Stop;
         }
 
-        data.RotateTowardsBehaviour.RotateTowardsEnemy(data.ThreatBehaviour.lastEnemyPos);
+        data.RotateTowardsBehaviour.RotateTowardsEnemy(data.ThreatBehaviour.GetLastEnemyPos());
 
         return ActionRunState.Continue;
     }

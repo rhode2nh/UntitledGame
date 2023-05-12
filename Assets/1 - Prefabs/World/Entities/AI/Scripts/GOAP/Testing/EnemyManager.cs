@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyManager : LifeEntity, IHittable
 {
-    private CapsuleCollider capsuleCollider;
+    private BoxCollider capsuleCollider;
     private float topHitPointPos;
     public float hitPointOffset;
     void Start()
     {
         health = 100.0f;
-        capsuleCollider = GetComponent<CapsuleCollider>();
+        capsuleCollider = GetComponent<BoxCollider>();
         topHitPointPos = capsuleCollider.bounds.max.y;
     }
 
