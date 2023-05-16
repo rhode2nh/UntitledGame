@@ -6,6 +6,8 @@ public class ThreatBehaviour : MonoBehaviour
     public float threatRate;
     public float threshold;
     public Vector3 lastEnemyPos;
+    public bool isEnemyInThreatArea;
+    public bool isLookingAtEnemy;
 
     private ThreatArea threatArea;
     private LOSArea losArea;
@@ -13,22 +15,22 @@ public class ThreatBehaviour : MonoBehaviour
     private void Awake()
     {
         this.threat = 0.0f;
-        threatArea = GetComponentInChildren<ThreatArea>();
-        losArea = GetComponentInChildren<LOSArea>();
         lastEnemyPos = new Vector3();
+        isEnemyInThreatArea = false;
+        isLookingAtEnemy = false;
     }
 
     private void FixedUpdate()
     {
-        if (this.IsLookingAtEnemy())
+        if (isLookingAtEnemy)
         {
             threat = threshold + 1;
         }
-        else if (this.IsEnemyInThreatArea())
+        else if (isEnemyInThreatArea)
         {
             threat += Time.fixedDeltaTime * threatRate;
         }
-        else if (!this.IsLookingAtEnemy() && threat > 0.0f)
+        else if (!isLookingAtEnemy && threat > 0.0f)
         {
             threat -= Time.fixedDeltaTime * threatRate;
         }
@@ -36,16 +38,6 @@ public class ThreatBehaviour : MonoBehaviour
         {
             threat = 0.0f;
         }
-    }
-
-    public bool IsEnemyInThreatArea()
-    {
-        return threatArea.isEnemyInThreatArea;
-    }
-
-    public bool IsLookingAtEnemy()
-    {
-        return losArea.isLookingAtEnemy;
     }
 
     public Vector3 GetLastEnemyPos()

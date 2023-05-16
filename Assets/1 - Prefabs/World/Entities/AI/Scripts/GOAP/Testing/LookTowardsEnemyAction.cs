@@ -24,7 +24,7 @@ public class LookTowardsEnemyAction : ActionBase<LookTowardsEnemyAction.Data>
         {
             return ActionRunState.Stop;
         }
-        if (data.ThreatBehaviour.threat > data.ThreatBehaviour.threshold || data.ThreatBehaviour.IsLookingAtEnemy())
+        if (data.ThreatBehaviour.threat > data.ThreatBehaviour.threshold || data.ThreatBehaviour.isLookingAtEnemy)
         {
             return ActionRunState.Stop;
         }

@@ -15,16 +15,16 @@ public class AgentBrain : MonoBehaviour
 
     private void Start()
     {
-        this.agent.SetGoal<WanderGoal>(false);
+        this.agent.SetGoal<WanderGoal>(true);
     }
 
     private void Update()
     {
-        if (this.threatBehaviour.IsEnemyInThreatArea() || this.threatBehaviour.IsLookingAtEnemy())
+        if (this.threatBehaviour.isEnemyInThreatArea || this.threatBehaviour.isLookingAtEnemy)
         {
             this.agent.SetGoal<DestroyEnemyGoal>(true);
         }
-        else if (this.threatBehaviour.threat < this.threatBehaviour.threshold)
+        else 
         {
             this.agent.SetGoal<WanderGoal>(true);
         }

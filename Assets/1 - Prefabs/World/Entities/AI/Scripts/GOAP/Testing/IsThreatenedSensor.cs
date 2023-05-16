@@ -24,6 +24,6 @@ public class IsThreatenedSensor : LocalWorldSensorBase
             return false;
         }
 
-        return threatBehaviour.threat > threatBehaviour.threshold;
+        return threatBehaviour.isEnemyInThreatArea;
     }
 }

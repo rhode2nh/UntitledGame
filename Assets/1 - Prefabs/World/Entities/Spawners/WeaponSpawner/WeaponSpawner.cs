@@ -11,11 +11,19 @@ public class WeaponSpawner : MonoBehaviour
         weaponPrefab = Instantiate(weapon, spawnPos.position, spawnPos.rotation);
         weaponPrefab.transform.parent = null;
         weaponPrefab.GetComponent<Rigidbody>().useGravity = false;
+        Physics.IgnoreLayerCollision(7, 8);
     }
 
     // Update is called once per frame
     void Update()
     {
-        weaponPrefab.transform.Rotate(transform.up, 20 * Time.deltaTime);
+        if (weaponPrefab == null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            weaponPrefab.transform.Rotate(transform.up, 20 * Time.deltaTime);
+        }
     }
 }

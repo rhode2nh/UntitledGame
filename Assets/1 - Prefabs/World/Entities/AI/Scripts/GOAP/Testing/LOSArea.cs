@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class LOSArea : MonoBehaviour
 {
-    public bool isLookingAtEnemy;
     public ThreatBehaviour threatBehaviour;
 
     // Start is called before the first frame update
     void Start()
     {
-        isLookingAtEnemy = false;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == Constants.PLAYER)
         {
-            isLookingAtEnemy = true;
+            threatBehaviour.isLookingAtEnemy = true;
         }
     }
 
@@ -33,7 +31,7 @@ public class LOSArea : MonoBehaviour
     {
         if (other.gameObject.tag == Constants.PLAYER)
         {
-            isLookingAtEnemy = false;
+            threatBehaviour.isLookingAtEnemy = false;
         }
     }
 }

@@ -2,20 +2,13 @@ using UnityEngine;
 
 public class ThreatArea : MonoBehaviour
 {
-    public bool isEnemyInThreatArea;
     public ThreatBehaviour threatBehaviour;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        isEnemyInThreatArea = false;
-    }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == Constants.PLAYER)
         {
-            isEnemyInThreatArea = true;
+            threatBehaviour.isEnemyInThreatArea = true;
         }
     }
 
@@ -31,7 +24,7 @@ public class ThreatArea : MonoBehaviour
     {
         if (other.gameObject.tag == Constants.PLAYER)
         {
-            isEnemyInThreatArea = false;
+            threatBehaviour.isEnemyInThreatArea = false;
         }
     }
 }

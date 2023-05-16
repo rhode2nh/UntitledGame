@@ -31,7 +31,7 @@ public class ShootEnemyAction : ActionBase<ShootEnemyAction.Data>
         }
 
         data.RotateTowardsBehaviour.RotateTowardsEnemy(data.Threat.GetLastEnemyPos());
-        if (data.Threat.IsLookingAtEnemy())
+        if (data.Threat.isLookingAtEnemy)
         {
             data.ShootBehaviour.Shoot();
         }

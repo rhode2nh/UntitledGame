@@ -9,6 +9,7 @@ public class WorldItem : MonoBehaviour, IDataPersistence
     public int id;
     public Dictionary<string, object> properties;
     public bool isInstance;
+    private GameObject model;
     //ItemStats itemStats;
 
     // Start is called before the first frame update
@@ -19,6 +20,14 @@ public class WorldItem : MonoBehaviour, IDataPersistence
         id = this.GetInstanceID();
         properties = new Dictionary<string, object>();
         InitializeProperties();
+        Physics.IgnoreLayerCollision(7, 8);
+        Physics.IgnoreLayerCollision(8, 8);
+        model = transform.GetChild(0).gameObject;
+    }
+
+    void Update()
+    {
+        model.transform.Rotate(transform.up, 30 * Time.deltaTime);
     }
 
     public void LoadData(GameData data)
