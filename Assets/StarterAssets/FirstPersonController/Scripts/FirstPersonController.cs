@@ -23,6 +23,9 @@ namespace StarterAssets
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
 		public float SpeedChangeRate = 10.0f;
+        [Tooltip("Tilt speed and angle of the character")]
+        public float tiltSpeed = 7f;
+        public float tiltAngle = 5f;
 
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
@@ -48,6 +51,7 @@ namespace StarterAssets
 
 		[Header("Cinemachine")]
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
+		public GameObject CinemachineCameraTargetParent;
 		public GameObject CinemachineCameraTarget;
 		[Tooltip("How far in degrees can you move the camera up")]
 		public float TopClamp = 90.0f;
@@ -81,6 +85,8 @@ namespace StarterAssets
 
 		private Vector3 _oldPos;
 		private float _totalDisance = 0.0f;
+        private Quaternion _tiltRotation = Quaternion.identity;
+        private Quaternion _initialRotation;
 
 		private void Awake()
 		{
@@ -96,6 +102,7 @@ namespace StarterAssets
 		{
             GameEvents.current.onIsPlayerDead += IsPlayerDead;
             GameEvents.current.onHurtPlayer += HurtPlayer;
+            _initialRotation = CinemachineCameraTarget.transform.localRotation;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 
@@ -166,7 +173,7 @@ namespace StarterAssets
 				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
 				// Update Cinemachine camera target pitch
-				CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+				CinemachineCameraTargetParent.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
 				// rotate the player left and right
 				transform.Rotate(Vector3.up * _rotationVelocity);
@@ -218,6 +225,20 @@ namespace StarterAssets
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            Quaternion _targetRotation = _initialRotation;
+            if (_input.move.x == -1)
+            {
+                _targetRotation = Quaternion.Euler(0, 0, tiltAngle) * _initialRotation;
+            }
+            else if (_input.move.x == 1)
+            {
+                _targetRotation = Quaternion.Euler(0, 0, -tiltAngle) * _initialRotation;
+            }
+            else
+            {
+                _targetRotation = _initialRotation;
+            }
+            CinemachineCameraTarget.transform.localRotation = Quaternion.Slerp(CinemachineCameraTarget.transform.localRotation, _targetRotation, tiltSpeed * Time.deltaTime);
 		}
 
 		private void JumpAndGravity()
