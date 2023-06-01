@@ -15,7 +15,7 @@ public class LookTowardsEnemyAction : ActionBase<LookTowardsEnemyAction.Data>
     public override void Start(IMonoAgent agent, Data data)
     {
         data.ThreatBehaviour = agent.GetComponent<ThreatBehaviour>();
-        data.RotateTowardsBehaviour = agent.GetComponent<RotateTowardsBehaviour>();
+        data.RotateTowardsBehaviour = agent.GetComponent<IRotateTowardsBehaviour>();
     }
 
     public override ActionRunState Perform(IMonoAgent agent, Data data, ActionContext context)
@@ -42,6 +42,6 @@ public class LookTowardsEnemyAction : ActionBase<LookTowardsEnemyAction.Data>
     {
         public ITarget Target { get; set; }
         public ThreatBehaviour ThreatBehaviour { get; set; }
-        public RotateTowardsBehaviour RotateTowardsBehaviour { get; set; }
+        public IRotateTowardsBehaviour RotateTowardsBehaviour { get; set; }
     }
 }

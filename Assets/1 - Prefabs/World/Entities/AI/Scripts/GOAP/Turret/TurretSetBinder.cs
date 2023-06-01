@@ -1,7 +1,7 @@
 using CrashKonijn.Goap.Behaviours;
 using UnityEngine;
 
-public class GoapSetBinder : MonoBehaviour
+public class TurretSetBinder : MonoBehaviour
 {
     public void Start()
     {

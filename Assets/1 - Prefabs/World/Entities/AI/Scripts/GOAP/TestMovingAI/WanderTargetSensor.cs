@@ -16,9 +16,13 @@ public class WanderTargetSensor : LocalTargetSensorBase
 
     public override ITarget Sense(IMonoAgent agent, IComponentReference references)
     {
-        var random = this.GetRandomPosition(agent);
+        // var random = this.GetRandomPosition(agent);
 
-        return new PositionTarget(random);
+        // return new PositionTarget(random);
+        var wayPoints = references.GetCachedComponent<AgentMoveBehaviour>().wayPoints;
+        var wayPoint = wayPoints[Random.Range(0, wayPoints.Count)];
+        var targetPosition = new Vector3(wayPoint.position.x, agent.transform.position.y, wayPoint.position.z);
+        return new PositionTarget(targetPosition);
     }
 
     public Vector3 GetRandomPosition(IMonoAgent agent)

@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class RotateTowardsBehaviour : MonoBehaviour
+public class TurretRotateTowardsBehaviour : MonoBehaviour, IRotateTowardsBehaviour
 {
     public GameObject barrel;
     public GameObject shell;
     public float rotateSpeed;
-    private float maxAngle = 45.0f;
 
     public void RotateTowardsEnemy(Vector3 enemyPos)
     {

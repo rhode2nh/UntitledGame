@@ -1,7 +1,7 @@
 using CrashKonijn.Goap.Behaviours;
 using UnityEngine;
 
-public class AgentBrain : MonoBehaviour
+public class TurretBrain : MonoBehaviour
 {
     private AgentBehaviour agent;
     
@@ -15,7 +15,7 @@ public class AgentBrain : MonoBehaviour
 
     private void Start()
     {
-        this.agent.SetGoal<WanderGoal>(true);
+        this.agent.SetGoal<IdleGoal>(true);
     }
 
     private void Update()
@@ -26,7 +26,7 @@ public class AgentBrain : MonoBehaviour
         }
         else 
         {
-            this.agent.SetGoal<WanderGoal>(true);
+            this.agent.SetGoal<IdleGoal>(true);
         }
     }
 }

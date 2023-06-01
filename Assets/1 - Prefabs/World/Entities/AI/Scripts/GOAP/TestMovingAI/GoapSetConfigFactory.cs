@@ -3,44 +3,45 @@ using CrashKonijn.Goap.Classes.Builders;
 using CrashKonijn.Goap.Configs.Interfaces;
 using CrashKonijn.Goap.Resolver;
 
+public class IsWandering : WorldKeyBase {}
+
 public class GoapSetConfigFactory : GoapSetFactoryBase
 {
     public override IGoapSetConfig Create()
     {
-        var builder = new GoapSetBuilder("GettingStartedSet");
+        var builder = new GoapSetBuilder("TestMovingAISet");
 
         // Goals
         builder.AddGoal<WanderGoal>()
-            .AddCondition("IsWandering", Comparison.GreaterThanOrEqual, 1);
-
+            .AddCondition<IsWandering>(Comparison.GreaterThanOrEqual, 1);
         builder.AddGoal<DestroyEnemyGoal>()
-            .AddCondition("IsEnemyDead", Comparison.GreaterThanOrEqual, 1);
+            .AddCondition<IsEnemyDead>(Comparison.GreaterThanOrEqual, 1);
 
         // Actions
         builder.AddAction<WanderAction>()
-            .SetTarget("WanderTarget")
-            .AddEffect("IsWandering", true)
+            .SetTarget<WanderTarget>()
+            .AddEffect<IsWandering>(true)
             .SetBaseCost(1)
-            .SetInRange(0.3f);
+            .SetInRange(1f);
 
         builder.AddAction<LookTowardsEnemyAction>()
-            .AddEffect("IsThreatened", true)
+            .AddEffect<IsThreatened>(true)
             .SetBaseCost(1);
 
         builder.AddAction<ShootEnemyAction>()
-            .AddCondition("IsThreatened", Comparison.GreaterThanOrEqual, 1)
-            .AddEffect("IsEnemyDead", true)
+            .AddCondition<IsThreatened>(Comparison.GreaterThanOrEqual, 1)
+            .AddEffect<IsEnemyDead>(true)
             .SetBaseCost(1);
 
         // Target Sensors
         builder.AddTargetSensor<WanderTargetSensor>()
-            .SetTarget("WanderTarget");
+            .SetTarget<WanderTarget>();
 
         // World Sensors
         builder.AddWorldSensor<IsThreatenedSensor>()
-            .SetKey("IsThreatened");
+            .SetKey<IsThreatened>();
         builder.AddWorldSensor<IsEnemyDeadSensor>()
-            .SetKey("IsEnemyDead");
+            .SetKey<IsEnemyDead>();
 
         return builder.Build();
     }

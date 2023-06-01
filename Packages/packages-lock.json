@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.collections": "1.2.4"
       },
-      "hash": "01743826711ea5b4ab060cb3ff492ee7b187fee7"
+      "hash": "40307adb70dad818c5e020fc1c50acfe121e5a4d"
     },
     "com.unity.addressables": {
       "version": "1.21.9",

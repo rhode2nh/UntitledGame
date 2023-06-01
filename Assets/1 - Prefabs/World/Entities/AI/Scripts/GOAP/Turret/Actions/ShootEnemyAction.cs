@@ -15,7 +15,7 @@ public class ShootEnemyAction : ActionBase<ShootEnemyAction.Data>
     {
         data.Threat = agent.GetComponent<ThreatBehaviour>();
         data.ShootBehaviour = agent.GetComponent<ShootBehaviour>();
-        data.RotateTowardsBehaviour = agent.GetComponent<RotateTowardsBehaviour>();
+        data.RotateTowardsBehaviour = agent.GetComponent<IRotateTowardsBehaviour>();
     }
 
     public override ActionRunState Perform(IMonoAgent agent, Data data, ActionContext context)
@@ -48,6 +48,6 @@ public class ShootEnemyAction : ActionBase<ShootEnemyAction.Data>
         public ITarget Target { get; set; }
         public ThreatBehaviour Threat { get; set; }
         public ShootBehaviour ShootBehaviour { get; set; }
-        public RotateTowardsBehaviour RotateTowardsBehaviour { get; set; }
+        public IRotateTowardsBehaviour RotateTowardsBehaviour { get; set; }
     }
 }
