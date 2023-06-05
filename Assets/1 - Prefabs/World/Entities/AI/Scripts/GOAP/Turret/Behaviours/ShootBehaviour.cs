@@ -20,7 +20,8 @@ public class ShootBehaviour : MonoBehaviour
         if (Time.time - timeSinceLastShot > fireRate)
         {
             timeSinceLastShot = Time.time;
-            Instantiate(projectile, shootPos.position, shootPos.rotation);
+            var instantiatedProjectile = Instantiate(projectile, shootPos.position, shootPos.rotation);
+            instantiatedProjectile.GetComponent<RaycastProjectile>().shouldRedirect = false;
         }
     }
 }

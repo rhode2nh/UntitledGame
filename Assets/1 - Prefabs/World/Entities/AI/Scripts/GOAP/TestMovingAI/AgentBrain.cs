@@ -24,7 +24,6 @@ public class AgentBrain : MonoBehaviour
     {
         if (this.threatBehaviour.isEnemyInThreatArea)
         {
-            Debug.Log("In threat");
             this.agent.SetGoal<DestroyEnemyGoal>(true);
             this.agentMoveBehaviour.navMeshAgent.destination = this.agent.transform.position;
         }
