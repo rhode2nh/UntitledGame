@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,10 +25,12 @@ public class FlyingAIController : MonoBehaviour
     [Header("Move Settings")]
     public float thrust;
     public float thrustTorque;
+    public float height;
     public bool moveForward;
     public bool moveBackward;
     public bool moveLeft;
     public bool moveRight;
+    private bool heightReached;
 
     // Start is called before the first frame update
     void Start()
@@ -37,10 +40,10 @@ public class FlyingAIController : MonoBehaviour
 
     void FixedUpdate()
     {
-        AvoidObstacles();
-        Hover();
+        // AvoidObstacles();
+        // Hover();
         Fly();
-        CalculateHeight();
+        // CalculateHeight();
     }
 
     private void AvoidObstacles()
@@ -83,27 +86,39 @@ public class FlyingAIController : MonoBehaviour
         if (moveForward)
         {
             rb.AddForce(transform.forward * thrust, ForceMode.Force);
-            rb.AddTorque(transform.right * thrustTorque, ForceMode.Force);
+            // rb.AddTorque(transform.right * thrustTorque, ForceMode.Force);
         }
         if (moveBackward)
         {
             rb.AddForce(-transform.forward * thrust, ForceMode.Force);
-            rb.AddTorque(-(transform.right * thrustTorque), ForceMode.Force);
+            // rb.AddTorque(-(transform.right * thrustTorque), ForceMode.Force);
         }
         if (moveLeft)
         {
             rb.AddForce(-transform.right * thrust, ForceMode.Force);
-            rb.AddTorque(transform.forward * thrustTorque, ForceMode.Force);
+            // rb.AddTorque(transform.forward * thrustTorque, ForceMode.Force);
         }
         if (moveRight)
         {
             rb.AddForce(transform.right * thrust, ForceMode.Force);
-            rb.AddTorque(-(transform.forward * thrustTorque), ForceMode.Force);
+            // rb.AddTorque(-(transform.forward * thrustTorque), ForceMode.Force);
         }
     }
 
     public void CalculateHeight()
     {
-
+        float calculateHeight = Vector3.Distance(transform.position, new Vector3(transform.position.x, 0, transform.position.z));
+        if (Math.Abs(transform.position.y - height) < 0.0001f)
+        {
+            rb.AddForce(transform.up * -Physics.gravity.y, ForceMode.Acceleration);
+        }
+        else if (transform.position.y < height)
+        {
+            rb.AddForce(transform.up * -Physics.gravity.y * (thrust / distanceFromGround), ForceMode.Acceleration);
+        }
+        // else
+        // {
+        //     rb.AddForce(transform.up * -(thrust / calculateHeight), ForceMode.Force);
+        // }
     }
 }

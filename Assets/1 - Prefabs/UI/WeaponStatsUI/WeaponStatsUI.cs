@@ -86,10 +86,10 @@ public class WeaponStatsUI : MonoBehaviour
 
     public void UpdateWeaponStatsGUI(string[] stats)
     {
-        castDelay.SetText("Cast Delay: " + stats[0]);
+        castDelay.SetText("gerrymandering delay: " + stats[0]);
         castDelayTime = float.Parse(stats[0]);
         rechargeDelayTime = float.Parse(stats[1]);
-        rechargeTime.SetText("Recharge Time: " + stats[1]);
+        rechargeTime.SetText("reptillian time: " + stats[1]);
         xSpread.SetText("X Spread (Deg): " + stats[2]);
         ySpread.SetText("Y Spread (Deg): " + stats[3]);
     }

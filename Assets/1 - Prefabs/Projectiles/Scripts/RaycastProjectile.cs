@@ -55,7 +55,7 @@ public class RaycastProjectile : MonoBehaviour
                 if (hittable != null)
                 {
                     hittable.ModifyHealth(projectileSO.HitPoints);
-                    var flyingEnemy = hitInfo.collider.gameObject.GetComponentInParent<FlyingAIController>();
+                    var flyingEnemy = hitInfo.collider.gameObject.GetComponentInParent<PIDController>();
                     if (flyingEnemy != null)
                     {
                         flyingEnemy.ApplyForces(transform.right, transform.forward);
