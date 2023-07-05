@@ -21,6 +21,13 @@ public class PathRequestManager : MonoBehaviour
         instance.TryProcessNext();
     }
 
+    public static void RequestRandomPath(Vector3 pathStart, Action<Vector3[], bool> callback) {
+        Node randomNode = instance.pathfinding.GetRandomNodeFromGrid(true);
+        PathRequest newRequest = new PathRequest(pathStart, randomNode.worldPosition, callback);
+        instance.pathRequestQueue.Enqueue(newRequest);
+        instance.TryProcessNext();
+    }
+
     void TryProcessNext() {
         if (!isProcessingPath && pathRequestQueue.Count > 0) {
             currentPathRequest = pathRequestQueue.Dequeue();

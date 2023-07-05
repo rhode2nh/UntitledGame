@@ -40,7 +40,7 @@ public class FlyingAIController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // AvoidObstacles();
+        AvoidObstacles();
         // Hover();
         Fly();
         // CalculateHeight();

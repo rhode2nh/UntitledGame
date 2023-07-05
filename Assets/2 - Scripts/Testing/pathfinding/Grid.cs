@@ -11,7 +11,7 @@ public class Grid : MonoBehaviour {
 	Node[,,] grid;
 
 	float nodeDiameter;
-	int gridSizeX, gridSizeY, gridSizeZ;
+	public int gridSizeX, gridSizeY, gridSizeZ;
 
 	void Awake() {
 		nodeDiameter = nodeRadius*2;
@@ -25,6 +25,10 @@ public class Grid : MonoBehaviour {
 		get {
 			return gridSizeX * gridSizeY * gridSizeZ;
 		}
+	}
+
+	public Node GetNodeFromGrid(int x, int y, int z) {
+		return grid[x, y, z];
 	}
 
 	void CreateGrid() {

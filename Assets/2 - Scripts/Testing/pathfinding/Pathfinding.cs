@@ -15,6 +15,20 @@ public class Pathfinding : MonoBehaviour
         grid = GetComponent<Grid>();
     }
 
+    public Node GetRandomNodeFromGrid(bool walkable) {
+        Node randomNode = grid.GetNodeFromGrid(UnityEngine.Random.Range(0, grid.gridSizeX), UnityEngine.Random.Range(0, grid.gridSizeY), UnityEngine.Random.Range(0, grid.gridSizeZ));
+        if (randomNode.walkable == walkable) {
+            return randomNode;
+        }
+        else {
+            while (randomNode.walkable != walkable) { 
+                randomNode = grid.GetNodeFromGrid(UnityEngine.Random.Range(0, grid.gridSizeX), UnityEngine.Random.Range(0, grid.gridSizeY), UnityEngine.Random.Range(0, grid.gridSizeZ));
+            }
+        }
+
+        return randomNode;
+    }
+
     public void StartFindPath(Vector3 startPos, Vector3 targetPos) {
         StartCoroutine(FindPath(startPos, targetPos));
     }
