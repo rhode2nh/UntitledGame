@@ -43,4 +43,18 @@ public class ModifierUISlot : UISlot
     {
         GameEvents.current.DeactivateInfoPanel();
     }
+
+    public override void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            // TODO: REWORK SO THAT IT RETURNS A SLOT FROM THE WEAPON
+            Slot removedItem = GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
+            // Slot removedItem = GameEvents.current.oveModifierFromWeapon(slot.id);
+            GameEvents.current.DeactivateInfoPanel();
+            if (removedItem.item == GameEvents.current.GetEmptyItem()) {
+                return;
+            }
+
+            GameEvents.current.DropItem(removedItem);  
+        }
+    }
 }

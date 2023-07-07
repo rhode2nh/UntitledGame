@@ -52,6 +52,7 @@ public class GameEvents : MonoBehaviour
     public event Func<int> onGetCurEquipmentIndex;
     public event Func<bool> onIsPlayerDead;
     public event Action<int> onHurtPlayer;
+    public event Action<Slot> onDropItem;
     
     public void Awake()
     {
@@ -455,6 +456,12 @@ public class GameEvents : MonoBehaviour
         if (onHurtPlayer != null)
         {
             onHurtPlayer(damage);
+        }
+    }
+
+    public void DropItem(Slot item) {
+        if (onDropItem != null) {
+            onDropItem(item);
         }
     }
 }

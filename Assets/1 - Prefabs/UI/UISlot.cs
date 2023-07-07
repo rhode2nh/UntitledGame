@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPointerExitHandler
+public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public Slot slot;
     public Image slotSprite;
@@ -42,4 +42,6 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
     public abstract void OnPointerEnter(PointerEventData eventData);
 
     public abstract void OnPointerExit(PointerEventData eventData);
+
+    public abstract void OnPointerClick(PointerEventData eventData); 
 }

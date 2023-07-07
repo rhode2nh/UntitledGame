@@ -13,7 +13,7 @@ public class WorldItem : MonoBehaviour, IDataPersistence
     //ItemStats itemStats;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         tag = Constants.WORLD_ITEM;
         count = 1;
@@ -70,7 +70,7 @@ public class WorldItem : MonoBehaviour, IDataPersistence
         }
     }
 
-    void InitializeProperties()
+    public void InitializeProperties()
     {
         switch(item)
         {
@@ -83,6 +83,7 @@ public class WorldItem : MonoBehaviour, IDataPersistence
                     slots.Add(new Slot(GameEvents.current.GetEmptySlot()));
                 }
                 properties.Add(Constants.P_W_MODIFIERS_LIST, slots);
+                Debug.Log("Here");
                 goto default;
             case IImplant i:
                 properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);

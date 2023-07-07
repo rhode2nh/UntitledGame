@@ -33,4 +33,17 @@ public class EquipmentUISlot : UISlot
     {
         GameEvents.current.DeactivateInfoPanel();
     }
+
+    public override void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            // TODO: REWORK THIS METHOD SO THAT IT RETURNS A SLOT
+            Slot removedItem = GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
+            GameEvents.current.DeactivateInfoPanel();
+            if (removedItem.item == GameEvents.current.GetEmptyItem()) {
+                return;
+            }
+
+            GameEvents.current.DropItem(removedItem);  
+        }
+    }
 }

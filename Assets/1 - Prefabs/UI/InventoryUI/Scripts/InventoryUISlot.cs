@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InventoryUISlot : UISlot
@@ -96,5 +97,16 @@ public class InventoryUISlot : UISlot
     public override void OnPointerExit(PointerEventData eventData)
     {
         GameEvents.current.DeactivateInfoPanel();
+    }
+    public override void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            Slot removedItem = GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
+            GameEvents.current.DeactivateInfoPanel();
+            if (removedItem.item == GameEvents.current.GetEmptyItem()) {
+                return;
+            }
+
+            GameEvents.current.DropItem(removedItem);  
+        }
     }
 }

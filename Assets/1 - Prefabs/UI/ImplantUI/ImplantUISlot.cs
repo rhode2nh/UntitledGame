@@ -40,4 +40,16 @@ public class ImplantUISlot : UISlot
     {
         GameEvents.current.DeactivateInfoPanel();
     }
+
+    public override void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            Slot removedItem = GameEvents.current.RemoveImplant(slot.id);
+            GameEvents.current.DeactivateInfoPanel();
+            if (removedItem.item == GameEvents.current.GetEmptyItem()) {
+                return;
+            }
+
+            GameEvents.current.DropItem(removedItem);  
+        }
+    }
 }

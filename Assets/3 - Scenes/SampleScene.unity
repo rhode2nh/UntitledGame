@@ -156,6 +156,9 @@ MonoBehaviour:
   knockback: 1
   findNewPath: 0
   findRandomPaths: 0
+  hit: 0
+  stabilize: 0
+  stabilizeTime: 0
 --- !u!4 &105518714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7869484378447914497, guid: 81ae3a3a46e9d1f4690d543fd27649b7, type: 3}
@@ -1046,6 +1049,9 @@ MonoBehaviour:
   knockback: 1
   findNewPath: 0
   findRandomPaths: 0
+  hit: 0
+  stabilize: 0
+  stabilizeTime: 0
 --- !u!1 &802299595
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,7 +1525,7 @@ MonoBehaviour:
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 255
-  gridWorldSize: {x: 50, y: 50, z: 50}
+  gridWorldSize: {x: 30, y: 15, z: 30}
   nodeRadius: 0.5
   gridSizeX: 0
   gridSizeY: 0
@@ -1556,7 +1562,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1038293050}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2388248, y: 1.1815305, z: 10.957239}
+  m_LocalPosition: {x: 0, y: 7.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2177,8 +2183,11 @@ MonoBehaviour:
   adjustFactor: 0.4
   hitTorqueForce: 10
   knockback: 1
-  findNewPath: 0
-  findRandomPaths: 0
+  findNewPath: 1
+  findRandomPaths: 1
+  hit: 0
+  stabilize: 0
+  stabilizeTime: 0.3
 --- !u!4 &1487626416 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2249068263862901472, guid: 53d35f39184ca1bc48838416920a1c77, type: 3}
@@ -4187,6 +4196,10 @@ PrefabInstance:
       propertyPath: pauseMenu
       value: 
       objectReference: {fileID: 2142044061984038241}
+    - target: {fileID: 2465300194362823865, guid: 7b2753cd9f1066f6b83d8e815971132f, type: 3}
+      propertyPath: cursorLocked
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2922844145472562102, guid: 7b2753cd9f1066f6b83d8e815971132f, type: 3}
       propertyPath: implantUI
       value: 

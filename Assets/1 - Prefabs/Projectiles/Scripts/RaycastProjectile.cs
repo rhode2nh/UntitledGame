@@ -59,6 +59,7 @@ public class RaycastProjectile : MonoBehaviour
                     if (flyingEnemy != null)
                     {
                         flyingEnemy.ApplyForces(transform.right, transform.forward);
+                        flyingEnemy.hit = true;
                     }
                     Destroy(gameObject);
                 }

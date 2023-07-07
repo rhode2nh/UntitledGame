@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -311,6 +312,9 @@ namespace StarterAssets
         public void PickUpItem(WorldItem item)
         {
             Slot invItem = new Slot(item.item, item.count, item.properties);
+			if (invItem.item is IWeapon) {
+				Debug.Log(((List<Slot>)item.properties[Constants.P_W_MODIFIERS_LIST])[0].item);
+			}
             GameEvents.current.AddItemToPlayerInventory(invItem);
             if (isDebug)
             {

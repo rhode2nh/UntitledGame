@@ -36,6 +36,9 @@ public class PIDController : MonoBehaviour
     int targetIndex;
     public bool findNewPath = false;
     public bool findRandomPaths = false;
+    public bool hit = false;
+    public bool stabilize = false;
+    public float stabilizeTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +68,10 @@ public class PIDController : MonoBehaviour
         // RotateToVelocity(torque, false);
 
         // Hover();
+        if (stabilize) {
+            Debug.Log("Here");
+            Hover();
+        }
     }
 
     IEnumerator FollowPath() {
@@ -83,7 +90,13 @@ public class PIDController : MonoBehaviour
                 }
                 currentWaypoint = path[targetIndex];
             }
-
+            if (hit) {
+                hit = false;
+                yield return new WaitForSeconds(0.2f);
+                stabilize = true;
+                yield return new WaitForSeconds(stabilizeTime);
+                stabilize = false;
+            }
             float positionPID = CalculatePositionPID();
             rb.AddForce((currentWaypoint - rb.position).normalized * thrust * positionPID);
             RotateToVelocity(torque, false);
@@ -221,7 +234,7 @@ public class PIDController : MonoBehaviour
     public void OnDrawGizmos() {
         if (path != null) {
             for (int i = targetIndex; i < path.Length; i++) {
-                Gizmos.color = Color.black;
+                Gizmos.color = Color.magenta;
                 Gizmos.DrawCube(path[i], Vector3.one);
 
                 if (i == targetIndex) {
