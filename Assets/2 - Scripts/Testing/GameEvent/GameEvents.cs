@@ -35,8 +35,8 @@ public class GameEvents : MonoBehaviour
     public event Func<List<Slot>> onGetAllModifiers;
     public event Action onUpdateEquipmentContainer;
     public event Action<int> onSpawnObject;
-    public event Action<int, int> onRemoveModifierFromWeapon;
-    public event Action<string> onRemoveWeaponFromEquipmentInventory;
+    public event Func<int, int, Slot> onRemoveModifierFromWeapon;
+    public event Func<string, Slot> onRemoveWeaponFromEquipmentInventory;
     public event Func<bool, Slot> onGetCurrentWeapon;
     public event Func<int, Slot> onGetCurrentWeaponFromSlot;
     public event Action<Slot> onUpdateCurrentWeapon;
@@ -323,19 +323,25 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void RemoveWeaponFromEquipmentInventory(string id)
+    public Slot RemoveWeaponFromEquipmentInventory(string id)
     {
         if (onRemoveWeaponFromEquipmentInventory != null)
         {
-            onRemoveWeaponFromEquipmentInventory(id);
+            return onRemoveWeaponFromEquipmentInventory(id);
+        }
+        else {
+            return GetEmptySlot();
         }
     }
 
-    public void RemoveModifierFromWeapon(int index, int equipmentId)
+    public Slot RemoveModifierFromWeapon(int index, int equipmentId)
     {
         if (onRemoveModifierFromWeapon != null)
         {
-            onRemoveModifierFromWeapon(index, equipmentId);
+            return onRemoveModifierFromWeapon(index, equipmentId);
+        } 
+        else {
+            return GetEmptySlot();
         }
     }
 

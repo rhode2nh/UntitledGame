@@ -41,7 +41,10 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
 
     public Slot RemoveImplant(string id)
     {
-        Slot implantToRemove = new Slot(implantInventory.items.FirstOrDefault(x => x.id == id));
+        Slot implantToRemove = implantInventory.items.FirstOrDefault(x => x.id == id);
+        if (implantToRemove == null) {
+            return GameEvents.current.GetEmptySlot();
+        }
         int index = implantInventory.items.FindIndex(x => x.id == id);
         implantInventory.items[index] = new Slot(GameEvents.current.GetEmptyItem(), 1);
         GameEvents.current.CalculateBuffedStats();

@@ -9,7 +9,8 @@ public class EquipmentUISlot : UISlot
 
     public override void OnRemoveButton()
     {
-        GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
+        Slot removedItem = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
+        GameEvents.current.AddItemToPlayerInventory(removedItem);
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
@@ -36,8 +37,7 @@ public class EquipmentUISlot : UISlot
 
     public override void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Right) {
-            // TODO: REWORK THIS METHOD SO THAT IT RETURNS A SLOT
-            Slot removedItem = GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
+            Slot removedItem = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
             GameEvents.current.DeactivateInfoPanel();
             if (removedItem.item == GameEvents.current.GetEmptyItem()) {
                 return;

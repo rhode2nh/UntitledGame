@@ -7,7 +7,7 @@ public class ImplantUI : MonoBehaviour
 
      private ImplantUISlot[] slots;
 
-    void Start()
+    void Awake()
     {
         slots = implantsParent.GetComponentsInChildren<ImplantUISlot>();
         GameEvents.current.onUpdateImplantGUI += UpdateUI;

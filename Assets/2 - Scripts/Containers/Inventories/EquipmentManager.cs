@@ -75,7 +75,10 @@ public class EquipmentManager : MonoBehaviour, IDataPersistence
     /// </summary>
     public Slot Unequip(string id)
     {
-        Slot itemToUnequip = new Slot(equipmentInventory.items.FirstOrDefault(x => x.id == id));
+        Slot itemToUnequip = equipmentInventory.items.FirstOrDefault(x => x.id == id);
+        if (itemToUnequip == null) {
+            return GameEvents.current.GetEmptySlot();
+        }
         if (itemToUnequip.item == GameEvents.current.GetEmptyItem())
         {
             return itemToUnequip;

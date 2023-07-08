@@ -80,6 +80,9 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
     public Slot RemoveItem(string id)
     {
         Slot removedItem = inventory.items.FirstOrDefault(x => x.id == id);
+        if (removedItem == null) {
+            return GameEvents.current.GetEmptySlot();
+        }
         if (removedItem.count == 1)
         {
             int index = inventory.items.IndexOf(removedItem);

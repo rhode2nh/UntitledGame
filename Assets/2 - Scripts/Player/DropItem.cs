@@ -21,7 +21,8 @@ public class DropItem : MonoBehaviour
 
     public void OnDropItem(Slot slot) {
         GameObject itemToDrop = DatabaseManager.instance.GetPrefabItem(slot.item.Id);
-        GameObject instantiatedItem = Instantiate(itemToDrop, transform.position, transform.rotation);
+        GameObject instantiatedItem = Instantiate(itemToDrop, transform.position, new Quaternion());
+        instantiatedItem.GetComponent<Rigidbody>().AddForce(transform.forward * 2.0f, ForceMode.Impulse);
         instantiatedItem.GetComponent<WorldItem>().properties = slot.properties.CopyProperties();
     }
 }

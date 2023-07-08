@@ -530,30 +530,27 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
     }
 
     //TODO: Cleanup function
-    public void RemoveModifierFromWeapon(int modifierIndex, int modifierSlotIndex)
+    public Slot RemoveModifierFromWeapon(int modifierIndex, int modifierSlotIndex)
     {
         if (modifierIndex == -1)
         {
-            return;
+            return GameEvents.current.GetEmptySlot();
         }
         Slot slot = new Slot(modifierSlots[modifierIndex]);
         modifierSlots[modifierIndex] = GameEvents.current.GetEmptySlot();
         _currentItem.properties[Constants.P_W_MODIFIERS_LIST] = new List<Slot>(modifierSlots);
         _currentItem.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST] = new List<int>(modifierSlotIndices);
-        var inventorySlot = new Slot(slot);
-        GameEvents.current.AddItemToPlayerInventory(inventorySlot);
         UpdateEquipmentContainer();
+        return slot;
+        // var inventorySlot = new Slot(slot);
+        // GameEvents.current.AddItemToPlayerInventory(inventorySlot);
     }
 
-    public void RemoveWeaponFromEquipmentInventory(string id)
+    public Slot RemoveWeaponFromEquipmentInventory(string id)
     {
         Slot equipment = equipmentManager.Unequip(id);
-        if (equipment.item == GameEvents.current.GetEmptyItem())
-        {
-            return;
-        }
-        GameEvents.current.AddItemToPlayerInventory(equipment); 
         UpdateEquipmentContainer();
+        return equipment;
     }
 
     public Slot GetCurrentWeapon(bool test)

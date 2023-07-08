@@ -22,10 +22,6 @@ public class EquipmentUI : MonoBehaviour
             instancedSlot.transform.SetParent(equipmentParent, false);
             slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
-    }
-
-    void Start()
-    {
         int activeSlotIndex = GameEvents.current.GetCurEquipmentIndex();
         var activeSlot = slots[activeSlotIndex] as EquipmentUISlot;
         activeSlot.ActiveSlotImage.enabled = true;
