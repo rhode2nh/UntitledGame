@@ -7,7 +7,7 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
 {
     public Inventory implantInventory;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GameEvents.current.onAddItemToImplantInventory += AddItem;
         //GameEvents.current.onClearInventory += ClearInventory;
@@ -98,6 +98,9 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
             }
         }
         GameEvents.current.UpdateImplantGUI(implantInventory.items);
+        GameEvents.current.CalculateBuffedStats();
+        var newBuffedStats = GameEvents.current.GetBuffedStats();
+        GameEvents.current.UpdateStatsPanel(newBuffedStats.agility, newBuffedStats.strength);
     }
 
 }
