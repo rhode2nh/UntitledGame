@@ -5,7 +5,7 @@ public class ImplantUI : MonoBehaviour
 {
     public Transform implantsParent;
 
-     private ImplantUISlot[] slots;
+    private ImplantUISlot[] slots;
 
     void Awake()
     {

@@ -12,6 +12,7 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
     public RectTransform originalPos;
     public GameObject m_DraggingIcon;
     public RectTransform m_DraggingPlane;
+    public GameObject icon;
 
     public void AddItem(Slot newSlot)
     {
@@ -59,16 +60,19 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
 
         // We have clicked something that can be dragged.
         // What we want to do is create an icon for this.
-        m_DraggingIcon = new GameObject("icon");
+        m_DraggingIcon = Instantiate(icon);
 
         m_DraggingIcon.transform.SetParent(canvas.transform, false);
         m_DraggingIcon.transform.SetAsLastSibling();
 
-        var image = m_DraggingIcon.AddComponent<Image>();
-        image.raycastTarget = false;
+        var background = m_DraggingIcon.GetComponent<Image>();
+        Debug.Log(background.color);
+        var image = m_DraggingIcon.transform.GetChild(0).GetComponent<Image>();
+        // image.gameObject.SetActive(true);
 
         image.sprite = slotSprite.sprite;
-        image.SetNativeSize();
+        image.enabled = true;
+        // image.SetNativeSize();
 
         m_DraggingPlane = canvas.transform as RectTransform;
 
@@ -100,6 +104,8 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
             Destroy(m_DraggingIcon);
         }
         if (data.pointerEnter == null) {
+            Slot curSlot = RemoveItemFromInventory(slot.id);
+            GameEvents.current.DropItem(curSlot, true);
             return;
         }
         var slotToSwap = data.pointerEnter.GetComponent<UISlot>();

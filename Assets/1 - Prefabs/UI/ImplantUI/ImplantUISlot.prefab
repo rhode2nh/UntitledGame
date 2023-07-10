@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -111,7 +111,7 @@ RectTransform:
   m_Children:
   - {fileID: 5670922087979622688}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -244,4 +244,9 @@ MonoBehaviour:
   slotSprite: {fileID: 2610967905371146495}
   button: {fileID: 2408364458965521856}
   isItemInSlot: 0
+  index: 0
+  originalPos: {fileID: 0}
+  m_DraggingIcon: {fileID: 0}
+  m_DraggingPlane: {fileID: 0}
+  icon: {fileID: 3030966282418690293, guid: cedf89c79533d7417bf6d5d7a4c5a0e5, type: 3}
   allowedImplant: 0

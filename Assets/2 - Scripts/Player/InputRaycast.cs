@@ -24,22 +24,17 @@ public class InputRaycast : MonoBehaviour
 
     public void DisplayHoverText()
     {
-        if (isHitting)
-        {
+        if (isHitting) {
             var tag = hit.transform.gameObject.tag;
-            if ( tag == Constants.WORLD_ITEM)
-            {
+            if (tag == Constants.WORLD_ITEM) {
+                Debug.Log("Here");
                 var objectHit = hit.transform.gameObject.GetComponent<WorldItem>();
                 GameEvents.current.UpdateHoverText("Pick up " + objectHit.item.name);
-            }
-            else if (tag == Constants.BUTTON)
-            {
+            } else if (tag == Constants.BUTTON) {
                 GameEvents.current.UpdateHoverText("Press E to execute");
             }
-            else
-            {
-                GameEvents.current.UpdateHoverText("");
-            }
+        } else {
+            GameEvents.current.UpdateHoverText("");
         }
     }
 }

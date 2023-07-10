@@ -54,7 +54,7 @@ public class GameEvents : MonoBehaviour
     public event Func<int> onGetCurEquipmentIndex;
     public event Func<bool> onIsPlayerDead;
     public event Action<int> onHurtPlayer;
-    public event Action<Slot> onDropItem;
+    public event Action<Slot, bool> onDropItem;
     public event Action<int, int> onSwitchInventoryItems;
     public event Action<int, int> onSwitchEquipmentItems;
     public event Action<int, int> onSwitchFromInventoryToEquipment;
@@ -486,9 +486,9 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void DropItem(Slot item) {
+    public void DropItem(Slot item, bool useMousePos = false) {
         if (onDropItem != null) {
-            onDropItem(item);
+            onDropItem(item, useMousePos);
         }
     }
 

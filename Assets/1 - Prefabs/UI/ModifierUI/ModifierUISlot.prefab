@@ -205,6 +205,7 @@ MonoBehaviour:
   originalPos: {fileID: 0}
   m_DraggingIcon: {fileID: 0}
   m_DraggingPlane: {fileID: 0}
+  icon: {fileID: 3030966282418690293, guid: cedf89c79533d7417bf6d5d7a4c5a0e5, type: 3}
   slotUIIndex: 0
   modifierIndex: 0
   equipmentId: 0
