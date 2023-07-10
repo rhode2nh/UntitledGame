@@ -6,46 +6,6 @@ using UnityEngine.UI;
 
 public class InventoryUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    public override void OnRemoveButton()
-    {
-        if (slot.item is IModifier)
-        {
-            Slot curWeapon = GameEvents.current.GetCurrentWeapon();
-            if (curWeapon.item == GameEvents.current.GetEmptyItem())
-            {
-                return;
-            }
-            List<Slot> modifierSlotList = (List<Slot>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
-            List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
-            int maxSlots = (int)curWeapon.properties[Constants.P_W_MAX_SLOTS_INT];
-            bool emptySlotFound = false;
-            for (int i = 0; i < maxSlots; i++)
-            {
-                if (modifierSlotList[i].item == GameEvents.current.GetEmptyItem())
-                {
-                    modifierSlotList[i] = slot;
-                    emptySlotFound = true;
-                    break;
-                }
-            }
-            if (emptySlotFound)
-            {
-                GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
-            }
-            GameEvents.current.UpdateCurrentWeapon(curWeapon);
-        }
-        else if (slot.item is IWeapon)
-        {
-            GameEvents.current.Equip(slot.id);
-            GameEvents.current.UpdateEquipmentContainer();
-        }
-        else if (slot.item is IImplant)
-        {
-            GameEvents.current.AddItemToImplantInventory(slot);
-        }
-        GameEvents.current.DeactivateInfoPanel();
-    }
-
     public override void OnPointerEnter(PointerEventData eventData)
     {
         if (slot.item != GameEvents.current.GetEmptyItem())
@@ -109,6 +69,43 @@ public class InventoryUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDrag
             }
 
             GameEvents.current.DropItem(removedItem);  
+        } else if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2) {
+            if (slot.item is IModifier)
+            {
+                Slot curWeapon = GameEvents.current.GetCurrentWeapon();
+                if (curWeapon.item == GameEvents.current.GetEmptyItem())
+                {
+                    return;
+                }
+                List<Slot> modifierSlotList = (List<Slot>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
+                List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
+                int maxSlots = (int)curWeapon.properties[Constants.P_W_MAX_SLOTS_INT];
+                bool emptySlotFound = false;
+                for (int i = 0; i < maxSlots; i++)
+                {
+                    if (modifierSlotList[i].item == GameEvents.current.GetEmptyItem())
+                    {
+                        modifierSlotList[i] = slot;
+                        emptySlotFound = true;
+                        break;
+                    }
+                }
+                if (emptySlotFound)
+                {
+                    GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
+                }
+                GameEvents.current.UpdateCurrentWeapon(curWeapon);
+            }
+            else if (slot.item is IWeapon)
+            {
+                GameEvents.current.Equip(slot.id);
+                GameEvents.current.UpdateEquipmentContainer();
+            }
+            else if (slot.item is IImplant)
+            {
+                GameEvents.current.AddItemToImplantInventory(slot);
+            }
+            GameEvents.current.DeactivateInfoPanel();
         }
     }
 

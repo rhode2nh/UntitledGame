@@ -8,12 +8,6 @@ public class EquipmentUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDrag
     public int equipmentIndex;
     public Image ActiveSlotImage;
 
-    public override void OnRemoveButton()
-    {
-        Slot removedItem = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
-        GameEvents.current.AddItemToPlayerInventory(removedItem);
-    }
-
     public override void OnPointerEnter(PointerEventData eventData)
     {
         if (slot.item != GameEvents.current.GetEmptyItem())
@@ -45,32 +39,12 @@ public class EquipmentUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDrag
             }
 
             GameEvents.current.DropItem(removedItem);  
+        } else if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2) {
+            Slot removedItem = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
+            GameEvents.current.AddItemToPlayerInventory(removedItem);
         }
     }
 
-    public override void OnEndDrag(PointerEventData data) {
-        base.OnEndDrag(data);
-        // Debug.Log(data.pointerEnter.name);
-        // if (data.pointerEnter.GetComponent<IUISlot>() != null) {
-        //     if (data.pointerEnter.GetComponent<EquipmentUISlot>() != null) {
-        //         int indexToSwap = data.pointerEnter.GetComponent<EquipmentUISlot>().index;
-        //         GameEvents.current.SwitchEquipmentItems(index, indexToSwap);
-        //     }                              
-        //     else if (data.pointerEnter.GetComponent<InventoryUISlot>() != null) {
-        //         if (data.pointerEnter.GetComponent<InventoryUISlot>().slot.item == GameEvents.current.GetEmptyItem()) {
-        //             int indexToSwap = data.pointerEnter.GetComponent<InventoryUISlot>().index;
-        //             Slot removedEquipment = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
-        //             GameEvents.current.AddItemToPlayerInventoryAtIndex(removedEquipment, indexToSwap);
-        //         } else if (data.pointerEnter.GetComponent<InventoryUISlot>().slot.item is IEquippable) {
-        //             int indexToSwap = data.pointerEnter.GetComponent<InventoryUISlot>().index;
-        //             Slot removedEquipment = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
-        //             Slot removedInvItem = GameEvents.current.RemoveItemFromPlayerInventory(data.pointerEnter.GetComponent<InventoryUISlot>().slot.id);
-        //             GameEvents.current.AddItemToPlayerInventoryAtIndex(removedEquipment, index);
-        //             GameEvents.current.EquipAtIndex(removedInvItem, indexToSwap);
-        //         }
-        //     }
-        // }
-    }
     public override void AddItemToInventory(Slot slot, int index) {
         GameEvents.current.EquipAtIndex(slot, index);
     }

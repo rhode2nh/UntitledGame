@@ -42,8 +42,6 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
         return isItemInSlot;
     }
 
-    public abstract void OnRemoveButton();
-
     public abstract void OnPointerEnter(PointerEventData eventData);
 
     public abstract void OnPointerExit(PointerEventData eventData);
@@ -68,11 +66,9 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
         var background = m_DraggingIcon.GetComponent<Image>();
         Debug.Log(background.color);
         var image = m_DraggingIcon.transform.GetChild(0).GetComponent<Image>();
-        // image.gameObject.SetActive(true);
 
         image.sprite = slotSprite.sprite;
         image.enabled = true;
-        // image.SetNativeSize();
 
         m_DraggingPlane = canvas.transform as RectTransform;
 
@@ -112,8 +108,6 @@ public abstract class UISlot : MonoBehaviour, IUISlot, IPointerEnterHandler, IPo
         if (slotToSwap == null) {
             return;
         }
-        Debug.Log(slotToSwap.CanAddToInventory(slot));
-        Debug.Log(CanAddToInventory(slotToSwap.slot));
         if (slotToSwap.CanAddToInventory(slot) && CanAddToInventory(slotToSwap.slot)) {
             Slot curSlot = RemoveItemFromInventory(slot.id);
             Slot otherSlot = slotToSwap.RemoveItemFromInventory(slotToSwap.slot.id);

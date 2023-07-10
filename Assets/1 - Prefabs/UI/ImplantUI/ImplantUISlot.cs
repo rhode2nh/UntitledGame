@@ -6,18 +6,6 @@ public class ImplantUISlot : UISlot, IBeginDragHandler, IDragHandler, IEndDragHa
 {
     public BodyPart allowedImplant;
 
-    public override void OnRemoveButton()
-    {
-        if (slot.item == GameEvents.current.GetEmptyItem())
-        {
-            return;
-        }
-
-        Slot implant = GameEvents.current.RemoveImplant(slot.id);
-        GameEvents.current.AddItemToPlayerInventory(implant);
-        GameEvents.current.CalculateBuffedStats();
-    }
-
     public override void OnPointerEnter(PointerEventData eventData)
     {
         if (slot.item != GameEvents.current.GetEmptyItem())
@@ -51,6 +39,15 @@ public class ImplantUISlot : UISlot, IBeginDragHandler, IDragHandler, IEndDragHa
             }
 
             GameEvents.current.DropItem(removedItem);  
+        } else if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2) {
+            if (slot.item == GameEvents.current.GetEmptyItem())
+            {
+                return;
+            }
+
+            Slot implant = GameEvents.current.RemoveImplant(slot.id);
+            GameEvents.current.AddItemToPlayerInventory(implant);
+            GameEvents.current.CalculateBuffedStats();
         }
     }
     

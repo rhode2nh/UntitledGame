@@ -32,6 +32,8 @@ public class InputRaycast : MonoBehaviour
                 GameEvents.current.UpdateHoverText("Pick up " + objectHit.item.name);
             } else if (tag == Constants.BUTTON) {
                 GameEvents.current.UpdateHoverText("Press E to execute");
+            } else {
+                GameEvents.current.UpdateHoverText("");
             }
         } else {
             GameEvents.current.UpdateHoverText("");

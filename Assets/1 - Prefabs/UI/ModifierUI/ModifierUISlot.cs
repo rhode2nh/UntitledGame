@@ -19,12 +19,6 @@ public class ModifierUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDragH
         modifierIndex = -1;
     }
 
-    public override void OnRemoveButton()
-    {
-        Slot removedModifier = GameEvents.current.RemoveModifierFromWeapon(modifierIndex, equipmentId);
-        GameEvents.current.AddItemToPlayerInventory(removedModifier);
-    }
-
     public override void OnPointerEnter(PointerEventData eventData)
     {
         if (slot.item != GameEvents.current.GetEmptyItem())
@@ -55,6 +49,9 @@ public class ModifierUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDragH
             }
 
             GameEvents.current.DropItem(removedItem);  
+        } else if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2) {
+            Slot removedModifier = GameEvents.current.RemoveModifierFromWeapon(modifierIndex, equipmentId);
+            GameEvents.current.AddItemToPlayerInventory(removedModifier);
         }
     }
 
