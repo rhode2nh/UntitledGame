@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,5 +26,9 @@ public class DatabaseManager : MonoBehaviour
     public GameObject GetPrefabItem(string itemId)
     {
         return prefabItemDatabase.GetItem(itemId);
+    }
+
+    public List<GameObject> GetGameObjects() {
+        return prefabItemDatabase.prefabDatabase;
     }
 }

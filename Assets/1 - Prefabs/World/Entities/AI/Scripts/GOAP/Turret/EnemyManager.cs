@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : LifeEntity, IHittable
+public class EnemyManager : LifeEntity, IHittable, IDropLoot
 {
     private Collider capsuleCollider;
     private float topHitPointPos;
     public float hitPointOffset;
+    public List<GameObject> lootTable;
+    private bool hasDropped = false;
+
     void Start()
     {
         health = 100.0f;
         capsuleCollider = GetComponent<Collider>();
         topHitPointPos = capsuleCollider.bounds.max.y;
+        lootTable = DatabaseManager.instance.GetGameObjects();
     }
 
     void Update()
@@ -29,7 +33,16 @@ public class EnemyManager : LifeEntity, IHittable
         Instantiate(hitPointText, new Vector3(Random.Range(transform.position.x - 0.3f, transform.position.x + 0.3f), Random.Range(topHitPointPos - 0.3f + hitPointOffset, topHitPointPos + 0.3f + hitPointOffset), transform.position.z), new Quaternion());
         if (health <= 0)
         {
+            if (!hasDropped) {
+                DropLoot(lootTable[Random.Range(0, lootTable.Count)]);
+                hasDropped = true;
+            }
             Destroy(gameObject);
         }
+    }
+
+    public void DropLoot(GameObject loot) {
+        GameObject instance = Instantiate(loot, transform.position, new Quaternion());
+        instance.GetComponent<Rigidbody>().AddForce(transform.up * 5, ForceMode.Impulse);
     }
 }
