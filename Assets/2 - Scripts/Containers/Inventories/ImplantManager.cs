@@ -17,6 +17,9 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
 
     public void AddItem(Slot slot)
     {
+        if (slot.item is not IImplant) {
+            return;
+        }
         var imp = slot.item as IImplant;
         int impIndex = (int)imp.BodyPart;
         var buffedStats = GameEvents.current.GetBuffedStats();

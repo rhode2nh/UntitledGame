@@ -9,11 +9,12 @@ public class GameEvents : MonoBehaviour
     public Item emptyItem;
 
     public event Action<Slot> onAddItemToPlayerInventory;
+    public event Action<Slot, int> onAddItemToPlayerInventoryAtIndex;
     public event Action<Slot> onAddItemToImplantInventory;
     public event Action<List<Slot>> onUpdateInventoryGUI;
     public event Action<List<Slot>> onUpdateImplantGUI;
     public event Action<List<Slot>, List<int>, int> onUpdateModifierGUI;
-    public event Action<List<Slot>, int> onUpdateWeaponGUI;
+    public event Action<List<Slot>> onUpdateWeaponGUI;
     public event Action<string[]> onUpdateWeaponStatsGUI;
     public event Action onIsCastDelayBarLoading;
     public event Action onIsRechargeDelayBarLoading;
@@ -24,6 +25,7 @@ public class GameEvents : MonoBehaviour
     public event Func<string, Slot> onGetItem;
     public event Func<string, bool> onHasItem;
     public event Action<string> onEquip;
+    public event Action<Slot, int> onEquipAtIndex;
     public event Action onEquipFirstOccurence;
     public event Action onUnEquipFirstOccurence;
     public event Func<string, Slot> onUnequip;
@@ -53,6 +55,9 @@ public class GameEvents : MonoBehaviour
     public event Func<bool> onIsPlayerDead;
     public event Action<int> onHurtPlayer;
     public event Action<Slot> onDropItem;
+    public event Action<int, int> onSwitchInventoryItems;
+    public event Action<int, int> onSwitchEquipmentItems;
+    public event Action<int, int> onSwitchFromInventoryToEquipment;
     
     public void Awake()
     {
@@ -64,6 +69,14 @@ public class GameEvents : MonoBehaviour
         if (onAddItemToPlayerInventory != null)
         {
             onAddItemToPlayerInventory(item);
+        }
+    }
+
+    public void AddItemToPlayerInventoryAtIndex(Slot item, int index)
+    {
+        if (onAddItemToPlayerInventoryAtIndex != null)
+        {
+            onAddItemToPlayerInventoryAtIndex(item, index);
         }
     }
 
@@ -99,11 +112,11 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void UpdateWeaponGUI(List<Slot> weapons, int maxSlots)
+    public void UpdateWeaponGUI(List<Slot> weapons)
     {
         if (onUpdateWeaponGUI != null)
         {
-            onUpdateWeaponGUI(weapons, maxSlots);
+            onUpdateWeaponGUI(weapons);
         }
     }
 
@@ -168,6 +181,14 @@ public class GameEvents : MonoBehaviour
         if (onEquip != null)
         {
             onEquip(id);
+        }
+    }
+
+    public void EquipAtIndex(Slot slot, int index)
+    {
+        if (onEquipAtIndex != null)
+        {
+            onEquipAtIndex(slot, index);
         }
     }
 
@@ -468,6 +489,18 @@ public class GameEvents : MonoBehaviour
     public void DropItem(Slot item) {
         if (onDropItem != null) {
             onDropItem(item);
+        }
+    }
+
+    public void SwitchInventoryItems(int index1, int index2) {
+        if (onSwitchInventoryItems != null) {
+            onSwitchInventoryItems(index1, index2);
+        }
+    }
+
+    public void SwitchEquipmentItems(int index1, int index2) {
+        if (onSwitchEquipmentItems != null) {
+            onSwitchEquipmentItems(index1, index2);
         }
     }
 }

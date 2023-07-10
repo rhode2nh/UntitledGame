@@ -16,6 +16,8 @@ public class InventoryUI : MonoBehaviour
             GameObject instancedSlot = Instantiate(slotPrefab);
             instancedSlot.GetComponentInChildren<IUISlot>().ClearSlot();
             instancedSlot.transform.SetParent(itemsParent, false);
+            instancedSlot.GetComponent<UISlot>().index = i;
+            instancedSlot.GetComponent<UISlot>().originalPos = instancedSlot.GetComponent<UISlot>().slotSprite.rectTransform;
             slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
 

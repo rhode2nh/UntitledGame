@@ -40,6 +40,7 @@ public class ModifierUI : MonoBehaviour
         for (int i = 0; i < maxSlots; i++)
         {
             slots[i].gameObject.SetActive(true);
+            slots[i].index = i;
         }
         for (int i = 0; i < maxSlots; i++)
         {

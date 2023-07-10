@@ -170,7 +170,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             GameEvents.current.UpdateWeaponStatsGUI(new string[] {"0.0", "0.0", "0.0", "0.0"});
             GameEvents.current.UpdateModifierGUI(modifierSlots, modifierSlotIndices, maxSlots);
         }
-        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment(), 4);
+        GameEvents.current.UpdateWeaponGUI(equipmentManager.GetAllEquipment());
     }
 
     //TODO: Refactor this code so the output is only recalculated when the modifiers are changed

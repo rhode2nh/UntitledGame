@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 301281462498406125}
   - component: {fileID: 46289802}
   - component: {fileID: 4855941573934518434}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: WI_Cube
   m_TagString: WORLD_ITEM
   m_Icon: {fileID: 0}
@@ -51,7 +51,6 @@ MonoBehaviour:
   count: 1
   id: 0
   isInstance: 0
-  model: {fileID: 0}
 --- !u!54 &46289802
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -111,7 +110,7 @@ GameObject:
   - component: {fileID: 301281462973478541}
   - component: {fileID: 301281462973478530}
   - component: {fileID: 301281462973478531}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
     private void Start()
     {
         GameEvents.current.onAddItemToPlayerInventory += AddItem;
+        GameEvents.current.onAddItemToPlayerInventoryAtIndex += AddItem;
         GameEvents.current.onCanCraft += CanCraft;
         GameEvents.current.onCraft += Craft;
         GameEvents.current.onConsume += Consume;
@@ -21,6 +22,7 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
         GameEvents.current.onCheckType += CheckType;
         GameEvents.current.onRemoveItemByType += RemoveItemByType;
         GameEvents.current.onGetAllModifiers += GetAllModifiers;
+        GameEvents.current.onSwitchInventoryItems += SwitchInventoryItems;
         hasItem = false;
     }
 
@@ -55,6 +57,44 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
             }
         }
         hasItem = false;
+        GameEvents.current.UpdateInventoryGUI(inventory.items);
+    }
+
+    /// <summary>
+    /// Adds an item to the inventory at the specified index.
+    /// </summary>
+    /// <param name="item">The item to add.</param>
+    public void AddItem(Slot item, int index)
+    {
+        // if (item.item.isStackable)
+        // {
+        //     for (int i = 0; i < inventory.items.Count; i++)
+        //     {
+        //         if (inventory.items[i].item == item.item)
+        //         {
+        //             hasItem = true;
+        //             inventory.items[i].AddCount(item.count);
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // if (!hasItem)
+        // {
+        //     for (int i = 0; i < inventory.maxSize; i++)
+        //     {
+        //         if (inventory.items[i].item == GameEvents.current.GetEmptyItem())
+        //         {
+        //             inventory.items[i] = new Slot(item);
+        //             break;
+        //         }
+        //     }
+        // }
+        // hasItem = false;
+        if (inventory.items[index].item != GameEvents.current.GetEmptyItem()) {
+            return;
+        }
+        inventory.items[index] = new Slot(item);
         GameEvents.current.UpdateInventoryGUI(inventory.items);
     }
 
@@ -250,6 +290,13 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
                 inventory.items.Add(StateManager.LoadItemData(itemData));
             }
         }
+        GameEvents.current.UpdateInventoryGUI(inventory.items);
+    }
+
+    public void SwitchInventoryItems(int index1, int index2) {
+        Slot item1 = inventory.items[index1];
+        inventory.items[index1] = inventory.items[index2];
+        inventory.items[index2] = item1;
         GameEvents.current.UpdateInventoryGUI(inventory.items);
     }
 }

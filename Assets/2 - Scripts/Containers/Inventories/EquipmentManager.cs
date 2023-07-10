@@ -14,6 +14,8 @@ public class EquipmentManager : MonoBehaviour, IDataPersistence
         GameEvents.current.onEquipFirstOccurence += Equip;
         GameEvents.current.onUnEquipFirstOccurence += UnEquipFirstOccurence;
         GameEvents.current.onUnequip += Unequip;
+        GameEvents.current.onEquipAtIndex += EquipAtIndex; 
+        GameEvents.current.onSwitchEquipmentItems += SwitchEquipmentItems;
     }
 
     /// <summary>
@@ -43,6 +45,20 @@ public class EquipmentManager : MonoBehaviour, IDataPersistence
             }
         }
         hasItem = false;
+    }
+
+    public void EquipAtIndex(Slot slot, int index) {
+        if (slot.item is not IEquippable) {
+            Debug.Log("Item is not equippable");
+            return;
+        }
+        if (equipmentInventory.items[index].item != GameEvents.current.GetEmptyItem()) {
+            return;
+        }
+
+        equipmentInventory.items[index] = slot;
+        GameEvents.current.UpdateWeaponGUI(equipmentInventory.items);
+        GameEvents.current.UpdateEquipmentContainer();
     }
 
     /// <summary>
@@ -221,6 +237,14 @@ public class EquipmentManager : MonoBehaviour, IDataPersistence
                 equipmentInventory.items.Add(StateManager.LoadItemData(itemData));
             }
         }
+        GameEvents.current.UpdateEquipmentContainer();
+    }
+
+    public void SwitchEquipmentItems(int index1, int index2) {
+        Slot item1 = equipmentInventory.items[index1];
+        equipmentInventory.items[index1] = equipmentInventory.items[index2];
+        equipmentInventory.items[index2] = item1;
+        GameEvents.current.UpdateWeaponGUI(equipmentInventory.items);
         GameEvents.current.UpdateEquipmentContainer();
     }
 }

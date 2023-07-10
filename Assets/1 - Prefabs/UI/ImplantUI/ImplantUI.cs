@@ -14,6 +14,7 @@ public class ImplantUI : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             slots[i].ClearSlot();
+            slots[i].index = i;
         }
     }
 

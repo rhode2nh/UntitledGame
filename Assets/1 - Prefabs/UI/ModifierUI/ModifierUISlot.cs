@@ -1,8 +1,9 @@
 
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine.EventSystems;
 
-public class ModifierUISlot : UISlot
+public class ModifierUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public int slotUIIndex;
     public int modifierIndex;
@@ -55,5 +56,27 @@ public class ModifierUISlot : UISlot
 
             GameEvents.current.DropItem(removedItem);  
         }
+    }
+
+    public override void AddItemToInventory(Slot slot, int index) {
+        Slot curWeapon = GameEvents.current.GetCurrentWeapon();
+        if (curWeapon.item == GameEvents.current.GetEmptyItem())
+        {
+            return;
+        }
+        List<Slot> modifierSlotList = (List<Slot>)curWeapon.properties[Constants.P_W_MODIFIERS_LIST];
+        List<int> modifierSlotIndices = (List<int>)curWeapon.properties[Constants.P_W_MODIFIER_SLOT_INDICES_LIST];
+        if (modifierSlotList[index].item == GameEvents.current.GetEmptyItem()) {
+            modifierSlotList[index] = slot;
+        }
+        GameEvents.current.UpdateCurrentWeapon(curWeapon);
+    }
+
+    public override Slot RemoveItemFromInventory(string id) {
+        return GameEvents.current.RemoveModifierFromWeapon(index, GameEvents.current.GetCurEquipmentIndex());
+    }
+
+    public override bool CanAddToInventory(Slot slot) {
+        return slot.item is IModifier || slot.item == GameEvents.current.GetEmptyItem();
     }
 }

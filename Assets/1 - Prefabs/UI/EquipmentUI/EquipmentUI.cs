@@ -19,6 +19,7 @@ public class EquipmentUI : MonoBehaviour
         {
             GameObject instancedSlot = Instantiate(equipmentUISlot);
             instancedSlot.GetComponentInChildren<IUISlot>().ClearSlot();
+            instancedSlot.GetComponent<UISlot>().index = i;
             instancedSlot.transform.SetParent(equipmentParent, false);
             slots.Add(instancedSlot.GetComponentInChildren<IUISlot>());
         }
@@ -32,7 +33,7 @@ public class EquipmentUI : MonoBehaviour
         return slots[index].GetSlot();
     }
 
-    private void UpdateUI(List<Slot> items, int maxSlots)
+    private void UpdateUI(List<Slot> items)
     {
         for (int i = 0; i < items.Count; i++)
         {

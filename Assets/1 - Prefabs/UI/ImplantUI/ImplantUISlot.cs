@@ -1,7 +1,8 @@
 using System.Text;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ImplantUISlot : UISlot
+public class ImplantUISlot : UISlot, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public BodyPart allowedImplant;
 
@@ -51,5 +52,35 @@ public class ImplantUISlot : UISlot
 
             GameEvents.current.DropItem(removedItem);  
         }
+    }
+    
+    public override void AddItemToInventory(Slot slot, int index) {
+        GameEvents.current.AddItemToImplantInventory(slot);
+    }
+
+    public override Slot RemoveItemFromInventory(string id) {
+        return GameEvents.current.RemoveImplant(id);
+    }
+
+    public override bool CanAddToInventory(Slot slot) {
+        if (slot.item == GameEvents.current.GetEmptyItem()) {
+            return true;
+        }
+        if (slot.item is IImplant) {
+            if (((IImplant)slot.item).BodyPart == allowedImplant) {
+                var buffedStats = GameEvents.current.GetBuffedStats();
+                var requiredStats = (TestStats)slot.properties[Constants.P_IMP_REQUIRED_STATS_DICT]; 
+                if (buffedStats >= requiredStats)
+                {
+                    return true;
+                }
+                else {
+                    Debug.Log("Can't equip implant. Requirements not met.");
+                    Debug.Log("Current Stats:\nagility: " + buffedStats.agility + "\nstrength: " + buffedStats.strength);
+                    Debug.Log("Required Stats:\nagility: " + requiredStats.agility + "\nstrength: " + requiredStats.strength);
+                }
+            }
+        }
+        return false;
     }
 }

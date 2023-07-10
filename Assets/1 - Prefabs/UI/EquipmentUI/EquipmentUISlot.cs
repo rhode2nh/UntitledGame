@@ -1,8 +1,9 @@
 using System.Text;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipmentUISlot : UISlot 
+public class EquipmentUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public int equipmentIndex;
     public Image ActiveSlotImage;
@@ -45,5 +46,40 @@ public class EquipmentUISlot : UISlot
 
             GameEvents.current.DropItem(removedItem);  
         }
+    }
+
+    public override void OnEndDrag(PointerEventData data) {
+        base.OnEndDrag(data);
+        // Debug.Log(data.pointerEnter.name);
+        // if (data.pointerEnter.GetComponent<IUISlot>() != null) {
+        //     if (data.pointerEnter.GetComponent<EquipmentUISlot>() != null) {
+        //         int indexToSwap = data.pointerEnter.GetComponent<EquipmentUISlot>().index;
+        //         GameEvents.current.SwitchEquipmentItems(index, indexToSwap);
+        //     }                              
+        //     else if (data.pointerEnter.GetComponent<InventoryUISlot>() != null) {
+        //         if (data.pointerEnter.GetComponent<InventoryUISlot>().slot.item == GameEvents.current.GetEmptyItem()) {
+        //             int indexToSwap = data.pointerEnter.GetComponent<InventoryUISlot>().index;
+        //             Slot removedEquipment = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
+        //             GameEvents.current.AddItemToPlayerInventoryAtIndex(removedEquipment, indexToSwap);
+        //         } else if (data.pointerEnter.GetComponent<InventoryUISlot>().slot.item is IEquippable) {
+        //             int indexToSwap = data.pointerEnter.GetComponent<InventoryUISlot>().index;
+        //             Slot removedEquipment = GameEvents.current.RemoveWeaponFromEquipmentInventory(slot.id);
+        //             Slot removedInvItem = GameEvents.current.RemoveItemFromPlayerInventory(data.pointerEnter.GetComponent<InventoryUISlot>().slot.id);
+        //             GameEvents.current.AddItemToPlayerInventoryAtIndex(removedEquipment, index);
+        //             GameEvents.current.EquipAtIndex(removedInvItem, indexToSwap);
+        //         }
+        //     }
+        // }
+    }
+    public override void AddItemToInventory(Slot slot, int index) {
+        GameEvents.current.EquipAtIndex(slot, index);
+    }
+
+    public override Slot RemoveItemFromInventory(string id) {
+        return GameEvents.current.RemoveWeaponFromEquipmentInventory(id);
+    }
+
+    public override bool CanAddToInventory(Slot slot) {
+        return slot.item is IEquippable || slot.item == GameEvents.current.GetEmptyItem();
     }
 }

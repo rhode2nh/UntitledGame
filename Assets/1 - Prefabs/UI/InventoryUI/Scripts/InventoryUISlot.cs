@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class InventoryUISlot : UISlot
+public class InventoryUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public override void OnRemoveButton()
     {
@@ -98,6 +99,7 @@ public class InventoryUISlot : UISlot
     {
         GameEvents.current.DeactivateInfoPanel();
     }
+
     public override void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Right) {
             Slot removedItem = GameEvents.current.RemoveItemFromPlayerInventory(slot.id);
@@ -108,5 +110,33 @@ public class InventoryUISlot : UISlot
 
             GameEvents.current.DropItem(removedItem);  
         }
+    }
+
+    public override void OnEndDrag(PointerEventData data) {
+        base.OnEndDrag(data);
+        // if (data.pointerEnter.GetComponent<InventoryUISlot>() != null) {
+        //     int indexToSwap = data.pointerEnter.GetComponent<InventoryUISlot>().index;
+        //     GameEvents.current.SwitchInventoryItems(index, indexToSwap);
+        // } else {
+            // var slotToSwap = data.pointerEnter.GetComponent<UISlot>();
+            // if (slotToSwap.CanAddToInventory(slot) && CanAddToInventory(slotToSwap.slot)) {
+            //     Slot curSlot = RemoveItemFromInventory(slot.id);
+            //     Slot otherSlot = slotToSwap.RemoveItemFromInventory(slotToSwap.slot.id);
+            //     AddItemToInventory(otherSlot, index);
+            //     slotToSwap.AddItemToInventory(curSlot, slotToSwap.index);
+            // }
+        // }
+    }
+
+    public override void AddItemToInventory(Slot slot, int index) {
+        GameEvents.current.AddItemToPlayerInventoryAtIndex(slot, index);
+    }
+
+    public override Slot RemoveItemFromInventory(string id) {
+        return GameEvents.current.RemoveItemFromPlayerInventory(id);
+    }
+
+    public override bool CanAddToInventory(Slot slot) {
+        return true;
     }
 }
