@@ -24,6 +24,7 @@ public class WeaponStatsUI : MonoBehaviour
         rechargeDelayTime = 0.0f;
     }
 
+    // TODO: Make a loading bar component
     IEnumerator CastDelayBarLoading()
     {
         float elapsedTime = 0.0f;

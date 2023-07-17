@@ -10,8 +10,8 @@ public class ImplantUISlot : UISlot, IBeginDragHandler, IDragHandler, IEndDragHa
     {
         if (slot.item != GameEvents.current.GetEmptyItem())
         {
-            var requiredStats = (TestStats)slot.properties[Constants.P_IMP_REQUIRED_STATS_DICT];
             GameEvents.current.ActivateInfoPanel();
+            var requiredStats = (TestStats)slot.properties[Constants.P_IMP_REQUIRED_STATS_DICT];
             var implant = slot.item as IImplant;
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append($"Name:\t\t{slot.item.name}\n");
