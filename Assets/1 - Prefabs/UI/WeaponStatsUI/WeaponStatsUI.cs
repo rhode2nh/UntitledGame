@@ -10,10 +10,6 @@ public class WeaponStatsUI : MonoBehaviour
     public TMP_Text ySpread;
     public RectTransform castDelayBar;
     public RectTransform rechargeDelayBar;
-    private bool isCastDelayBarLoading;
-    private bool isRechargeDelayBarLoading;
-    private bool coroutineStarted;
-    private bool stopLoadingBars;
     private float castDelayTime;
     private float rechargeDelayTime;
 
@@ -24,63 +20,31 @@ public class WeaponStatsUI : MonoBehaviour
         GameEvents.current.onIsCastDelayBarLoading += CastDelayBarIsLoading;
         GameEvents.current.onIsRechargeDelayBarLoading += RechargeDelayBarIsLoading;
         GameEvents.current.onStopLoadingBars += StopLoadingBars;
-        isCastDelayBarLoading = false;
-        isRechargeDelayBarLoading = false;
-        stopLoadingBars = false;
-        coroutineStarted = false;
         castDelayTime = 0.0f;
         rechargeDelayTime = 0.0f;
     }
 
-    void Update() 
-    {
-        if (isCastDelayBarLoading && !coroutineStarted)
-        {
-            StartCoroutine(CastDelayBarLoading());
-        }
-        if (isRechargeDelayBarLoading && !coroutineStarted)
-        {
-            StartCoroutine(RechargeDelayBarLoading());
-        }
-    }
-
     IEnumerator CastDelayBarLoading()
     {
-        coroutineStarted = true;
         float elapsedTime = 0.0f;
         while (elapsedTime < castDelayTime)
         {
-            if (stopLoadingBars)
-            {
-                break;
-            }
             elapsedTime += Time.deltaTime;
             castDelayBar.localScale = new Vector3(elapsedTime / castDelayTime, 1.0f, 1.0f);
             yield return null;
         }
-        stopLoadingBars = false;
-        coroutineStarted = false;
-        isCastDelayBarLoading = false;
         castDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
     }
 
     IEnumerator RechargeDelayBarLoading()
     {
-        coroutineStarted = true;
         float elapsedTime = 0.0f;
         while (elapsedTime < rechargeDelayTime)
         {
-            if (stopLoadingBars)
-            {
-                break;
-            }
             elapsedTime += Time.deltaTime;
             rechargeDelayBar.localScale = new Vector3(elapsedTime / rechargeDelayTime, 1.0f, 1.0f);
             yield return null;
         }
-        stopLoadingBars = false;
-        coroutineStarted = false;
-        isRechargeDelayBarLoading = false;
         rechargeDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
     }
 
@@ -96,16 +60,18 @@ public class WeaponStatsUI : MonoBehaviour
 
     public void CastDelayBarIsLoading()
     {
-        isCastDelayBarLoading = true;
+        StartCoroutine(CastDelayBarLoading());
     }
 
     public void RechargeDelayBarIsLoading()
     {
-        isRechargeDelayBarLoading = true;
+        StartCoroutine(RechargeDelayBarLoading());
     }
 
     public void StopLoadingBars()
     {
-        stopLoadingBars = true;
+        StopAllCoroutines();
+        castDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
+        rechargeDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
     }
 }

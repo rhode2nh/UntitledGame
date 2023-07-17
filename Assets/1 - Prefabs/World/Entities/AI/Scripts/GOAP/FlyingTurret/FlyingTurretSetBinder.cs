@@ -1,12 +1,12 @@
 using CrashKonijn.Goap.Behaviours;
 using UnityEngine;
 
-public class TurretSetBinder : MonoBehaviour
+public class FlyingTurretSetBinder : MonoBehaviour
 {
     public void Start()
     {
         var runner = FindObjectOfType<GoapRunnerBehaviour>();
         var agent = GetComponent<AgentBehaviour>();
-        agent.GoapSet = runner.GetGoapSet("GettingStartedSet");
+        agent.GoapSet = runner.GetGoapSet("FlyingTurretAISet");
     }
 }

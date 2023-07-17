@@ -83,7 +83,6 @@ public class WorldItem : MonoBehaviour, IDataPersistence
                     slots.Add(new Slot(GameEvents.current.GetEmptySlot()));
                 }
                 properties.Add(Constants.P_W_MODIFIERS_LIST, slots);
-                Debug.Log("Here");
                 goto default;
             case IImplant i:
                 properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);

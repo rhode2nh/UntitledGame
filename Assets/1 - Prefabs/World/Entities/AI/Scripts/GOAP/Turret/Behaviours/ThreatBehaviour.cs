@@ -8,14 +8,16 @@ public class ThreatBehaviour : MonoBehaviour
     public Vector3 lastEnemyPos;
     public bool isEnemyInThreatArea;
     public bool isLookingAtEnemy;
+    public float velocityThreshold;
 
-    private ThreatArea threatArea;
-    private LOSArea losArea;
+    public Vector3 lastLastEnemyPos;
+    public bool hasEnemyMoved;
 
     private void Awake()
     {
         this.threat = 0.0f;
         lastEnemyPos = new Vector3();
+        lastLastEnemyPos = lastEnemyPos;
         isEnemyInThreatArea = false;
         isLookingAtEnemy = false;
     }
@@ -43,5 +45,9 @@ public class ThreatBehaviour : MonoBehaviour
     public Vector3 GetLastEnemyPos()
     {
         return this.lastEnemyPos;
+    }
+
+    public bool HasEnemyMoved() {
+        return hasEnemyMoved;
     }
 }

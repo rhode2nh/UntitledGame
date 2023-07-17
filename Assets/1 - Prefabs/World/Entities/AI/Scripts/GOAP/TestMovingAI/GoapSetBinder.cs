@@ -7,6 +7,6 @@ public class GoapSetBinder : MonoBehaviour
     {
         var runner = FindObjectOfType<GoapRunnerBehaviour>();
         var agent = GetComponent<AgentBehaviour>();
-        agent.GoapSet = runner.GetSet("TestMovingAISet");
+        agent.GoapSet = runner.GetGoapSet("TestMovingAISet");
     }
 }

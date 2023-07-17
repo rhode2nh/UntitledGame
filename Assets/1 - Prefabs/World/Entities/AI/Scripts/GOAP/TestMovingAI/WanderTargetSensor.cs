@@ -19,17 +19,13 @@ public class WanderTargetSensor : LocalTargetSensorBase
         // var random = this.GetRandomPosition(agent);
 
         // return new PositionTarget(random);
-        var wayPoints = references.GetCachedComponent<AgentMoveBehaviour>().wayPoints;
-        var wayPoint = wayPoints[Random.Range(0, wayPoints.Count)];
-        var targetPosition = new Vector3(wayPoint.position.x, agent.transform.position.y, wayPoint.position.z);
-        return new PositionTarget(targetPosition);
-    }
+        // var wayPoints = references.GetCachedComponent<AgentMoveBehaviour>().wayPoints;
+        // var wayPoint = wayPoints[Random.Range(0, wayPoints.Count)];
+        // var targetPosition = new Vector3(wayPoint.position.x, agent.transform.position.y, wayPoint.position.z);
+        // return new PositionTarget(targetPosition);
 
-    public Vector3 GetRandomPosition(IMonoAgent agent)
-    {
-        var random = Random.insideUnitCircle * 5f;
-        var position = agent.transform.position + new Vector3(random.x, 0f, random.y);
+        IAgentMoveBehavior agentMoveBehavior = agent.GetComponent<IAgentMoveBehavior>();
 
-        return position;
+        return new PositionTarget(agentMoveBehavior.GetRandomDestintation());
     }
 }

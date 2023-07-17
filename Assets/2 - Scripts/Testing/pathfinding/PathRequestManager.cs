@@ -28,6 +28,10 @@ public class PathRequestManager : MonoBehaviour
         instance.TryProcessNext();
     }
 
+    public static Node GetRandomNode() {
+        return instance.pathfinding.GetRandomNodeFromGrid(true);
+    }
+
     void TryProcessNext() {
         if (!isProcessingPath && pathRequestQueue.Count > 0) {
             currentPathRequest = pathRequestQueue.Dequeue();

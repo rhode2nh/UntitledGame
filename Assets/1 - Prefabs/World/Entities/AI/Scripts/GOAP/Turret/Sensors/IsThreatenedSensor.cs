@@ -17,7 +17,7 @@ public class IsThreatenedSensor : LocalWorldSensorBase
 
     public override SenseValue Sense(IMonoAgent agent, IComponentReference references)
     {
-        var threatBehaviour = references.GetComponent<ThreatBehaviour>();
+        var threatBehaviour = references.GetCachedComponent<ThreatBehaviour>();
 
         if (threatBehaviour == null)
         {

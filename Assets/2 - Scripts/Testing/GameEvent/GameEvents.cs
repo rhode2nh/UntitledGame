@@ -57,7 +57,6 @@ public class GameEvents : MonoBehaviour
     public event Action<Slot, bool> onDropItem;
     public event Action<int, int> onSwitchInventoryItems;
     public event Action<int, int> onSwitchEquipmentItems;
-    public event Action<int, int> onSwitchFromInventoryToEquipment;
     
     public void Awake()
     {

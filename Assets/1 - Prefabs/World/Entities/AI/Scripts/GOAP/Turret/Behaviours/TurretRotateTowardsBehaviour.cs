@@ -18,4 +18,12 @@ public class TurretRotateTowardsBehaviour : MonoBehaviour, IRotateTowardsBehavio
         }
         shell.transform.rotation = Quaternion.RotateTowards(shell.transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
+
+    public void GoToPosition(Vector3 position) {
+
+    }
+
+    public void StopGoingToPosition() {
+
+    }
 }

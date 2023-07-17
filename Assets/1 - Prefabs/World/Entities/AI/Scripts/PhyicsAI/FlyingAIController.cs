@@ -55,7 +55,6 @@ public class FlyingAIController : MonoBehaviour
         {
             distanceFromGround = Vector3.Distance(transform.position, colliders[0].ClosestPointOnBounds(transform.position));
             var dir = (transform.position - colliders[i].ClosestPointOnBounds(transform.position)).normalized;
-            Debug.Log(dir);
             rb.AddForce(-Physics.gravity.y * dir * (groundThrust / distanceFromGround), ForceMode.Acceleration);
         }
     }

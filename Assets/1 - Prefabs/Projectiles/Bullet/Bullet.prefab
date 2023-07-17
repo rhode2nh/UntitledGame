@@ -134,7 +134,7 @@ MonoBehaviour:
   maxNumBouces: 2
   layerMask:
     serializedVersion: 2
-    m_Bits: 447
+    m_Bits: 1215
   projectileSO: {fileID: 11400000, guid: 92db2162ccf89730c8db9cd7412980ef, type: 2}
   shouldRedirect: 0
   inGas: 0

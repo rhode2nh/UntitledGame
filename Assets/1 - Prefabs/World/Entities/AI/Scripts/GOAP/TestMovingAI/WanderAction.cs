@@ -12,7 +12,8 @@ public class WanderAction : ActionBase<WanderAction.Data>
 
     public override void Start(IMonoAgent agent, Data data)
     {
-        data.Timer = Random.Range(0.3f, 1f);
+        data.Timer = Random.Range(0.1f, 0.3f);
+        data.pidController = agent.GetComponent<PIDController>();
     }
 
     public override ActionRunState Perform(IMonoAgent agent, Data data, ActionContext context)
@@ -29,11 +30,13 @@ public class WanderAction : ActionBase<WanderAction.Data>
 
     public override void End(IMonoAgent agent, Data data)
     {
+        data.pidController.ClearPath();
     }
 
     public class Data : IActionData
     {
         public ITarget Target { get; set; }
         public float Timer { get; set; }
+        public PIDController pidController { get; set; }
     }
 }

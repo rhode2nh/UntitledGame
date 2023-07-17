@@ -17,4 +17,12 @@ public class AgentRotateTowardsBehaviour : MonoBehaviour, IRotateTowardsBehaviou
         //}
         body.transform.rotation = Quaternion.RotateTowards(body.transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
+
+    public void GoToPosition(Vector3 position) {
+
+    }
+
+    public void StopGoingToPosition() {
+
+    }
 }
