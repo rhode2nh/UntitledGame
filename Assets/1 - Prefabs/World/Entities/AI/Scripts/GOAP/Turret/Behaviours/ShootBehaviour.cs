@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShootBehaviour : MonoBehaviour
 {
-    public Transform shootPos;
+    public Transform[] shootPositions;
     public GameObject projectile;
     public float fireRate;
     private float timeSinceLastShot;
@@ -20,8 +20,10 @@ public class ShootBehaviour : MonoBehaviour
         if (Time.time - timeSinceLastShot > fireRate)
         {
             timeSinceLastShot = Time.time;
-            var instantiatedProjectile = Instantiate(projectile, shootPos.position, shootPos.rotation);
-            instantiatedProjectile.GetComponent<RaycastProjectile>().shouldRedirect = false;
+            foreach (Transform shootPosition in shootPositions) {
+                var instantiatedProjectile = Instantiate(projectile, shootPosition.position, shootPosition.rotation);
+                instantiatedProjectile.GetComponent<RaycastProjectile>().shouldRedirect = false;
+            }
         }
     }
 }

@@ -58,15 +58,17 @@ public class InfoPanel : MonoBehaviour
     void SetInfoText(string newText)
     {
         text.SetText(newText);
-        CalculatePivot();
+        StartCoroutine(CalculatePivot());
     }
 
-    void CalculatePivot() {
-        Canvas.ForceUpdateCanvases();
-
+    IEnumerator CalculatePivot() {
+        // Since rect size calculation is done at render time, we need to wait for rendering to get the updated width/height
+        DeactivateInfoPanel();
+        yield return new WaitForEndOfFrame();
+        ActivateInfoPanel();
         rectTransform.GetWorldCorners(r);
         if (r[3].y < 0.0f && r[3].x > v[3].x) {
-            rectTransform.pivot = Vector2.one;
+            rectTransform.pivot = Vector2.right;
         } else if (r[3].y < 0.0f) {
             rectTransform.pivot = Vector2.zero;
         } else if (r[3].x > v[3].x) {

@@ -64,11 +64,6 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         GameEvents.current.onUpdateCurrentWeapon += UpdateCurrentWeapon;
         GameEvents.current.onRemoveWeaponFromEquipmentInventory += RemoveWeaponFromEquipmentInventory;
         GameEvents.current.onGetCurEquipmentIndex += GetCurEquipmentIndex;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         modifierSlots = new List<Slot>();
         equipmentContainerAnimator = equipmentContainer.GetComponent<Animator>();
         modifierSlotIndices = new List<int>();
@@ -86,6 +81,11 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         curGroupIndex = 0;
         coroutineStarted = false;
         _currentItem = null;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
     }
 
     void Update()

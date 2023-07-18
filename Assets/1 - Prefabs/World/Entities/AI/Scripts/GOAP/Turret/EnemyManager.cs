@@ -7,11 +7,14 @@ public class EnemyManager : LifeEntity, IHittable, IDropLoot
     private Collider capsuleCollider;
     private float topHitPointPos;
     public float hitPointOffset;
-    public List<GameObject> lootTable;
+    private List<GameObject> lootTable;
+    public HealthBar healthBar;
     private bool hasDropped = false;
+    public float chanceToDropLoot;
 
     void Start()
     {
+        maxHealth = 100.0f;
         health = 100.0f;
         capsuleCollider = GetComponent<Collider>();
         topHitPointPos = capsuleCollider.bounds.max.y;
@@ -28,6 +31,7 @@ public class EnemyManager : LifeEntity, IHittable, IDropLoot
         if (!isInvincible)
         {
             health -= hitPoints;
+            healthBar.ModifyHealthBar(health, maxHealth);
         }
         hitPointText.text = hitPoints.ToString();
         Instantiate(hitPointText, new Vector3(Random.Range(transform.position.x - 0.3f, transform.position.x + 0.3f), Random.Range(topHitPointPos - 0.3f + hitPointOffset, topHitPointPos + 0.3f + hitPointOffset), transform.position.z), new Quaternion());
@@ -42,7 +46,9 @@ public class EnemyManager : LifeEntity, IHittable, IDropLoot
     }
 
     public void DropLoot(GameObject loot) {
-        GameObject instance = Instantiate(loot, transform.position, new Quaternion());
-        instance.GetComponent<Rigidbody>().AddForce(transform.up * 5, ForceMode.Impulse);
+        if (chanceToDropLoot >= Random.Range(0.0f, 100.0f)) {
+            GameObject instance = Instantiate(loot, transform.position, new Quaternion());
+            instance.GetComponent<Rigidbody>().AddForce(transform.up * 5, ForceMode.Impulse);
+        }
     }
 }

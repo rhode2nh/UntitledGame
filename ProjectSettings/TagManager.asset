@@ -8,6 +8,7 @@ TagManager:
   - CHEST
   - CinemachineTarget
   - BUTTON
+  - HealthBarCanvas
   layers:
   - Default
   - TransparentFX

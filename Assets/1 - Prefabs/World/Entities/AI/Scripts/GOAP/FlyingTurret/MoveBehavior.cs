@@ -34,15 +34,15 @@ public class MoveBehavior : MonoBehaviour, IAgentMoveBehavior
     private void OnTargetInRange(ITarget target)
     {
         this.shouldMove = false;
-        // pidController.findNewPath = false;
+        pidController.StopCoroutine("FollowPath");
     }
 
     private void OnTargetChanged(ITarget target, bool inRange)
     {
         this.currentTarget = target;
         this.shouldMove = !inRange;
+        Debug.Log("I'm here");
         pidController.GetNewPath(target.Position);
-        // pidController.findNewPath = true;
     }
 
     private void OnTargetOutOfRange(ITarget target)

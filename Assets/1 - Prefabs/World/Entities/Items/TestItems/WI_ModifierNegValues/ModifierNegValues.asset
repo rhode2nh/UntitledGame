@@ -19,8 +19,8 @@ MonoBehaviour:
   testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 3c86c7d6af88e8fa1b399a6635259ea6, type: 3}
   isStackable: 0
-  castDelay: -0.5
-  rechargeDelay: -3
+  castDelay: -0.2
+  rechargeDelay: -0.3
   powerConsumption: 0
   spreadX: 0
   spreadY: 0

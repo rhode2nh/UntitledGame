@@ -16,7 +16,7 @@ public class LookAtAction : ActionBase<LookAtAction.Data>
         data.ThreatBehaviour = agent.GetComponent<ThreatBehaviour>();
         data.RotateTowardsBehaviour = agent.GetComponent<IRotateTowardsBehaviour>();
         data.pidController = agent.GetComponent<PIDController>();
-        data.pidController.StartGoingToPosition(data.ThreatBehaviour.GetLastEnemyPos());
+        data.RotateTowardsBehaviour.GoToPosition(data.ThreatBehaviour.GetLastEnemyPos());
     }
 
     public override ActionRunState Perform(IMonoAgent agent, Data data, ActionContext context)

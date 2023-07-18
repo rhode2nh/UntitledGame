@@ -23,7 +23,7 @@ public class LOSArea : MonoBehaviour
     {
         if (other.gameObject.tag == Constants.PLAYER)
         {
-            threatBehaviour.lastEnemyPos = other.gameObject.transform.GetChild(0).transform.position;
+            threatBehaviour.lastEnemyPos = other.gameObject.transform.position;
         }
     }
 

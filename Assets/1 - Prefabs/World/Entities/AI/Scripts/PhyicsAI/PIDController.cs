@@ -11,6 +11,7 @@ public class PIDController : MonoBehaviour
     public Transform target;
     public float thrust;
     public float torque;
+    public float lockOnSpeed;
     public Vector3 previousPosition;
     public float previousAngle;
     public bool derivativeInitialized;
@@ -39,23 +40,17 @@ public class PIDController : MonoBehaviour
     public bool hit = false;
     public bool stabilize = false;
     public float stabilizeTime = 0.0f;
+    public float hitTime;
     public Vector3 testPosition;
-    public bool coroutineStarted = false;
+    public AnimationCurve test;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();       
         previousPosition = rb.velocity;
-        // PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
     }
-    void Update() {
-        // if (findNewPath) {
-        //     PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-        //     findNewPath = false;
-        // }
-    }
-
+    
     void FixedUpdate() {
         // if (stabilize) {
             // Hover();
@@ -80,10 +75,7 @@ public class PIDController : MonoBehaviour
             }
             if (hit) {
                 hit = false;
-                yield return new WaitForSeconds(0.2f);
-                stabilize = true;
-                yield return new WaitForSeconds(stabilizeTime);
-                stabilize = false;
+                yield return new WaitForSeconds(hitTime);
             }
             float positionPID = CalculatePositionPID(path[path.Length - 1]);
             rb.AddForce((currentWaypoint - rb.position).normalized * thrust * positionPID);
@@ -93,36 +85,13 @@ public class PIDController : MonoBehaviour
     }
 
     IEnumerator GoToPosition(Vector3 position) {
-        // while (true) {
-        //     if (position.Equals(rb.position)) {
-        //         yield break;
-        //     }
-        //     if (hit) {
-        //         hit = false;
-        //         yield return new WaitForSeconds(0.2f);
-        //         stabilize = true;
-        //         yield return new WaitForSeconds(stabilizeTime);
-        //         stabilize = false;
-        //     }
-        //     if (!hit) {
-        //         Vector3 a = position;
-        //         Vector3 b = transform.position;
-        //         Vector3 pointToGoTo = 5 * Vector3.Normalize(b - a) + a;
-        //         float positionPID = CalculatePositionPID(pointToGoTo);
-        //         rb.AddForce((pointToGoTo - rb.position).normalized * thrust * positionPID);
-        //         LookAtPosition(position, torque);
-        //         yield return new WaitForFixedUpdate();
-        //     } else {
-        //         hit = false;
-        //     }
-        // }
         while (true) {
             if (position.Equals(rb.position)) {
                 yield break;
             }
             if (hit) {
                 hit = false;
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(hitTime);
                 stabilize = true;
                 yield return new WaitForSeconds(stabilizeTime);
                 stabilize = false;
@@ -133,7 +102,7 @@ public class PIDController : MonoBehaviour
                 Vector3 pointToGoTo = 5 * Vector3.Normalize(b - a) + a;
                 float positionPID = CalculatePositionPID(pointToGoTo);
                 rb.AddForce((pointToGoTo - rb.position).normalized * thrust * positionPID);
-                LookAtPosition(testPosition, torque);
+                LookAtPosition(testPosition, lockOnSpeed);
                 yield return new WaitForFixedUpdate();
             } else {
                 hit = false;
@@ -161,25 +130,13 @@ public class PIDController : MonoBehaviour
     public void RotateToVelocity(float turnSpeed, bool ignoreY)
     {
         Vector3 dir;
-        if(ignoreY)
-        dir = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        else
         dir = rb.velocity;
 
-        Vector3 stabilizeDir = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         if (dir.magnitude > 0.1)
         {
-            if (dir.magnitude <  stabilizeThreshold) {
-                dir = stabilizeDir; 
-                Quaternion dirQ = Quaternion.LookRotation(dir);
-                Quaternion slerp = Quaternion.Slerp(transform.rotation, dirQ, turnSpeed * Time.deltaTime);
-                rb.MoveRotation(slerp);
-            }
-            else {
-                Quaternion dirQ = Quaternion.LookRotation(dir);
-                Quaternion slerp = Quaternion.Slerp(transform.rotation, dirQ, dir.magnitude * turnSpeed * Time.deltaTime);
-                rb.MoveRotation(slerp);
-            }
+            Quaternion dirQ = Quaternion.LookRotation(dir);
+            Quaternion slerp = Quaternion.Slerp(transform.rotation, dirQ, dir.magnitude * turnSpeed * Time.deltaTime);
+            rb.MoveRotation(slerp);
         }
     }
 
@@ -196,8 +153,8 @@ public class PIDController : MonoBehaviour
     }
 
     public void LookAtPosition(Vector3 position, float turnSpeed) {
-        Quaternion dirQ = Quaternion.LookRotation(position - transform.position);
-        Quaternion slerp = Quaternion.Slerp(transform.rotation, dirQ, turnSpeed * Time.fixedDeltaTime);
+        Quaternion rotationToLookAtNode = Quaternion.LookRotation((position - rb.position).normalized);
+        Quaternion slerp = Quaternion.Lerp(rb.rotation, rotationToLookAtNode, turnSpeed * Time.fixedDeltaTime);
         rb.MoveRotation(slerp);
     }
 

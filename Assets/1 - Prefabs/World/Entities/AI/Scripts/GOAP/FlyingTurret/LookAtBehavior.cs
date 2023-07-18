@@ -10,6 +10,7 @@ public class LookAtBehavior : MonoBehaviour, IRotateTowardsBehaviour
     private PIDController pidController;
     private ITarget currentTarget;
     private ThreatBehaviour threatBehaviour;
+    private ShootBehaviour shootBehaviour;
     private bool shouldRotate;
 
     private void Awake()
@@ -17,6 +18,7 @@ public class LookAtBehavior : MonoBehaviour, IRotateTowardsBehaviour
         this.agent = this.GetComponent<AgentBehaviour>();
         this.pidController = GetComponent<PIDController>();
         this.threatBehaviour = GetComponent<ThreatBehaviour>();
+        this.shootBehaviour = GetComponent<ShootBehaviour>();
     }
 
     private void OnEnable()
@@ -36,7 +38,7 @@ public class LookAtBehavior : MonoBehaviour, IRotateTowardsBehaviour
     private void OnTargetInRange(ITarget target)
     {
         this.shouldRotate = true;
-        pidController.StopFollowingPath();
+        // pidController.StopFollowingPath();
     }
 
     private void OnTargetChanged(ITarget target, bool inRange)
@@ -61,23 +63,12 @@ public class LookAtBehavior : MonoBehaviour, IRotateTowardsBehaviour
         {
             return;
         }
-        // if (!threatBehaviour.isEnemyInThreatArea) {
-        //     pidController.StopGoingToPosition();
-        //     pidController.coroutineStarted = false;
-        //     return;
-        // }
-
-        // if (threatBehaviour.isEnemyInThreatArea && !pidController.coroutineStarted) {
-        //     pidController.StartGoingToPosition(threatBehaviour.GetLastEnemyPos());
-        //     pidController.coroutineStarted = true;
-        // }
-        // // pidController.LookAtPosition(currentTarget.Position, 5);
+        if (threatBehaviour.isLookingAtEnemy) {
+            shootBehaviour.Shoot();
+        }
         if (threatBehaviour.HasEnemyMoved()) {
             pidController.testPosition = threatBehaviour.GetLastEnemyPos();
-            // pidController.StartGoingToPosition(threatBehaviour.GetLastEnemyPos());
         }
-        // pidController.StartGoingToPosition(threatBehaviour.GetLastEnemyPos());
-        // pidController.LookAtPosition(threatBehaviour.GetLastEnemyPos(), 5);
     }
 
     public void RotateTowardsEnemy(Vector3 enemyPos) {

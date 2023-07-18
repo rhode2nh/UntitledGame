@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: Bullet
   m_EditorClassIdentifier: 
   Id: b9384f59-cd5e-41b1-bb04-9829a8e91d1c
-  Name: MOD_BULLET
+  Name: MOD_PROJECTILE
   worldItemPrefab: {fileID: 0}
   equipmentMesh: {fileID: 0}
   testPrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 92ebe0f9f214bfc7495f7caa6b7f1b79, type: 3}
   isStackable: 0
   castDelay: 0.1
-  rechargeDelay: 0.2
+  rechargeDelay: 0.1
   powerConsumption: 0
   spreadX: 1
   spreadY: 1
   projectilePrefab: {fileID: 7192778709288459863, guid: ef4e77981ea68c0d79963ed446649cd1, type: 3}
   timeAlive: 2
-  hitPoints: 3
+  hitPoints: 20
