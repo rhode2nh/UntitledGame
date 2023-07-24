@@ -41,7 +41,6 @@ public class MoveBehavior : MonoBehaviour, IAgentMoveBehavior
     {
         this.currentTarget = target;
         this.shouldMove = !inRange;
-        Debug.Log("I'm here");
         pidController.GetNewPath(target.Position);
     }
 

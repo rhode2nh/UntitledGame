@@ -57,6 +57,8 @@ public class GameEvents : MonoBehaviour
     public event Action<Slot, bool> onDropItem;
     public event Action<int, int> onSwitchInventoryItems;
     public event Action<int, int> onSwitchEquipmentItems;
+    public event Action<float> onSetMouseSense;
+    public event Func<float> onGetMouseSense;
     
     public void Awake()
     {
@@ -500,6 +502,20 @@ public class GameEvents : MonoBehaviour
     public void SwitchEquipmentItems(int index1, int index2) {
         if (onSwitchEquipmentItems != null) {
             onSwitchEquipmentItems(index1, index2);
+        }
+    }
+
+    public void SetMouseSense(float mouseSens) {
+        if (onSetMouseSense != null) {
+            onSetMouseSense(mouseSens);
+        }
+    }
+
+    public float GetMouseSense() {
+        if (onGetMouseSense != null) {
+            return onGetMouseSense();
+        } else {
+            return -1f;
         }
     }
 }

@@ -2,6 +2,7 @@ using CrashKonijn.Goap.Behaviours;
 using CrashKonijn.Goap.Enums;
 using CrashKonijn.Goap.Interfaces;
 using CrashKonijn.Goap.Classes;
+using UnityEngine;
 
 public class ShootEnemyAction : ActionBase<ShootEnemyAction.Data>
 {

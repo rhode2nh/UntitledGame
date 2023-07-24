@@ -8,6 +8,7 @@ public class EnemyManager : LifeEntity, IHittable, IDropLoot
     private float topHitPointPos;
     public float hitPointOffset;
     private List<GameObject> lootTable;
+    public GameObject lootToDrop;
     public HealthBar healthBar;
     private bool hasDropped = false;
     public float chanceToDropLoot;
@@ -38,7 +39,11 @@ public class EnemyManager : LifeEntity, IHittable, IDropLoot
         if (health <= 0)
         {
             if (!hasDropped) {
-                DropLoot(lootTable[Random.Range(0, lootTable.Count)]);
+                if (lootToDrop != null) {
+                    DropLoot(lootToDrop);
+                } else {
+                    DropLoot(lootTable[Random.Range(0, lootTable.Count)]);
+                }
                 hasDropped = true;
             }
             Destroy(gameObject);

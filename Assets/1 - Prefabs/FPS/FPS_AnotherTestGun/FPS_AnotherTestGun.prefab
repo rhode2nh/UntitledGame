@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 128665824}
   - component: {fileID: 128665826}
   - component: {fileID: 128665825}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4895,7 +4895,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3310671854432358671}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: BulletSpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4929,7 +4929,7 @@ GameObject:
   - component: {fileID: 7505147874400904769}
   - component: {fileID: 5027614258296616493}
   - component: {fileID: 3977020678471225259}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FPS_AnotherTestGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5036,6 +5036,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b82c1746a7847abc887b5d5059d75f40, type: 3}
       propertyPath: m_Name
       value: AnotherTestGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b82c1746a7847abc887b5d5059d75f40, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

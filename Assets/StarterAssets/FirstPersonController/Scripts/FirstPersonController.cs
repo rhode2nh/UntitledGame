@@ -103,6 +103,8 @@ namespace StarterAssets
 		{
             GameEvents.current.onIsPlayerDead += IsPlayerDead;
             GameEvents.current.onHurtPlayer += HurtPlayer;
+			GameEvents.current.onSetMouseSense += SetMouseSense;
+			GameEvents.current.onGetMouseSense += GetMouseSense;
             _initialRotation = CinemachineCameraTarget.transform.localRotation;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -167,8 +169,8 @@ namespace StarterAssets
 			// if there is an input
 			if (_input.look.sqrMagnitude >= _threshold)
 			{
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * Time.deltaTime;
-				_rotationVelocity = _input.look.x * RotationSpeed * Time.deltaTime;
+				_cinemachineTargetPitch += _input.look.y * RotationSpeed * 0.01f;
+				_rotationVelocity = _input.look.x * RotationSpeed * 0.01f;
 
 				// clamp our pitch rotation
 				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -347,5 +349,13 @@ namespace StarterAssets
         {
             health -= damage;
         }
+
+		public void SetMouseSense(float mouseSens) {
+			RotationSpeed = mouseSens;
+		}
+
+		public float GetMouseSense() {
+			return RotationSpeed;
+		}
 	}
 }

@@ -195,7 +195,7 @@ Transform:
   - {fileID: 832494031112097586}
   - {fileID: 228852715099937846}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2129753552786799044
 MonoBehaviour:
@@ -246,7 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6334c7b00d084ce69a417514d3aaa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootPositions: []
+  shootPositions:
+  - {fileID: 5033163343448843576}
   projectile: {fileID: 7192778709288459863, guid: ef4e77981ea68c0d79963ed446649cd1, type: 3}
   fireRate: 0.5
 --- !u!114 &6306572600503318793
@@ -302,8 +303,8 @@ MonoBehaviour:
   hitPointText: {fileID: 3577502606492458132, guid: 4245c2d2cfef6d5e5a41af366902c796, type: 3}
   isInvincible: 0
   hitPointOffset: 1
-  lootTable: []
   healthBar: {fileID: 7109480678457472030}
+  chanceToDropLoot: 0
 --- !u!65 &1053191208458681358
 BoxCollider:
   m_ObjectHideFlags: 0

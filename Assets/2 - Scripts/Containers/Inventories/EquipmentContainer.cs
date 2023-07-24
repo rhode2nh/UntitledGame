@@ -83,11 +83,6 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         _currentItem = null;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
     void Update()
     {
         if (isAttacking && coroutineStarted == false && _currentItem != null)

@@ -44,6 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa382bf6f33da265a9b330c8f6abeddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarCanvas: {fileID: 8373246772885199105, guid: ebe19f21dee839316b6b102e4f399556, type: 3}
   healthBar: {fileID: 4728657010841269713, guid: b22ffb3dc833a7e8fa570b8ec6961591, type: 3}
-  offsetPos: {x: 0, y: 0, z: 0}
+  offsetPos: {x: 0, y: 1, z: 0}

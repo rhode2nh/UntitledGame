@@ -18,13 +18,13 @@ public class HealthBar : MonoBehaviour
         instantiatedHealthBar = Instantiate(healthBar);
         remaining = instantiatedHealthBar.transform.GetChild(0).GetComponent<Image>();
         instantiatedHealthBar.transform.SetParent(healthBarCanvas.transform);
-        instantiatedHealthBar.transform.position = transform.position + offsetPos;
+        instantiatedHealthBar.transform.position = transform.parent.position + offsetPos;
     }
 
     // Update is called once per frame
     void Update()
     {
-        instantiatedHealthBar.transform.position = transform.position + offsetPos;
+        instantiatedHealthBar.transform.position = transform.parent.position + offsetPos;
         instantiatedHealthBar.transform.LookAt(Camera.main.gameObject.transform);
     }
 
