@@ -85,10 +85,15 @@ public class WorldItem : MonoBehaviour, IDataPersistence
                 properties.Add(Constants.P_W_MODIFIERS_LIST, slots);
                 goto default;
             case IImplant i:
-                properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel);
+                var randomQualityLevel = Random.Range(1, 3);
+                properties.Add(Constants.P_IMP_QUALITY_LEVEL_INT, i.QualityLevel + randomQualityLevel);
                 properties.Add(Constants.P_IMP_BODY_PART_IMPLANTTYPE, i.BodyPart);
-                properties.Add(Constants.P_IMP_STATS_DICT, new TestStats(1, 1));
-                properties.Add(Constants.P_IMP_REQUIRED_STATS_DICT, new TestStats(Random.Range(1, 4), Random.Range(1, 4)));
+                if (i.BodyPart == BodyPart.Legs || i.BodyPart == BodyPart.Feet) {
+                    properties.Add(Constants.P_IMP_STATS_DICT, new TestStats(1, 1, 5));
+                } else {
+                    properties.Add(Constants.P_IMP_STATS_DICT, new TestStats(1 * randomQualityLevel, 1 * randomQualityLevel, 1 * randomQualityLevel));
+                }
+                properties.Add(Constants.P_IMP_REQUIRED_STATS_DICT, new TestStats(randomQualityLevel / 2, randomQualityLevel / 2, 0));
                 goto default;
 
             default:

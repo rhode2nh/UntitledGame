@@ -24,3 +24,4 @@ MonoBehaviour:
   testStats:
     agility: 1
     strength: 1
+    jumpHeight: 1

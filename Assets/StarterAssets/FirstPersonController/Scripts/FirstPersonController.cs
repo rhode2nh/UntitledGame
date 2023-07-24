@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -13,7 +14,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : LifeEntity
+	public class FirstPersonController : LifeEntity, IHittable
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -105,6 +106,7 @@ namespace StarterAssets
             GameEvents.current.onHurtPlayer += HurtPlayer;
 			GameEvents.current.onSetMouseSense += SetMouseSense;
 			GameEvents.current.onGetMouseSense += GetMouseSense;
+			GameEvents.current.onGetPlayerHealth += GetPlayerHealth;
             _initialRotation = CinemachineCameraTarget.transform.localRotation;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -261,7 +263,7 @@ namespace StarterAssets
 				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
 				{
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+					_verticalVelocity = Mathf.Sqrt((playerStats.buffedStats.jumpHeight + JumpHeight) * -2f * Gravity);
 				}
 
 				// jump timeout
@@ -350,12 +352,25 @@ namespace StarterAssets
             health -= damage;
         }
 
+		public float GetPlayerHealth() { 
+			return health;
+		}
+
 		public void SetMouseSense(float mouseSens) {
 			RotationSpeed = mouseSens;
 		}
 
 		public float GetMouseSense() {
 			return RotationSpeed;
+		}
+
+		public void ModifyHealth(float damage) {
+			health -= damage;
+			GameEvents.current.UpdateHealth(health);
+			if (health <= 0) {
+				GameEvents.current.ClearInventory();
+				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			}
 		}
 	}
 }

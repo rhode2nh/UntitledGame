@@ -5,16 +5,18 @@ public class StatsPanel : MonoBehaviour
 {
     public TMP_Text agility;
     public TMP_Text strength;
+    public TMP_Text jumpHeight;
 
     void Start()
     {
         GameEvents.current.onUpdateStatsPanel += UpdateStatsPanel;
-        UpdateStatsPanel(GameEvents.current.GetBuffedStats().agility, GameEvents.current.GetBuffedStats().strength);
+        UpdateStatsPanel(GameEvents.current.GetBuffedStats());
     }
 
-    public void UpdateStatsPanel(int agility, int strength)
+    public void UpdateStatsPanel(TestStats stats)
     {
-        this.agility.SetText("Agilty: " + agility.ToString());
-        this.strength.SetText("Strength: " + strength.ToString());
+        this.agility.SetText("Agilty: " + stats.agility.ToString());
+        this.strength.SetText("Strength: " + stats.strength.ToString());
+        this.jumpHeight.SetText("Jump Height: " + stats.jumpHeight.ToString());
     }
 }

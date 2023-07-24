@@ -8,6 +8,7 @@ public class WeaponStatsUI : MonoBehaviour
     public TMP_Text rechargeTime;
     public TMP_Text xSpread;
     public TMP_Text ySpread;
+    public TMP_Text health;
     public RectTransform castDelayBar;
     public RectTransform rechargeDelayBar;
     private float castDelayTime;
@@ -20,6 +21,7 @@ public class WeaponStatsUI : MonoBehaviour
         GameEvents.current.onIsCastDelayBarLoading += CastDelayBarIsLoading;
         GameEvents.current.onIsRechargeDelayBarLoading += RechargeDelayBarIsLoading;
         GameEvents.current.onStopLoadingBars += StopLoadingBars;
+        GameEvents.current.onUpdateHealth += UpdateHealth;
         castDelayTime = 0.0f;
         rechargeDelayTime = 0.0f;
     }
@@ -47,6 +49,10 @@ public class WeaponStatsUI : MonoBehaviour
             yield return null;
         }
         rechargeDelayBar.localScale = new Vector3(0.0f, 1.0f, 1.0f);
+    }
+
+    public void UpdateHealth(float health) {
+        this.health.SetText("Health: " + health.ToString());
     }
 
     public void UpdateWeaponStatsGUI(string[] stats)

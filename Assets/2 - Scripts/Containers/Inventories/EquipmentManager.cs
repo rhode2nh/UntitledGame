@@ -16,6 +16,7 @@ public class EquipmentManager : MonoBehaviour, IDataPersistence
         GameEvents.current.onUnequip += Unequip;
         GameEvents.current.onEquipAtIndex += EquipAtIndex; 
         GameEvents.current.onSwitchEquipmentItems += SwitchEquipmentItems;
+        GameEvents.current.onClearInventory += ClearInventory;
     }
 
     /// <summary>
@@ -204,7 +205,9 @@ public class EquipmentManager : MonoBehaviour, IDataPersistence
 
     public void ClearInventory()
     {
-        equipmentInventory.items.Clear();
+        for (int i = 0; i < equipmentInventory.items.Count; i++) {
+            equipmentInventory.items[i] = GameEvents.current.GetEmptySlot();
+        }
     }
 
     public void SaveData(ref GameData data)

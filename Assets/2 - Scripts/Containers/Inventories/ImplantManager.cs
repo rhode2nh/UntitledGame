@@ -10,7 +10,7 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
     void Awake()
     {
         GameEvents.current.onAddItemToImplantInventory += AddItem;
-        //GameEvents.current.onClearInventory += ClearInventory;
+        GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onRemoveImplant += RemoveImplant;
         GameEvents.current.onGetImplantStats += GetImplantStats;
     }
@@ -38,7 +38,7 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
             GameEvents.current.UpdateImplantGUI(implantInventory.items);
             GameEvents.current.CalculateBuffedStats();
             var newBuffedStats = GameEvents.current.GetBuffedStats();
-            GameEvents.current.UpdateStatsPanel(newBuffedStats.agility, newBuffedStats.strength);
+            GameEvents.current.UpdateStatsPanel(newBuffedStats);
         }
     }
 
@@ -53,13 +53,15 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
         GameEvents.current.CalculateBuffedStats();
         GameEvents.current.UpdateImplantGUI(implantInventory.items);
         var newBuffedStats = GameEvents.current.GetBuffedStats();
-        GameEvents.current.UpdateStatsPanel(newBuffedStats.agility, newBuffedStats.strength);
+        GameEvents.current.UpdateStatsPanel(newBuffedStats);
         return implantToRemove;
     }
 
     public void ClearInventory()
     {
-        implantInventory.items.Clear();
+        for (int i = 0; i < implantInventory.items.Count; i++) {
+            implantInventory.items[i] = GameEvents.current.GetEmptySlot();
+        }
     }
 
     public List<TestStats> GetImplantStats()
@@ -97,10 +99,11 @@ public class ImplantManager : MonoBehaviour, IDataPersistence
                 implantInventory.items.Add(StateManager.LoadItemData(itemData));
             }
         }
+        Debug.Log(implantInventory.items.Count);
         GameEvents.current.UpdateImplantGUI(implantInventory.items);
         GameEvents.current.CalculateBuffedStats();
         var newBuffedStats = GameEvents.current.GetBuffedStats();
-        GameEvents.current.UpdateStatsPanel(newBuffedStats.agility, newBuffedStats.strength);
+        GameEvents.current.UpdateStatsPanel(newBuffedStats);
     }
 
 }

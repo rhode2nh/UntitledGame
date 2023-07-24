@@ -23,6 +23,7 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
         GameEvents.current.onRemoveItemByType += RemoveItemByType;
         GameEvents.current.onGetAllModifiers += GetAllModifiers;
         GameEvents.current.onSwitchInventoryItems += SwitchInventoryItems;
+        GameEvents.current.onClearInventory += ClearInventory;
         hasItem = false;
     }
 
@@ -236,7 +237,9 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
 
     public void ClearInventory()
     {
-        inventory.items.Clear();
+        for (int i = 0; i < inventory.items.Count; i++) {
+            inventory.items[i] = GameEvents.current.GetEmptySlot();
+        }
     }
 
     public bool CheckType(string id, params System.Type[] types)

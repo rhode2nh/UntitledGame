@@ -8,7 +8,7 @@ public class Implant : Item, IImplant
     [SerializeField]
     private BodyPart bodyPart;
     [SerializeField]
-    private TestStats testStats = new TestStats(1, 1);
+    private TestStats testStats = new TestStats(1, 1, 0);
 
     public int QualityLevel { get => qualityLevel; set => qualityLevel = value;  }
     public BodyPart BodyPart { get => bodyPart; set => bodyPart = value;  }

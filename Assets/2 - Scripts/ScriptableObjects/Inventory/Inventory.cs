@@ -18,6 +18,7 @@ public class Inventory : ScriptableObject
 
     public void InitializeInventory()
     {
+        items.Clear();
         for (int i = 0; i < maxSize; i++)
         {
             items.Add(new Slot(GameEvents.current.GetEmptyItem(), 1));

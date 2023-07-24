@@ -37,12 +37,14 @@ public class InventoryUISlot : UISlot, IDragHandler, IBeginDragHandler, IEndDrag
             else if (slot.item is IImplant)
             {
                 var requiredStats = (TestStats)slot.properties[Constants.P_IMP_REQUIRED_STATS_DICT];
+                var impStats = (TestStats)slot.properties[Constants.P_IMP_STATS_DICT];
                 var implant = slot.item as IImplant;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append($"Name:\t\t{slot.item.name}\n");
                 stringBuilder.Append($"Body Part:\t\t{implant.BodyPart.ToString()}\n");
-                stringBuilder.Append($"Agility:\t\t{implant.TestStats.agility.ToString()}\n");
-                stringBuilder.Append($"Strength:\t\t{implant.TestStats.strength.ToString()}\n");
+                stringBuilder.Append($"Agility:\t\t{impStats.agility.ToString()}\n");
+                stringBuilder.Append($"Strength:\t\t{impStats.strength.ToString()}\n");
+                stringBuilder.Append($"Jump Height:\t{impStats.jumpHeight.ToString()}\n");
                 stringBuilder.Append($"\nRequired Stats\n");
                 stringBuilder.Append($"Agility:\t\t{requiredStats.agility.ToString()}\n");
                 stringBuilder.Append($"Strength:\t\t{requiredStats.strength.ToString()}\n");

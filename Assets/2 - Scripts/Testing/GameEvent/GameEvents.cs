@@ -50,7 +50,7 @@ public class GameEvents : MonoBehaviour
     public event Action onDeactivateInfoPanel;
     public event Action onActivateInfoPanel;
     public event Action<string> onSetInfoText;
-    public event Action<int, int> onUpdateStatsPanel;
+    public event Action<TestStats> onUpdateStatsPanel;
     public event Func<int> onGetCurEquipmentIndex;
     public event Func<bool> onIsPlayerDead;
     public event Action<int> onHurtPlayer;
@@ -59,6 +59,8 @@ public class GameEvents : MonoBehaviour
     public event Action<int, int> onSwitchEquipmentItems;
     public event Action<float> onSetMouseSense;
     public event Func<float> onGetMouseSense;
+    public event Func<float> onGetPlayerHealth;
+    public event Action<float> onUpdateHealth;
     
     public void Awake()
     {
@@ -447,11 +449,11 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public void UpdateStatsPanel(int agility, int strength)
+    public void UpdateStatsPanel(TestStats stats)
     {
         if (onUpdateStatsPanel != null)
         {
-            onUpdateStatsPanel(agility, strength);
+            onUpdateStatsPanel(stats);
         }
     }
 
@@ -516,6 +518,20 @@ public class GameEvents : MonoBehaviour
             return onGetMouseSense();
         } else {
             return -1f;
+        }
+    }
+
+    public float GetPlayerHealth() {
+        if (onGetPlayerHealth != null) {
+            return onGetPlayerHealth();
+        } else {
+            return -1f;
+        }
+    }
+
+    public void UpdateHealth(float health) {
+        if (onUpdateHealth != null) {
+            onUpdateHealth(health);
         }
     }
 }

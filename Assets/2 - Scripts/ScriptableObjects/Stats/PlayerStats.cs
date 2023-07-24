@@ -16,7 +16,7 @@ public class PlayerStats : Stats
 
     public void InitializeStats()
     {
-        testStats = new TestStats(1, 1);
+        testStats = new TestStats(1, 1, 0);
         buffedStats = new TestStats(testStats);
     }
 }

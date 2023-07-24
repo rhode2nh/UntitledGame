@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Stats : ScriptableObject
 {
-    public TestStats testStats = new TestStats(1, 1); 
+    public TestStats testStats = new TestStats(1, 1, 0); 
 } 
