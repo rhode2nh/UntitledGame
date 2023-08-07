@@ -17,6 +17,6 @@ public class StatsPanel : MonoBehaviour
     {
         this.agility.SetText("Agilty: " + stats.agility.ToString());
         this.strength.SetText("Strength: " + stats.strength.ToString());
-        this.jumpHeight.SetText("Jump Height: " + stats.jumpHeight.ToString());
+        // this.jumpHeight.SetText("Jump Height: " + stats.jumpHeight.ToString());
     }
 }

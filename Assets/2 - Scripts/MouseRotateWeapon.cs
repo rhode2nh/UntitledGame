@@ -9,8 +9,8 @@ public class MouseRotateWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float mouseX = (Mouse.current.delta.x.ReadValue() / 2) * swayMultiplier; 
-        float mouseY = (Mouse.current.delta.y.ReadValue() / 2) * swayMultiplier; 
+        float mouseX = (Mouse.current.delta.x.ReadValue() / 2) * (swayMultiplier * GameEvents.current.GetMouseSense()); 
+        float mouseY = (Mouse.current.delta.y.ReadValue() / 2) * (swayMultiplier * GameEvents.current.GetMouseSense()); 
 
         Quaternion rotationX = Quaternion.AngleAxis(mouseY, Vector3.forward);
         Quaternion rotationY = Quaternion.AngleAxis(mouseX, Vector3.up);

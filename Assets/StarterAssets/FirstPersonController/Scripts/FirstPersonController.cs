@@ -24,8 +24,9 @@ namespace StarterAssets
 		[Tooltip("Rotation speed of the character")]
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
-		public float SpeedChangeRate = 10.0f;
+		public float accelerationRate = 10.0f;
         [Tooltip("Tilt speed and angle of the character")]
+		public float decelerationRate = 10.0f;
         public float tiltSpeed = 7f;
         public float tiltAngle = 5f;
 
@@ -44,12 +45,16 @@ namespace StarterAssets
 		[Header("Player Grounded")]
 		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 		public bool Grounded = true;
+		public bool hitCeiling = false;
+		bool resetVerticalVelocity = false;
 		[Tooltip("Useful for rough ground")]
 		public float GroundedOffset = -0.14f;
+		public float ceilingOffset = 1.0f;
 		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
 		public float GroundedRadius = 0.5f;
 		[Tooltip("What layers the character uses as ground")]
 		public LayerMask GroundLayers;
+		public LayerMask CeilingLayers;
 
 		[Header("Cinemachine")]
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -89,6 +94,8 @@ namespace StarterAssets
 		private float _totalDisance = 0.0f;
         private Quaternion _tiltRotation = Quaternion.identity;
         private Quaternion _initialRotation;
+		float lastHorizontalSpeed = 0.0f;
+		Vector3 lastInputDir = new Vector3();
 
 		private void Awake()
 		{
@@ -123,6 +130,7 @@ namespace StarterAssets
 		{
 			JumpAndGravity();
 			GroundedCheck();
+			CeilingCheck();
 			Move();
 			CalculateDistanceTravelled();
 		}
@@ -166,6 +174,12 @@ namespace StarterAssets
 			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 		}
 
+		private void CeilingCheck() {
+			// set sphere position, with offset
+			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + ceilingOffset, transform.position.z);
+			hitCeiling = Physics.CheckSphere(spherePosition, GroundedRadius, CeilingLayers, QueryTriggerInteraction.Ignore);
+		}
+
 		private void CameraRotation()
 		{
 			// if there is an input
@@ -203,14 +217,26 @@ namespace StarterAssets
 			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
 			// accelerate or decelerate to target speed
-			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-			{
-				// creates curved result rather than a linear one giving a more organic speed change
-				// note T in Lerp is clamped, so we don't need to clamp our speed
-				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+			if (targetSpeed == 0.0f) {
+				_speed = Mathf.Lerp(lastHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
+				if (lastHorizontalSpeed < 0.1f) {
+					lastHorizontalSpeed = 0.0f;
+				} else {
+					lastHorizontalSpeed = Mathf.Lerp(lastHorizontalSpeed, targetSpeed, Time.deltaTime * decelerationRate);
+				}
 
 				// round speed to 3 decimal places
 				_speed = Mathf.Round(_speed * 1000f) / 1000f;
+			}
+			else if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+			{
+				// creates curved result rather than a linear one giving a more organic speed change
+				// note T in Lerp is clamped, so we don't need to clamp our speed
+				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
+
+				// round speed to 3 decimal places
+				_speed = Mathf.Round(_speed * 1000f) / 1000f;
+				lastHorizontalSpeed = currentHorizontalSpeed;
 			}
 			else
 			{
@@ -226,6 +252,9 @@ namespace StarterAssets
 			{
 				// move
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+				lastInputDir = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+			} else {
+				inputDirection = transform.right * lastInputDir.x + transform.forward * lastInputDir.z;
 			}
 
 			// move the player
@@ -250,6 +279,7 @@ namespace StarterAssets
 		{
 			if (Grounded)
 			{
+				resetVerticalVelocity = false;
 				// reset the fall timeout timer
 				_fallTimeoutDelta = FallTimeout;
 
@@ -290,6 +320,10 @@ namespace StarterAssets
 			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
 			if (_verticalVelocity < _terminalVelocity)
 			{
+				if (hitCeiling && !resetVerticalVelocity) {
+					_verticalVelocity = 0.0f;
+					resetVerticalVelocity = true;
+				} 
 				_verticalVelocity += Gravity * Time.deltaTime;
 			}
 		}
@@ -311,6 +345,7 @@ namespace StarterAssets
 
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
+			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + ceilingOffset, transform.position.z), GroundedRadius);
 		}
 
         public void PickUpItem(WorldItem item)
