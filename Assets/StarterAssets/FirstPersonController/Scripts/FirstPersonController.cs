@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -26,7 +27,8 @@ namespace StarterAssets
 		[Tooltip("Acceleration and deceleration")]
 		public float accelerationRate = 10.0f;
         [Tooltip("Tilt speed and angle of the character")]
-		public float decelerationRate = 10.0f;
+		public float friction = 10.0f;
+		public float airResistance = 1.0f;
         public float tiltSpeed = 7f;
         public float tiltAngle = 5f;
 
@@ -60,6 +62,7 @@ namespace StarterAssets
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
 		public GameObject CinemachineCameraTargetParent;
 		public GameObject CinemachineCameraTarget;
+		public CinemachineVirtualCamera virtualCamera;
 		[Tooltip("How far in degrees can you move the camera up")]
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
@@ -81,6 +84,9 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+		public float velocityFOVScaleFactor;
+		public float fovChangeRate;
+		private float fov;
 
 		private const float _threshold = 0.01f;
 
@@ -95,7 +101,16 @@ namespace StarterAssets
         private Quaternion _tiltRotation = Quaternion.identity;
         private Quaternion _initialRotation;
 		float lastHorizontalSpeed = 0.0f;
+		Vector3 lastInputDirBeforeJump = new Vector3();
+		Vector3 lastLookDirBeforeJump = new Vector3();
+		Vector3 inputDirection = new Vector3();
 		Vector3 lastInputDir = new Vector3();
+		Transform lastTransform;
+		Vector3 lastRightDir = new Vector3();
+		Vector3 lastForwardDir = new Vector3();
+		private bool captureLastInputDir = true;
+		Vector3 lerpedInputDir = new Vector3();
+		private float dotScalar = 0.0f;
 
 		private void Awake()
 		{
@@ -103,8 +118,8 @@ namespace StarterAssets
 			if (_mainCamera == null)
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+				fov = virtualCamera.m_Lens.FieldOfView;
 			}
-
 		}
 
 		private void Start()
@@ -124,6 +139,7 @@ namespace StarterAssets
 
 			// Get start position to calculate distance travelled
 			_oldPos = transform.position;
+			lastTransform = transform;
 		}
 
 		private void Update()
@@ -201,78 +217,71 @@ namespace StarterAssets
 
 		private void Move()
 		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
-			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is no input, set the target speed to 0
-			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-			// a reference to the players current horizontal velocity
-			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-
-			float speedOffset = 0.1f;
-			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-
-			// accelerate or decelerate to target speed
-			if (targetSpeed == 0.0f) {
-				_speed = Mathf.Lerp(lastHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
-				if (lastHorizontalSpeed < 0.1f) {
-					lastHorizontalSpeed = 0.0f;
-				} else {
-					lastHorizontalSpeed = Mathf.Lerp(lastHorizontalSpeed, targetSpeed, Time.deltaTime * decelerationRate);
-				}
-
-				// round speed to 3 decimal places
-				_speed = Mathf.Round(_speed * 1000f) / 1000f;
-			}
-			else if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-			{
-				// creates curved result rather than a linear one giving a more organic speed change
-				// note T in Lerp is clamped, so we don't need to clamp our speed
-				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
-
-				// round speed to 3 decimal places
-				_speed = Mathf.Round(_speed * 1000f) / 1000f;
-				lastHorizontalSpeed = currentHorizontalSpeed;
-			}
-			else
-			{
-				_speed = targetSpeed;
-			}
-
-			// normalise input direction
-			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is a move input rotate player when the player is moving
-			if (_input.move != Vector2.zero)
-			{
-				// move
-				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
-				lastInputDir = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-			} else {
-				inputDirection = transform.right * lastInputDir.x + transform.forward * lastInputDir.z;
-			}
-
+			// if (Grounded) {
+			// 	inputDirection = MoveGround();
+			// } else {
+			// 	inputDirection = MoveAir();
+			// }
+			inputDirection = MoveGround();
 			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-            Quaternion _targetRotation = _initialRotation;
-            if (_input.move.x == -1)
-            {
+			_controller.Move(Vector3.ClampMagnitude(inputDirection, 1f) * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            float maxSpeed = 100.0f;
+            float normalizedSpeed = _controller.velocity.magnitude / maxSpeed;
+			virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView, fov + fov * Mathf.Pow(normalizedSpeed, 2) * velocityFOVScaleFactor, Time.deltaTime * fovChangeRate);
+
+            Quaternion _targetRotation;
+            if (_input.move.x == -1) {
                 _targetRotation = Quaternion.Euler(0, 0, tiltAngle) * _initialRotation;
-            }
-            else if (_input.move.x == 1)
-            {
+            } else if (_input.move.x == 1) {
                 _targetRotation = Quaternion.Euler(0, 0, -tiltAngle) * _initialRotation;
-            }
-            else
-            {
+            } else {
                 _targetRotation = _initialRotation;
             }
             CinemachineCameraTarget.transform.localRotation = Quaternion.Slerp(CinemachineCameraTarget.transform.localRotation, _targetRotation, tiltSpeed * Time.deltaTime);
+		}
+
+		private Vector3 MoveAir() {
+			float targetSpeed = 0.0f;
+			float decelType = airResistance;
+			Vector3 dir = new Vector3();
+
+			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+			_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, Time.deltaTime * airResistance);
+
+			dir = lastLookDirBeforeJump;
+			lastHorizontalSpeed = currentHorizontalSpeed;
+
+			return dir;
+		}
+		
+		private Vector3 MoveGround() {
+			// set target speed based on move speed, sprint speed and if sprint is pressed
+			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			Vector3 inputDir = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+			float frictionType = Grounded ? friction : airResistance;
+
+			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+			// if there is a move input rotate player when the player is moving
+			if (_input.move == Vector2.zero && captureLastInputDir) {
+				lastRightDir = transform.right;
+				lastForwardDir = transform.forward;
+				inputDir = lastRightDir * inputDir.x + lastForwardDir * inputDir.z;
+				captureLastInputDir = false;
+			} else if (_input.move != Vector2.zero) {
+				inputDir = transform.right * inputDir.x + transform.forward * inputDir.z;
+				captureLastInputDir = true;
+				lastInputDir = inputDir;
+			} 
+
+			lerpedInputDir = Vector3.Lerp(lerpedInputDir, inputDir, frictionType * Time.deltaTime);
+
+			// a reference to the players current horizontal velocity
+			_speed = targetSpeed;
+			return lerpedInputDir;
+		}
+
+		private void OnControllerColliderHit(ControllerColliderHit controllerColliderHit) {
+			lerpedInputDir -= controllerColliderHit.normal * Vector3.Dot(lerpedInputDir, controllerColliderHit.normal);
 		}
 
 		private void JumpAndGravity()
@@ -301,6 +310,10 @@ namespace StarterAssets
 				{
 					_jumpTimeoutDelta -= Time.deltaTime;
 				}
+
+				// lastInputDirBeforeJump = _input.move;
+				// lastLookDirBeforeJump = transform.right * lastInputDirBeforeJump.x + transform.forward * lastInputDirBeforeJump.y;
+				lastLookDirBeforeJump = (transform.right * Vector3.Dot(_controller.velocity, transform.right) + transform.forward * Vector3.Dot(_controller.velocity, transform.forward)).normalized;
 			}
 			else
 			{
@@ -346,6 +359,9 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + ceilingOffset, transform.position.z), GroundedRadius);
+			Gizmos.DrawCube(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z + 0.5f), new Vector3(1, 1, 0));
+			Gizmos.color = Color.magenta;
+			Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), inputDirection);
 		}
 
         public void PickUpItem(WorldItem item)

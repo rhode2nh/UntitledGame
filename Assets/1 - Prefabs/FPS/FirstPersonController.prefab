@@ -158,11 +158,12 @@ MonoBehaviour:
   health: 100
   maxHealth: 0
   hitPointText: {fileID: 0}
-  isInvincible: 0
+  isInvincible: 1
   MoveSpeed: 8
   SprintSpeed: 12
   RotationSpeed: 0.7
-  SpeedChangeRate: 10
+  accelerationRate: 10
+  decelerationRate: 10
   tiltSpeed: 7
   tiltAngle: 5
   JumpHeight: 1.2
@@ -170,15 +171,22 @@ MonoBehaviour:
   JumpTimeout: 0.1
   FallTimeout: 0.15
   Grounded: 1
+  hitCeiling: 0
   GroundedOffset: -0.14
+  ceilingOffset: 1.88
   GroundedRadius: 0.5
   GroundLayers:
     serializedVersion: 2
     m_Bits: 9
+  CeilingLayers:
+    serializedVersion: 2
+    m_Bits: 3967
   CinemachineCameraTargetParent: {fileID: 7156158376155493557}
   CinemachineCameraTarget: {fileID: 6300908035547443692}
+  virtualCamera: {fileID: 1939202870802154241}
   TopClamp: 90
   BottomClamp: -90
+  velocityFOVScaleFactor: 3
   isDebug: 1
   _inputRaycast: {fileID: 3755328709686843207}
   playerStats: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}
@@ -370,7 +378,7 @@ MonoBehaviour:
   mainCamera: {fileID: 5643884005054251729}
   layerMask:
     serializedVersion: 2
-    m_Bits: 187
+    m_Bits: 1979
   inGas: 0
   curGasProps:
     accelerationFactor: 0
@@ -539,7 +547,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6b911390c5825014e8377183a7837d3f, type: 2}
+  - {fileID: 2100000, guid: 0836ab58703551be39533a2ec4f3b493, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -571,7 +579,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -609,7 +617,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4578864367593296372}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.20000076, y: 0.625, z: 1.25}
+  m_LocalPosition: {x: 0, y: 0, z: 1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -812,7 +820,7 @@ Transform:
   - {fileID: 4255665404420782314}
   - {fileID: 6098046810724503432}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6300908035547443692
 GameObject:
