@@ -5,8 +5,18 @@ using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour, IDataPersistence
 {
+    public static EquipmentManager instance;
     public Inventory equipmentInventory;
     private bool hasItem = false;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError("Found more than one Equipment Inventory Manager in the scene.");
+        }
+        instance = this;
+    }
 
     private void Start()
     {

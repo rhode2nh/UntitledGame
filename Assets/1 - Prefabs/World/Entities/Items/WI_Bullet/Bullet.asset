@@ -27,3 +27,4 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7192778709288459863, guid: ef4e77981ea68c0d79963ed446649cd1, type: 3}
   timeAlive: 2
   hitPoints: 20
+  knockback: 0.2

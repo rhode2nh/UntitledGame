@@ -61,6 +61,7 @@ public class GameEvents : MonoBehaviour
     public event Func<float> onGetMouseSense;
     public event Func<float> onGetPlayerHealth;
     public event Action<float> onUpdateHealth;
+    public event Action<float, Vector3> onRecoilKnockback;
     
     public void Awake()
     {
@@ -532,6 +533,12 @@ public class GameEvents : MonoBehaviour
     public void UpdateHealth(float health) {
         if (onUpdateHealth != null) {
             onUpdateHealth(health);
+        }
+    }
+
+    public void RecoilKnockback(float knockback, Vector3 direction) {
+        if (onRecoilKnockback != null) {
+            onRecoilKnockback(knockback, direction);
         }
     }
 }

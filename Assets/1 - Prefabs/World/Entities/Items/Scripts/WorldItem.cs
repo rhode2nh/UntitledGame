@@ -95,7 +95,9 @@ public class WorldItem : MonoBehaviour, IDataPersistence
                 }
                 properties.Add(Constants.P_IMP_REQUIRED_STATS_DICT, new TestStats(randomQualityLevel / 2, randomQualityLevel / 2, 0));
                 goto default;
-
+            case IProjectile p:
+                properties.Add(Constants.P_KNOCKBACK, ((IProjectile)item).Knockback);
+                goto default;
             default:
                 break;
         }

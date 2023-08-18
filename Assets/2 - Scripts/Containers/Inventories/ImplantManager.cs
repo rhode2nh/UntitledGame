@@ -5,10 +5,17 @@ using UnityEngine;
 
 public class ImplantManager : MonoBehaviour, IDataPersistence
 {
+    public static ImplantManager instance;
     public Inventory implantInventory;
-    // Start is called before the first frame update
+
     void Awake()
     {
+        if (instance != null)
+        {
+            Debug.LogError("Found more than one Equipment Inventory Manager in the scene.");
+        }
+        instance = this;
+
         GameEvents.current.onAddItemToImplantInventory += AddItem;
         GameEvents.current.onClearInventory += ClearInventory;
         GameEvents.current.onRemoveImplant += RemoveImplant;

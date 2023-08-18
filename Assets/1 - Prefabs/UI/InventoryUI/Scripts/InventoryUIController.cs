@@ -3,7 +3,16 @@ using UnityEngine;
 public class InventoryUIController : MonoBehaviour
 {
     //private MouseLook mouseLook;
+    public static InventoryUIController instance;
     public GameObject inventoryUI;
+    
+    void Awake() {
+        if (instance != null)
+        {
+            Debug.LogError("Found more than one Inventory UI Controller in the scene.");
+        }
+        instance = this;
+    }
     
     // Start is called before the first frame update
     void Start()

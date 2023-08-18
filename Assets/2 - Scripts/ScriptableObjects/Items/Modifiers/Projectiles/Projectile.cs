@@ -7,6 +7,7 @@ public class Projectile : Modifier, IProjectile
     public GameObject projectilePrefab;
     public float timeAlive;
     public float hitPoints;
+    public float knockback;
 
     public new void Awake() 
     {
@@ -18,4 +19,5 @@ public class Projectile : Modifier, IProjectile
 
     public GameObject ProjectilePrefab { get => projectilePrefab; }
     public float HitPoints { get => hitPoints; }
+    public float Knockback { get => knockback; }
 }

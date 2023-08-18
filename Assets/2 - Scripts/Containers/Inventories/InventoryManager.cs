@@ -5,9 +5,18 @@ using System;
 
 public class InventoryManager : MonoBehaviour, IDataPersistence
 {
+    public static InventoryManager instance;
     public Inventory inventory;
-    public PlayerStats playerStats;
     private bool hasItem;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError("Found more than one Inventory Manager in the scene.");
+        }
+        instance = this;
+    }
 
     private void Start()
     {

@@ -51,6 +51,7 @@ public class Constants
     public const string P_W_MODIFIERS_LIST = "P_W_MODIFIERS_LIST";
     public const string P_W_MAX_SLOTS_INT = "P_W_MAX_SLOTS_INT";
     public const string P_W_MODIFIER_SLOT_INDICES_LIST = "P_W_MODIFIER_SLOT_INDICES_LIST";
+    public const string P_KNOCKBACK = "P_KNOCKBACK";
 
     public const string P_IMP_QUALITY_LEVEL_INT = "P_IMP_QUALITY_LEVEL_INT";
     public const string P_IMP_BODY_PART_IMPLANTTYPE = "P_IMP_BODY_PART_IMPLANTTYPE";

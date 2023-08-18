@@ -3,8 +3,17 @@ using UnityEngine;
 public class ImplantUIController : MonoBehaviour
 {
     //private MouseLook mouseLook;
+    public static ImplantUIController instance;
     public GameObject implantUI;
     
+    void Awake() {
+        if (instance != null)
+        {
+            Debug.LogError("Found more than one Implant UI Controller in the scene.");
+        }
+        instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

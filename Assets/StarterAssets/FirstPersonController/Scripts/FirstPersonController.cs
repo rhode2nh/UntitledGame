@@ -75,6 +75,7 @@ namespace StarterAssets
 		private float _speed;
 		private float _rotationVelocity;
 		private float _verticalVelocity;
+		private float _verticalKnockback;
 		private float _terminalVelocity = 53.0f;
 
 		// timeout deltatime
@@ -103,6 +104,8 @@ namespace StarterAssets
 		float lastHorizontalSpeed = 0.0f;
 		Vector3 lastInputDirBeforeJump = new Vector3();
 		Vector3 lastLookDirBeforeJump = new Vector3();
+		Vector3 lastLookDirBeforeShoot = new Vector3();
+		Vector3 lastForwardDirBeforeShoot = new Vector3();
 		Vector3 inputDirection = new Vector3();
 		Vector3 lastInputDir = new Vector3();
 		Transform lastTransform;
@@ -111,6 +114,9 @@ namespace StarterAssets
 		private bool captureLastInputDir = true;
 		Vector3 lerpedInputDir = new Vector3();
 		private float dotScalar = 0.0f;
+		private float knockback = 0.0f;
+		private Vector3 _horizontalKnockbackDir = new Vector3();
+		private float lastMoveSpeed = 0.0f;
 
 		private void Awake()
 		{
@@ -129,6 +135,7 @@ namespace StarterAssets
 			GameEvents.current.onSetMouseSense += SetMouseSense;
 			GameEvents.current.onGetMouseSense += GetMouseSense;
 			GameEvents.current.onGetPlayerHealth += GetPlayerHealth;
+			GameEvents.current.onRecoilKnockback += ApplyRecoilKnockback;
             _initialRotation = CinemachineCameraTarget.transform.localRotation;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -217,17 +224,13 @@ namespace StarterAssets
 
 		private void Move()
 		{
-			// if (Grounded) {
-			// 	inputDirection = MoveGround();
-			// } else {
-			// 	inputDirection = MoveAir();
-			// }
 			inputDirection = MoveGround();
+			_horizontalKnockbackDir = -MoveKnockback() * Time.deltaTime;
 			// move the player
-			_controller.Move(Vector3.ClampMagnitude(inputDirection, 1f) * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+			_controller.Move(Vector3.ClampMagnitude(inputDirection, 1f) * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime + _horizontalKnockbackDir);
             float maxSpeed = 100.0f;
             float normalizedSpeed = _controller.velocity.magnitude / maxSpeed;
-			virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView, fov + fov * Mathf.Pow(normalizedSpeed, 2) * velocityFOVScaleFactor, Time.deltaTime * fovChangeRate);
+			virtualCamera.m_Lens.FieldOfView = Mathf.Clamp(Mathf.Lerp(virtualCamera.m_Lens.FieldOfView, fov + fov * Mathf.Pow(normalizedSpeed, 2) * velocityFOVScaleFactor, Time.deltaTime * fovChangeRate), 0.0f, 120.0f);
 
             Quaternion _targetRotation;
             if (_input.move.x == -1) {
@@ -253,10 +256,16 @@ namespace StarterAssets
 
 			return dir;
 		}
+
+		private Vector3 MoveKnockback() {
+			float frictionType = Grounded ? friction : airResistance;
+			lastLookDirBeforeShoot = Vector3.Lerp(lastLookDirBeforeShoot, new Vector3(), Time.deltaTime * frictionType);
+			return lastLookDirBeforeShoot;
+		}
 		
 		private Vector3 MoveGround() {
 			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			float targetSpeed = Grounded ? (_input.sprint ? SprintSpeed : MoveSpeed) : lastMoveSpeed;
 			Vector3 inputDir = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 			float frictionType = Grounded ? friction : airResistance;
 
@@ -282,6 +291,7 @@ namespace StarterAssets
 
 		private void OnControllerColliderHit(ControllerColliderHit controllerColliderHit) {
 			lerpedInputDir -= controllerColliderHit.normal * Vector3.Dot(lerpedInputDir, controllerColliderHit.normal);
+			lastLookDirBeforeShoot -= controllerColliderHit.normal * Vector3.Dot(lastLookDirBeforeShoot, controllerColliderHit.normal);
 		}
 
 		private void JumpAndGravity()
@@ -295,7 +305,7 @@ namespace StarterAssets
 				// stop our velocity dropping infinitely when grounded
 				if (_verticalVelocity < 0.0f)
 				{
-					_verticalVelocity = -2f;
+					_verticalVelocity = 0f;
 				}
 
 				// Jump
@@ -303,6 +313,8 @@ namespace StarterAssets
 				{
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
 					_verticalVelocity = Mathf.Sqrt((playerStats.buffedStats.jumpHeight + JumpHeight) * -2f * Gravity);
+					lastLookDirBeforeJump = (transform.right * Vector3.Dot(_controller.velocity, transform.right) + transform.forward * Vector3.Dot(_controller.velocity, transform.forward)).normalized;
+					lastMoveSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 				}
 
 				// jump timeout
@@ -310,10 +322,6 @@ namespace StarterAssets
 				{
 					_jumpTimeoutDelta -= Time.deltaTime;
 				}
-
-				// lastInputDirBeforeJump = _input.move;
-				// lastLookDirBeforeJump = transform.right * lastInputDirBeforeJump.x + transform.forward * lastInputDirBeforeJump.y;
-				lastLookDirBeforeJump = (transform.right * Vector3.Dot(_controller.velocity, transform.right) + transform.forward * Vector3.Dot(_controller.velocity, transform.forward)).normalized;
 			}
 			else
 			{
@@ -334,7 +342,7 @@ namespace StarterAssets
 			if (_verticalVelocity < _terminalVelocity)
 			{
 				if (hitCeiling && !resetVerticalVelocity) {
-					_verticalVelocity = 0.0f;
+					_verticalVelocity = 0f;
 					resetVerticalVelocity = true;
 				} 
 				_verticalVelocity += Gravity * Time.deltaTime;
@@ -358,10 +366,13 @@ namespace StarterAssets
 
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
+			if (hitCeiling) Gizmos.color = transparentGreen;
+			else Gizmos.color = transparentRed;
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + ceilingOffset, transform.position.z), GroundedRadius);
-			Gizmos.DrawCube(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z + 0.5f), new Vector3(1, 1, 0));
 			Gizmos.color = Color.magenta;
 			Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), inputDirection);
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), _horizontalKnockbackDir);
 		}
 
         public void PickUpItem(WorldItem item)
@@ -390,7 +401,7 @@ namespace StarterAssets
         private void OnApplicationQuit()
         {
             // TODO Rework when save/load system is implemented
-            GameEvents.current.ClearInventory();
+            // GameEvents.current.ClearInventory();
         }
 
         public bool IsPlayerDead()
@@ -416,12 +427,23 @@ namespace StarterAssets
 		}
 
 		public void ModifyHealth(float damage) {
-			health -= damage;
-			GameEvents.current.UpdateHealth(health);
+			if (!isInvincible) {
+				health -= damage;
+				GameEvents.current.UpdateHealth(health);
+			}
 			if (health <= 0) {
 				GameEvents.current.ClearInventory();
 				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 			}
+		}
+
+		public void ApplyRecoilKnockback(float knockback, Vector3 direction) {
+			_verticalVelocity += Vector3.Dot(CinemachineCameraTarget.transform.forward, -transform.up) * knockback;
+			resetVerticalVelocity = false;
+			var forward = CinemachineCameraTarget.transform.forward;
+			lastLookDirBeforeShoot += new Vector3(forward.x, 0.0f, forward.z) * knockback;
+			lastForwardDirBeforeShoot = transform.forward;
+			this.knockback += Vector3.Dot(-lastLookDirBeforeShoot, -lastForwardDirBeforeShoot) * knockback;
 		}
 	}
 }

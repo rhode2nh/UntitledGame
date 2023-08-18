@@ -83,6 +83,10 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         _currentItem = null;
     }
 
+    void Start() {
+        equipmentManager = EquipmentManager.instance;
+    }
+
     void Update()
     {
         if (isAttacking && coroutineStarted == false && _currentItem != null)
@@ -389,9 +393,11 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
 
     private void InstantiateOutput(List<Output> output)
     {
+        float recoilKnockback = 0.0f; 
         foreach (var modifier in output)
         {
             var projectile = modifier.projectile.item as IProjectile;
+            recoilKnockback += projectile.Knockback;
             Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
@@ -429,6 +435,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             }
             //instantiatedProjectile.GetComponent<Rigidbody>().AddForce(instantiatedProjectile.transform.forward * 4, ForceMode.Impulse);
         }
+        GameEvents.current.RecoilKnockback(recoilKnockback, new Vector3());
         var gunSmoke = instantiatedGun.GetComponentInChildren<ParticleSystem>();
         if (gunSmoke != null)
         {
