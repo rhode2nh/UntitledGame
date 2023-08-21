@@ -146,3 +146,5 @@ MonoBehaviour:
     accelerationFactor: 0
     maxSpeed: 0
     minSpeed: 0
+  sphereCastRadius: 0.1
+  sphereCastMaxDistance: 0.1

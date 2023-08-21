@@ -25,5 +25,5 @@ public interface ITrajectory
     public float InitializeForwardStartSpeed();
     public Vector3 CalculateTrajectory(Vector3 forward, Vector3 up, Vector3 right, float timeStep, 
             float horizontalScaleDelta, float verticalScaleDelta, float forwardScaleDelta,
-            float verticalSpeed, float horizontalSpeed, float forwardSpeed);
+            float verticalSpeed, float horizontalSpeed, float forwardSpeed, bool reflected);
 }

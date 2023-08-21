@@ -135,27 +135,30 @@ public class Trajectory : Modifier, ITrajectory
         return Mathf.Lerp(0, horizontalScalar, horizontalScaleRate * timeElapsed);
     }
 
-    public Vector3 CalculateTrajectory(Vector3 forward, Vector3 up, Vector3 right, float timeStep, float horizontalScaleDelta, float verticalScaleDelta, float forwardScaleDelta, float verticalSpeed, float horizontalSpeed, float forwardSpeed) {
-        float forwardStep = CalculateTrajectoryFunction(ForwardTrajectory, timeStep, forwardSpeed);
-        float horizontalStep = CalculateTrajectoryFunction(HorizontalTrajectory, timeStep, horizontalSpeed);
-        float verticalStep = CalculateTrajectoryFunction(VerticalTrajectory, timeStep, verticalSpeed);
+    public Vector3 CalculateTrajectory(Vector3 forward, Vector3 up, Vector3 right, float timeStep, float horizontalScaleDelta, float verticalScaleDelta, float forwardScaleDelta, float verticalSpeed, float horizontalSpeed, float forwardSpeed, bool reflected) {
+        float forwardStep = CalculateTrajectoryFunction(ForwardTrajectory, timeStep, forwardSpeed, reflected);
+        float horizontalStep = CalculateTrajectoryFunction(HorizontalTrajectory, timeStep, horizontalSpeed, reflected);
+        float verticalStep = CalculateTrajectoryFunction(VerticalTrajectory, timeStep, verticalSpeed, reflected);
         return (forward * forwardStep * (forwardScalar * forwardScaleDelta))
         + (up * verticalStep * (verticalScalar * verticalScaleDelta))
         + (right * horizontalStep * (horizontalScalar * horizontalScaleDelta));
     }
 
-    private float CalculateTrajectoryFunction(TrajectoryFunctions function, float timeStep, float speed) {
+    private float CalculateTrajectoryFunction(TrajectoryFunctions function, float timeStep, float speed, bool reflected) {
         switch(function) {
             case TrajectoryFunctions.Sine:
                 return Mathf.Sin(timeStep * speed);
             case TrajectoryFunctions.Cosine:
+                if (reflected) {
+                    return 1f - Mathf.Cos(timeStep * speed);
+                }
                 return Mathf.Cos(timeStep * speed);
             case TrajectoryFunctions.X:
                 return timeStep * speed;
             case TrajectoryFunctions.XSquared:
                 return Mathf.Pow(timeStep * speed, 2);
             default:
-                return timeStep;
+                return 0.0f;
         }
     }
 }

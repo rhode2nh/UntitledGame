@@ -35,6 +35,10 @@ public class RaycastProjectile : MonoBehaviour
     private float _verticalStartSpeed;
     private float _horizontalStartSpeed;
     private float _forwardStartSpeed;
+    private bool reflected;
+    
+    public float sphereCastRadius;
+    public float sphereCastMaxDistance;
 
 
     // Start is called before the first frame update
@@ -62,6 +66,7 @@ public class RaycastProjectile : MonoBehaviour
         forwardScaleDelta = 0.0f;
         timeElapsed = 0f;
         propertiesInitialized = true;
+        reflected = false;
     }
 
     public void RandomizeProperties() {
@@ -90,7 +95,7 @@ public class RaycastProjectile : MonoBehaviour
             forwardScaleDelta = currentTrajectory.CalculateForwardScaleDelta(timeElapsed);
             position += currentTrajectory.CalculateTrajectory(_forwardDirection, _verticalDirection, _horizontalDirection,
                 _forwardProgress, horizontalScaleDelta, verticalScaleDelta, forwardScaleDelta,
-                _verticalStartSpeed, _horizontalStartSpeed, _forwardStartSpeed);
+                _verticalStartSpeed, _horizontalStartSpeed, _forwardStartSpeed, reflected);
             timeElapsed += Time.deltaTime;
         } else {
             position += _forwardProgress * _forwardDirection * speed;
@@ -98,9 +103,10 @@ public class RaycastProjectile : MonoBehaviour
      
         nextPos = position;
         transform.LookAt(position);
-        // nextPos += gameObject.transform.forward * Time.deltaTime * _curSpeed;
         RaycastHit hitInfo;
-        if (Physics.Linecast(curPos, nextPos, out hitInfo, layerMask))
+        bool sphereHit = Physics.SphereCast(curPos, sphereCastRadius, transform.forward, out hitInfo, sphereCastMaxDistance, layerMask);
+        // if (Physics.Linecast(curPos, nextPos, out hitInfo, layerMask))
+        if (sphereHit)
         {
             if (!hitInfo.collider.isTrigger)
             {
@@ -140,6 +146,7 @@ public class RaycastProjectile : MonoBehaviour
                 _verticalProgress = 0.0f;
                 _horizontalProgress = 0.0f;
                 flipHorizontalDir = -flipHorizontalDir;
+                reflected = true;
                 _forwardDirection = transform.forward;
                 transform.position += gameObject.transform.forward * Time.deltaTime * _curSpeed;
                 nextPos += transform.forward * Time.deltaTime * _curSpeed;
