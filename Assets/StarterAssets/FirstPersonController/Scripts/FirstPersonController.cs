@@ -441,9 +441,9 @@ namespace StarterAssets
 			_verticalVelocity += Vector3.Dot(CinemachineCameraTarget.transform.forward, -transform.up) * knockback;
 			resetVerticalVelocity = false;
 			var forward = CinemachineCameraTarget.transform.forward;
-			lastLookDirBeforeShoot += new Vector3(forward.x, 0.0f, forward.z) * knockback;
 			lastForwardDirBeforeShoot = transform.forward;
 			this.knockback += Vector3.Dot(-lastLookDirBeforeShoot, -lastForwardDirBeforeShoot) * knockback;
+			lastLookDirBeforeShoot += new Vector3(forward.x, 0.0f, forward.z) * knockback;
 		}
 	}
 }

@@ -22,6 +22,6 @@ MonoBehaviour:
   castDelay: 0
   rechargeDelay: 0
   powerConsumption: 0
-  spreadX: 9
-  spreadY: 0
+  spreadX: 20
+  spreadY: 20
   modifiersPerCast: 2

@@ -128,13 +128,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf81d87c61a24c03480ec001d7423e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 40
+  sineFrequency: 10
+  cosFrequency: 0
+  sineAmplitude: 1
+  cosAmplitude: 0
+  speed: 20
   curPos: {x: 0, y: 0, z: 0}
   nextPos: {x: 0, y: 0, z: 0}
-  maxNumBouces: 2
+  maxNumBouces: 3
   layerMask:
     serializedVersion: 2
-    m_Bits: 1215
+    m_Bits: 4294967295
   projectileSO: {fileID: 11400000, guid: 92db2162ccf89730c8db9cd7412980ef, type: 2}
   shouldRedirect: 0
   inGas: 0

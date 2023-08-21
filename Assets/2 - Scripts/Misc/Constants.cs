@@ -36,6 +36,7 @@ public class Constants
     public const string TEST_MODIFIER = "TEST_MODIFIER";
     public const string TEST_GUN = "TEST_GUN";
     public const string MOD_PROJECTILE = "MOD_PROJECTILE";
+    public const string MOD_TRAJECTORY = "MOD_TRAJECTORY";
     public const string MOD_BULLET = "MOD_BULLET";
     public const string MOD_CASTX = "MOD_CASTX";
     public const string IMPLANT = "IMPLANT";

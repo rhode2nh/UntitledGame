@@ -6,13 +6,15 @@ using System;
 
 public struct Output
 {
-    public Slot projectile;
+    public Slot slot;
     public List<Output> postModifiers;
+    public Slot potentialTrajectory;
 
-    public Output(Slot projectile)
+    public Output(Slot slot)
     {
-        this.projectile = projectile;
+        this.slot = slot;
         postModifiers = new List<Output>();
+        potentialTrajectory = new Slot();
     }
 }
 
@@ -54,7 +56,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
     private List<int> _usedModifierIds;
     private List<Output> _curOutput;
 
-    private Animator equipmentContainerAnimator;
+    private Animator gunAnimator;
 
     void Awake()
     {
@@ -65,7 +67,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         GameEvents.current.onRemoveWeaponFromEquipmentInventory += RemoveWeaponFromEquipmentInventory;
         GameEvents.current.onGetCurEquipmentIndex += GetCurEquipmentIndex;
         modifierSlots = new List<Slot>();
-        equipmentContainerAnimator = equipmentContainer.GetComponent<Animator>();
+        // gunAnimator = equipmentContainer.GetComponent<Animator>();
         modifierSlotIndices = new List<int>();
         _curOutput = new List<Output>();
         lastOutput = new List<Output>();
@@ -97,7 +99,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
 
         if (shooting)
         {
-            equipmentContainerAnimator.SetTrigger("TrRecoil");
+            gunAnimator.SetTrigger("TrRecoil");
             shooting = false;
         }
     }
@@ -129,6 +131,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
                 Destroy(instantiatedGun);
             }
             instantiatedGun = Instantiate(_currentItem.item.testPrefab, equipmentContainer.transform);
+            gunAnimator = instantiatedGun.GetComponentInChildren<Animator>();
             instantiatedGun.transform.parent = equipmentContainer.transform;
             instantiatedGun.transform.localPosition = instantiatedGun.GetComponent<Gun>().gunPos;
             projectileSpawner.localPosition = instantiatedGun.GetComponent<Gun>().bulletSpawnPos.localPosition + instantiatedGun.GetComponent<Gun>().gunPos;
@@ -176,10 +179,12 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
     IEnumerator Attack()
     {
         List<List<Output>> firstPass = CalculateFirstPass();
-        //PrintOutput(firstPass);
+        // PrintOutput(firstPass);
         List<List<Output>> secondPass = CalculateSecondPass(firstPass);
-        //PrintOutput(secondPass);
-        secondPass = RemoveNonProjectiles(secondPass);
+        // PrintOutput(secondPass);
+        List<List<Output>> thirdPass = ApplyTrajectories(secondPass);
+        PrintOutput(thirdPass);
+        secondPass = RemoveNonProjectiles(thirdPass);
 
         // No projectiles are in the weapon
         if (secondPass.Count == 0)
@@ -251,12 +256,16 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
                 potentialWrapModifiers.Add(i);
                 projectilesToGroup--;
             }
+
+            else if (curModifier is ITrajectory) {
+                currentGroup.Add(new Output(curSlot));
+            }
             
             // TODO: Figure out what to do with the rest of modifiers
             else
             {
-                firstPass.Add(new List<Output>());
-                projectilesToGroup--;
+                // firstPass.Add(new List<Output>());
+                // projectilesToGroup--;
             }
 
 
@@ -317,9 +326,9 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             bool foundTrigger = false;
             for (int j = 0; j < firstPass[i].Count; j++)
             {
-                var curProjectile = firstPass[i][j].projectile.item;
+                var curModifier = firstPass[i][j].slot.item;
                 // First occurence of a trigger
-                if (curProjectile is ITrigger)
+                if (curModifier is ITrigger)
                 {
                     if (!foundTrigger)
                     {
@@ -334,11 +343,11 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
                         secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                     }
                 }
-                else if (curProjectile is ICastX)
+                else if (curModifier is ICastX)
                 {
                     if (foundTrigger)
                     {
-                        var castX = curProjectile as ICastX;
+                        var castX = curModifier as ICastX;
                         // TODO: Not sure if this is needed
                         secondPass[i][triggerIndex].postModifiers.Add(firstPass[i][j]);
                         postProjectilesToGroup += castX.ModifiersPerCast;
@@ -371,6 +380,33 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         return secondPass;
     }
 
+    private List<List<Output>> ApplyTrajectories(List<List<Output>> secondPass) {
+        List<List<Output>> thirdPass = new List<List<Output>>();
+        int potentialTrajectoriesToApply = 0;
+        
+
+        for (int i = 0; i < secondPass.Count; i++) {
+            thirdPass.Add(new List<Output>());
+            Slot trajectoryModifier = new Slot();
+            for (int j = 0; j < secondPass[i].Count; j++) {
+                var curModifier = secondPass[i][j].slot.item;
+                if (curModifier is ICastX) {
+                    potentialTrajectoriesToApply += ((ICastX)curModifier).ModifiersPerCast;
+                } else if (curModifier is ITrajectory) {
+                    trajectoryModifier = new Slot(secondPass[i][j].slot);
+                    potentialTrajectoriesToApply += 1;
+                } else if (curModifier is IProjectile) {
+                    var projectileWithTrajectory = secondPass[i][j];
+                    projectileWithTrajectory.potentialTrajectory = new Slot(trajectoryModifier);
+                    thirdPass[i].Add(projectileWithTrajectory);
+                    potentialTrajectoriesToApply -= 1;
+                }
+            }
+        }
+
+        return thirdPass;
+    }
+
     private List<List<Output>> RemoveNonProjectiles(List<List<Output>> firstPass)
     {
         List<List<Output>> nonEmpty = firstPass.Where(x => x.Count != 0).ToList();
@@ -381,7 +417,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             finalPass.Add(new List<Output>());
             for (int j = 0; j < nonEmpty[i].Count; j++)
             {
-                if (nonEmpty[i][j].projectile.item is IProjectile)
+                if (nonEmpty[i][j].slot.item is IProjectile || nonEmpty[i][j].slot.item is ITrajectory)
                 {
                     finalPass[i].Add(nonEmpty[i][j]);
                 }
@@ -396,7 +432,7 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
         float recoilKnockback = 0.0f; 
         foreach (var modifier in output)
         {
-            var projectile = modifier.projectile.item as IProjectile;
+            var projectile = modifier.slot.item as IProjectile;
             recoilKnockback += projectile.Knockback;
             Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
@@ -419,16 +455,19 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             Vector3 directionWithSpread = Quaternion.AngleAxis(x, projectileSpawner.up) * Quaternion.AngleAxis(y, projectileSpawner.forward) * directionWithoutSpread;
 
             var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, Quaternion.identity);
+            if (modifier.potentialTrajectory.item != null) {
+                Debug.Log(modifier.potentialTrajectory.item);
+                instantiatedProjectile.GetComponent<RaycastProjectile>().currentTrajectory = (ITrajectory)modifier.potentialTrajectory.item;
+                instantiatedProjectile.GetComponent<RaycastProjectile>().RandomizeProperties();
+            }
             var triggerList = instantiatedProjectile.GetComponent<TriggerList>();
-            if (triggerList != null)
-            {
+            if (triggerList != null) {
                 triggerList.triggerList = modifier.postModifiers; 
                 triggerList.xSpread = totalXSpread;
                 triggerList.ySpread = totalYSpread;
             }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
-            if (inGas)
-            {
+            if (inGas) {
                 var raycastProjectile = instantiatedProjectile.GetComponent<RaycastProjectile>();
                 raycastProjectile.inGas = true;
                 raycastProjectile.gasProps = curGasProps;
@@ -578,13 +617,13 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
             debugString += "Group " + i + ":\n";
             for (int j = 0; j < outputList[i].Count; j++)
             {
-                debugString += "   - " + outputList[i][j].projectile.item.name + "\n";
-                if (outputList[i][j].projectile is ITrigger)
+                debugString += "   - " + outputList[i][j].slot.item.name + "\n";
+                if (outputList[i][j].slot is ITrigger)
                 {
                     var postProjectiles = outputList[i][j].postModifiers;
                     for (int k = 0; k < postProjectiles.Count; k++)
                     {
-                        debugString += "      * " + postProjectiles[k].projectile.item.name + "\n";
+                        debugString += "      * " + postProjectiles[k].slot.item.name + "\n";
                     }
                 }
             }

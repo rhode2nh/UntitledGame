@@ -86,12 +86,7 @@ GameObject:
   - component: {fileID: 6971752745807331601}
   - component: {fileID: 2465300194362823865}
   - component: {fileID: 8943611022609233322}
-  - component: {fileID: 6444453215391107198}
-  - component: {fileID: 5617688563414428985}
   - component: {fileID: 597023005875809628}
-  - component: {fileID: 4482036837754250972}
-  - component: {fileID: 2922844145472562102}
-  - component: {fileID: 512079913783844420}
   - component: {fileID: 422269253867851845}
   m_Layer: 7
   m_Name: PlayerCapsule
@@ -163,7 +158,8 @@ MonoBehaviour:
   SprintSpeed: 12
   RotationSpeed: 0.7
   accelerationRate: 10
-  decelerationRate: 10
+  friction: 10
+  airResistance: 0.2
   tiltSpeed: 7
   tiltAngle: 5
   JumpHeight: 1.2
@@ -187,6 +183,7 @@ MonoBehaviour:
   TopClamp: 90
   BottomClamp: -90
   velocityFOVScaleFactor: 3
+  fovChangeRate: 4
   isDebug: 1
   _inputRaycast: {fileID: 3755328709686843207}
   playerStats: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}
@@ -331,33 +328,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &6444453215391107198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427951629391058792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 410c19ab08e00fb6f837e5078e496383, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 11400000, guid: b00a947d746dc5648a569046ac5e97f4, type: 2}
-  playerStats: {fileID: 11400000, guid: 3866e404e8b51744a8f3f414ed812f10, type: 2}
---- !u!114 &5617688563414428985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427951629391058792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a94d64e2d90da09be6463b1db89785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentInventory: {fileID: 11400000, guid: 1420fdce0225cfd2ba7fdcb854621dfe, type: 2}
 --- !u!114 &597023005875809628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curEquipmentIndex: 0
   instantiatedGun: {fileID: 0}
-  equipmentManager: {fileID: 5617688563414428985}
+  equipmentManager: {fileID: 0}
   equipmentContainer: {fileID: 5132647605301566007}
   projectileSpawner: {fileID: 6009758356004828549}
   mainCamera: {fileID: 5643884005054251729}
@@ -402,45 +372,6 @@ MonoBehaviour:
   totalCastDelay: 0
   totalRechargeTime: 0
   gunShotAudio: {fileID: 0}
---- !u!114 &4482036837754250972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427951629391058792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b34146ad9b505713281e1f3fc2df620f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryUI: {fileID: 0}
---- !u!114 &2922844145472562102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427951629391058792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26c7b061a5b57007b766f4c9118cb59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  implantUI: {fileID: 0}
---- !u!114 &512079913783844420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427951629391058792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2970e151dbd351dedb660975e13c159b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  implantInventory: {fileID: 11400000, guid: e13eedd4e8248a81abb3fb66b46befcd, type: 2}
 --- !u!114 &422269253867851845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,7 +861,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2047
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
