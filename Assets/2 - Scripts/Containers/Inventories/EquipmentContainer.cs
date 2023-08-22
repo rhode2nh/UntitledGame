@@ -456,7 +456,6 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
 
             var instantiatedProjectile = Instantiate(projectile.ProjectilePrefab, projectileSpawner.position, Quaternion.identity);
             if (modifier.potentialTrajectory.item != null) {
-                Debug.Log(modifier.potentialTrajectory.item);
                 instantiatedProjectile.GetComponent<RaycastProjectile>().currentTrajectory = (ITrajectory)modifier.potentialTrajectory.item;
                 instantiatedProjectile.GetComponent<RaycastProjectile>().RandomizeProperties();
             }
@@ -467,6 +466,10 @@ public class EquipmentContainer : MonoBehaviour, IDataPersistence
                 triggerList.ySpread = totalYSpread;
             }
             instantiatedProjectile.transform.forward = directionWithSpread.normalized;
+            var shootable = instantiatedProjectile.GetComponent<IShootable>();
+            if (shootable != null) {
+                shootable.Shoot();
+            }
             if (inGas) {
                 var raycastProjectile = instantiatedProjectile.GetComponent<RaycastProjectile>();
                 raycastProjectile.inGas = true;

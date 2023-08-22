@@ -28,8 +28,8 @@ MonoBehaviour:
   verticalTrajectory: 1
   horizontalTrajectory: 2
   forwardScalar: 1
-  verticalScalar: 1
-  horizontalScalar: 1
+  verticalScalar: 3
+  horizontalScalar: 3
   forwardSpeed: 10
   verticalSpeed: 10
   horizontalSpeed: 10
@@ -37,5 +37,11 @@ MonoBehaviour:
   lerpVerticalScalar: 1
   lerpHorizontalScalar: 1
   forwardScaleRate: 1
-  verticalScaleRate: 1
-  horizontalScaleRate: 1
+  verticalScaleRate: 0.2
+  horizontalScaleRate: 0.2
+  randomizeForwardDir: 0
+  randomizeVerticalDir: 1
+  randomizeHorizontalDir: 1
+  randomizeForwardStartSpeed: 0
+  randomizeVerticalStartSpeed: 1
+  randomizeHorizontalStartSpeed: 1

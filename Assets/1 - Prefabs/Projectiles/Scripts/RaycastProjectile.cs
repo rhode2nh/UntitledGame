@@ -108,6 +108,9 @@ public class RaycastProjectile : MonoBehaviour
         // if (Physics.Linecast(curPos, nextPos, out hitInfo, layerMask))
         if (sphereHit)
         {
+            if (hitInfo.collider.gameObject.GetComponentInParent<IShootable>() != null) {
+                Destroy(hitInfo.collider.transform.parent.gameObject);
+            }
             if (!hitInfo.collider.isTrigger)
             {
                 //TODO: Figure out what to do when a collision occurs

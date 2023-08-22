@@ -45,7 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf81d87c61a24c03480ec001d7423e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  sineFrequency: 0
+  cosFrequency: 0
+  sineAmplitude: 0
+  cosAmplitude: 0
+  speed: 50
   curPos: {x: 0, y: 0, z: 0}
   nextPos: {x: 0, y: 0, z: 0}
   maxNumBouces: 2
@@ -59,6 +63,8 @@ MonoBehaviour:
     accelerationFactor: 0
     maxSpeed: 0
     minSpeed: 0
+  sphereCastRadius: 0
+  sphereCastMaxDistance: 0
 --- !u!1 &7427640225806010628
 GameObject:
   m_ObjectHideFlags: 0
