@@ -27,6 +27,7 @@ public class Bomb : MonoBehaviour, IShootable
     void OnDestroy() {
         GameObject explosionPS = Instantiate(explosion, transform.position, transform.rotation);
         explosionPS.GetComponent<ParticleSystem>().Play();
+        Destroy(explosionPS, explosionPS.GetComponent<ParticleSystem>().main.startLifetimeMultiplier);
         Collider[] colliders = Physics.OverlapSphere(transform.position, 3.0f, layerMask, QueryTriggerInteraction.Ignore);
         if (colliders.Length > 0) {
             foreach (var collider in colliders) {
