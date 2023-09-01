@@ -105,7 +105,6 @@ namespace StarterAssets
 		Vector3 lastInputDirBeforeJump = new Vector3();
 		Vector3 lastLookDirBeforeJump = new Vector3();
 		Vector3 lastLookDirBeforeShoot = new Vector3();
-		Vector3 lastForwardDirBeforeShoot = new Vector3();
 		Vector3 inputDirection = new Vector3();
 		Vector3 lastInputDir = new Vector3();
 		Transform lastTransform;
@@ -114,7 +113,6 @@ namespace StarterAssets
 		private bool captureLastInputDir = true;
 		Vector3 lerpedInputDir = new Vector3();
 		private float dotScalar = 0.0f;
-		private float knockback = 0.0f;
 		private Vector3 _horizontalKnockbackDir = new Vector3();
 		private float lastMoveSpeed = 0.0f;
 
@@ -370,7 +368,7 @@ namespace StarterAssets
 			else Gizmos.color = transparentRed;
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + ceilingOffset, transform.position.z), GroundedRadius);
 			Gizmos.color = Color.magenta;
-			Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), inputDirection);
+			Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), inputDirection * 3);
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), _horizontalKnockbackDir);
 		}
@@ -441,8 +439,6 @@ namespace StarterAssets
 			_verticalVelocity += Vector3.Dot(CinemachineCameraTarget.transform.forward, -transform.up) * knockback;
 			resetVerticalVelocity = false;
 			var forward = CinemachineCameraTarget.transform.forward;
-			lastForwardDirBeforeShoot = transform.forward;
-			this.knockback += Vector3.Dot(-lastLookDirBeforeShoot, -lastForwardDirBeforeShoot) * knockback;
 			lastLookDirBeforeShoot += new Vector3(forward.x, 0.0f, forward.z) * knockback;
 		}
 	}
